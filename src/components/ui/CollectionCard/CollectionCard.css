@@ -1,0 +1,25 @@
+@media only screen and (max-width: 992px) {
+    .collection_title {
+      font-size: 0.8rem !important;
+    }
+  
+    .creator_info h6 {
+      font-size: 0.6rem !important;
+    }
+  
+    .creator_info p {
+      font-size: 0.7rem !important;
+    }
+
+
+  }
+
+.creator_img{
+    width: 50px !important;
+    height: 50px !important;
+    background-color: #fff;
+}
+
+.collection_title{
+    font-size: 2rem !important;
+}

@@ -1,0 +1,33 @@
+
+  
+  .footer {
+    padding-bottom: 30px;
+    background: #000;
+    position:absolute;
+    /* bottom:0; */
+    width: 100%;
+
+  }
+  
+  .list__item {
+    background: transparent !important;
+    padding-left: 0 !important;
+    border: none !important;
+  }
+  
+  .list__item a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.772);
+    opacity: 85%;
+    font-size: 0.9rem;
+  }
+  
+  .list__item a:hover {
+    color: rgba(255, 255, 255, 0.772);
+  }
+  
+
+  
+  .copyright {
+    font-size: 0.8rem;
+  }

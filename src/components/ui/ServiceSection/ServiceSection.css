@@ -1,0 +1,26 @@
+.single_service{
+    background: #2f2f4b;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+}
+
+.service_title{
+    color: #fff;
+}
+
+.single_service_content h5 a{
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 1px 1px 20px #fff;
+    
+}
+
+.single_service_content{
+    margin-top: 20px;
+}
+
+.single_service_content h5 a:hover{
+    text-decoration: none;
+    color: aquamarine;
+}
