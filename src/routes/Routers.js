@@ -19,13 +19,14 @@ function Routers() {
     <Route path='/explore' element={<Explore/>}/>
     <Route path='/create' element={<Create/>}/>
     <Route path='/contact' element={<Contact/>}/>
+    <Route path='/explore/collection/:id' element={<SingleCollection/>}/>
     <Route path='/edit-profile' element={<EditProfile/>}/>
     <Route path='/explore/:id' element={<NftDetails/>}/>
     <Route path='/seller-profile' element={<SellerProfile/>}/>
     <Route path='/wallet' element={<Wallet/>}/>
     <Route path='/NFTs' element={<NFTs/>}/>
     <Route path='/create-collection' element={<CreateCollection/>}/>
-    <Route path='/collection/:id' element={<SingleCollection/>}/>
+
   </Routes>
 }
 
