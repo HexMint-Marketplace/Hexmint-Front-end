@@ -23,3 +23,7 @@
 .collection_title{
     font-size: 2rem !important;
 }
+.nft-price-wrapper{
+  color: #fff;
+  font-style: italic;
+}

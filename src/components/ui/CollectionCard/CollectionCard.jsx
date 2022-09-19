@@ -9,7 +9,7 @@ const CollectionCard = (props) => {
   return (
     <div className="single_collection_card">
       <div className="collection_img">
-      <Link to={`/explore/${id}`}>
+      <Link to={`/explore/collection/${id}`}>
         <img src={imgUrl} alt="" className="w-100" />
       </Link>
       </div>
@@ -21,7 +21,7 @@ const CollectionCard = (props) => {
 
           <div className="collection_content">
             <h5 className="collection_title">
-          <Link to={`/explore/${id}`}>{title}</Link>
+          <Link to={`/explore/collection/${id}`}>{title}</Link>
             </h5>
           </div>
 

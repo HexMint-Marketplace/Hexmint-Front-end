@@ -13,7 +13,47 @@ import ava04 from "../colHeadImages/planet.png";
 import ava05 from "../colHeadImages/stargirl.png";
 import ava06 from "../colHeadImages/the187.png";
 
-import sellerProfile from "../images/profile.png"
+import sellerProfile from "../images/User.png"
+
+export const COLLECTION_DATA = [
+  {
+    collectionId : "01",
+    contractAddress : "testing01",
+    collectionName : "Cyber Punks",
+    description : "Cool Cats is a collection of 9,999 randomly generated and stylistically curated NFTs that exist on the Ethereum Blockchain. Cool Cat holders can participate in exclusive events such as NFT claims, raffles, community giveaways, and more.",
+    collectionIcon : img01,
+
+  },
+  {
+    collectionId : "02",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img02,
+
+  },  {
+    collectionId : "03",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img03,
+
+  },  {
+    collectionId : "04",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img04,
+
+  },  {
+    collectionId : "05",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img05,
+
+  },
+]
 
 export const NFT__DATA = [
   {

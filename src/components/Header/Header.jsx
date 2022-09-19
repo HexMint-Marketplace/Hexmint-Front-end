@@ -36,7 +36,7 @@ function Header() {
                         <span>
                         <i class="ri-zcool-fill"></i>
                         </span>
-                        NFTs
+                        HeXmint
                     </h2>
                 </div>
                 
