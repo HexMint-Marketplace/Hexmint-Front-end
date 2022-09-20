@@ -46,7 +46,7 @@ const SingleCollectionHead = (props) => {
 
                     <div className='d-flex justify-content-end'>
                             <button className='btn gap-2 align-items-center '>
-                                Create a Collection
+                                <Link to='/seller-profile/create-collection-form'>Create a Collection</Link>
                             </button>
                     </div>
 

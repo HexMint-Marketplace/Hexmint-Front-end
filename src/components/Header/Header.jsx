@@ -16,10 +16,10 @@ const NAV_LINKS = [
         display : 'Create',
         url : '/create'
     },
-    {
-        display : 'Contact',
-        url : '/contact'
-    },
+    // {
+    //     display : 'Contact',
+    //     url : '/contact'
+    // },
     {
         display: "Profile",
         url: "/seller-profile",

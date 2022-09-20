@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom';
 import {COLLECTION_DATA} from '../asssets/data/data.js'
 import NFTList from '../components/ui/NFTList/NFTList.jsx';
 import SingleCollectionHead from '../components/ui/SingleCollectionHead/SingleCollectionHead'

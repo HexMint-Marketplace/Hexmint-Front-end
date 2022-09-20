@@ -11,6 +11,11 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import NFTs from '../pages/NFTs'
 import CreateCollection from '../pages/CreateCollection'
 import SingleCollection from '../pages/SingleCollection'
+import NFTDetailsB from '../pages/NftDetailsB'
+import NFTDetailsU from '../pages/NFTDetailsU'
+import TransferForm from '../components/ui/TransferForm/TransferForm'
+import ListingForm from '../components/ui/ListingForm/ListingForm'
+import NewCollectionForm from '../pages/NewCollectionForm'
 
 function Routers() {
   return <Routes>
@@ -26,6 +31,12 @@ function Routers() {
     <Route path='/wallet' element={<Wallet/>}/>
     <Route path='/NFTs' element={<NFTs/>}/>
     <Route path='/create-collection' element={<CreateCollection/>}/>
+    <Route path='/explore/collection/NFT/:id' element={<NFTDetailsB/>}/>
+    <Route path='/seller-profile/seller-collection/NFT' element={<NFTDetailsU/>} />
+    <Route path='/seller-profile/seller-collection/NFT/transfer-form' element={<TransferForm/>} />
+    <Route path='/seller-profile/seller-collection/NFT/listing-form' element={<ListingForm/>} />
+    <Route path='/seller-profile/create-collection-form' element={<NewCollectionForm/>} />
+    
 
   </Routes>
 }

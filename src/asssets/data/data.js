@@ -64,6 +64,8 @@ export const NFT__DATA = [
     creator: "Trista Francis",
     creatorImg: ava01,
     currentBid: 5.89,
+    createrUsername: "@TristaF",
+    collectionName: "Cyber Punks"
   },
 
   {
@@ -116,6 +118,70 @@ export const NFT__DATA = [
     currentBid: 4.99,
   }
 ];
+
+export const USER_COLLECTION_DATA = [
+  {
+    id: "01",
+    title: "Apes Club",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img01,
+    creator: "Trista Francis",
+    creatorImg: ava01,
+    currentBid: 5.89,
+    createrUsername: "@TristaF",
+    collectionName: "Cyber Punks"
+  },
+
+  {
+    id: "02",
+    title: "Azuki God",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img02,
+    creator: "Trista Francis",
+    creatorImg: ava02,
+    currentBid: 5.09,
+  },
+
+  {
+    id: "03",
+    title: "Okay Boys",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img03,
+    creator: "Trista Francis",
+    creatorImg: ava03,
+    currentBid: 6.89,
+  },
+
+  {
+    id: "04",
+    title: "Rename",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img04,
+    creator: "Trista Francis",
+    creatorImg: ava04,
+    currentBid: 7.89,
+  },
+
+  {
+    id: "05",
+    title: "Travel Monkey Club",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img05,
+    creator: "Trista Francis",
+    creatorImg: ava05,
+    currentBid: 4.89,
+  },
+
+  {
+    id: "06",
+    title: "Sir Lion Swag",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img06,
+    creator: "Trista Francis",
+    creatorImg: ava06,
+    currentBid: 4.99,
+  }
+]
 
 export const SELLER__DATA = [
   {
