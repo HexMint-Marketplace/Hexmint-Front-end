@@ -13,7 +13,47 @@ import ava04 from "../colHeadImages/planet.png";
 import ava05 from "../colHeadImages/stargirl.png";
 import ava06 from "../colHeadImages/the187.png";
 
-import sellerProfile from "../images/profile.png"
+import sellerProfile from "../images/User.png"
+
+export const COLLECTION_DATA = [
+  {
+    collectionId : "01",
+    contractAddress : "testing01",
+    collectionName : "Cyber Punks",
+    description : "Cool Cats is a collection of 9,999 randomly generated and stylistically curated NFTs that exist on the Ethereum Blockchain. Cool Cat holders can participate in exclusive events such as NFT claims, raffles, community giveaways, and more.",
+    collectionIcon : img01,
+
+  },
+  {
+    collectionId : "02",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img02,
+
+  },  {
+    collectionId : "03",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img03,
+
+  },  {
+    collectionId : "04",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img04,
+
+  },  {
+    collectionId : "05",
+    contractAddress : "testing01",
+    collectionName : "collectionName",
+    description : "description",
+    collectionIcon : img05,
+
+  },
+]
 
 export const NFT__DATA = [
   {
@@ -24,6 +64,8 @@ export const NFT__DATA = [
     creator: "Trista Francis",
     creatorImg: ava01,
     currentBid: 5.89,
+    createrUsername: "@TristaF",
+    collectionName: "Cyber Punks"
   },
 
   {
@@ -76,6 +118,70 @@ export const NFT__DATA = [
     currentBid: 4.99,
   }
 ];
+
+export const USER_COLLECTION_DATA = [
+  {
+    id: "01",
+    title: "Apes Club",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img01,
+    creator: "Trista Francis",
+    creatorImg: ava01,
+    currentBid: 5.89,
+    createrUsername: "@TristaF",
+    collectionName: "Cyber Punks"
+  },
+
+  {
+    id: "02",
+    title: "Azuki God",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img02,
+    creator: "Trista Francis",
+    creatorImg: ava02,
+    currentBid: 5.09,
+  },
+
+  {
+    id: "03",
+    title: "Okay Boys",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img03,
+    creator: "Trista Francis",
+    creatorImg: ava03,
+    currentBid: 6.89,
+  },
+
+  {
+    id: "04",
+    title: "Rename",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img04,
+    creator: "Trista Francis",
+    creatorImg: ava04,
+    currentBid: 7.89,
+  },
+
+  {
+    id: "05",
+    title: "Travel Monkey Club",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img05,
+    creator: "Trista Francis",
+    creatorImg: ava05,
+    currentBid: 4.89,
+  },
+
+  {
+    id: "06",
+    title: "Sir Lion Swag",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    imgUrl: img06,
+    creator: "Trista Francis",
+    creatorImg: ava06,
+    currentBid: 4.99,
+  }
+]
 
 export const SELLER__DATA = [
   {

@@ -16,10 +16,10 @@ const NAV_LINKS = [
         display : 'Create',
         url : '/create'
     },
-    {
-        display : 'Contact',
-        url : '/contact'
-    },
+    // {
+    //     display : 'Contact',
+    //     url : '/contact'
+    // },
     {
         display: "Profile",
         url: "/seller-profile",
@@ -36,7 +36,7 @@ function Header() {
                         <span>
                         <i class="ri-zcool-fill"></i>
                         </span>
-                        NFTs
+                        HeXmint
                     </h2>
                 </div>
                 

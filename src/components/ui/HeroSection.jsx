@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 import './herosection.css'
 import homeImage from '../../asssets/images/homeImage.png'
+import howItWorks from '../../asssets/images/Howitworks.png'
 
 function HeroSection() {
   return (
@@ -31,6 +32,17 @@ function HeroSection() {
                 <Col lg='6' md='11' s='10' xs='10' >
                     <div className="home_image w-100">
                         <img src={homeImage} alt="" />
+                    </div>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col lg='12' md='6' sm='12'>
+                    <div className="">
+                        <h1 className='text-center mt-5 mb-5 py-3'>How It Works</ h1>
+                        <div className="w-100">
+                        <img src={howItWorks} className='img-fluid mx-auto'alt="" />
+                        </div>
                     </div>
                 </Col>
             </Row>
