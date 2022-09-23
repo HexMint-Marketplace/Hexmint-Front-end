@@ -1,0 +1,69 @@
+.form__input input,
+.form__input textarea,
+.form__input select {
+  width: 100%;
+  padding: 7px 25px;
+  color: #fff;
+  font-size: 0.8rem;
+  background: transparent;
+  border: 3px solid rgba(221, 221, 221, 0.171);
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form__input {
+  margin-bottom: 15px;
+}
+
+.form__input label {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+select option {
+  margin: 40px;
+  background: black;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.form__input .upload__input {
+  padding: 40px 25px;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* .hero_buttons{
+    margin-top: 40px;
+} */
+
+.mint_button {
+  padding: 13px 40px !important;
+  border-radius: 50px !important;
+}
+
+.mint_button {
+  background: linear-gradient(to right, #59f9b7, #66feea);
+}
+
+.mint_button a {
+  text-decoration: none;
+  color: black;
+  font-weight: 650;
+  font-size: 1rem;
+}
+
+.mint_button a:hover {
+  color: rgb(103, 38, 38);
+  text-shadow: black 2px 2px 20px;
+}
+
+@media only screen and (max-width: 576px) {
+  .blk_user {
+    margin-top: 15px;
+  }
+}
