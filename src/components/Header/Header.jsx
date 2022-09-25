@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
+import { useMoralis, useWeb3Contract } from "react-moralis";
 
 const NAV_LINKS = [
   {
@@ -27,6 +28,8 @@ const NAV_LINKS = [
 ];
 
 function Header() {
+  const {enableWeb3, isWeb3Enabled, web3, Moralis} = useMoralis();
+
   return (
     <header className="header w-100">
       <Container>
@@ -58,12 +61,19 @@ function Header() {
           </div>
 
           <div className="nav_right d-flex align-items-center gap-5">
-            <button className="btn d-flex gap-2 align-items-center">
+            { isWeb3Enabled ? (
+              <>
+                "Connected!" 
+              </>
+            ) : (
+              <button onClick={() => enableWeb3()} className="btn d-flex gap-2 align-items-center">
               <span>
                 <i class="ri-wallet-line"></i>
               </span>
-              <Link to="/wallet">Connect Wallet</Link>
-            </button>
+              Connect Wallet
+              </button>
+            )}
+
 
             <span className="mobile_menu">
               <i className="ri-menu-line"></i>

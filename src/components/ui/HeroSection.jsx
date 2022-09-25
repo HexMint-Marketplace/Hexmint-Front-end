@@ -5,6 +5,7 @@ import './herosection.css'
 import homeImage from '../../asssets/images/homeImage.png'
 import howItWorks from '../../asssets/images/Howitworks.png'
 
+
 function HeroSection() {
   return (
     <section className="hero_section">
