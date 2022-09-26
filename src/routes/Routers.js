@@ -1,3 +1,4 @@
+
 import React from "react";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
@@ -11,6 +12,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import NFTs from "../pages/NFTs";
 import CreateCollection from "../pages/CreateCollection";
 import SingleCollection from "../pages/SingleCollection";
+import NFTDetailsB from '../pages/NftDetailsB'
+import NFTDetailsU from '../pages/NFTDetailsU'
+import TransferForm from '../components/ui/TransferForm/TransferForm'
+import ListingForm from '../components/ui/ListingForm/ListingForm'
 
 import NormalAdminDashboard from "../pages/Nadmin/Dashboard";
 import ViewReports from "./../pages/Nadmin/ViewReports";
@@ -19,6 +24,7 @@ import SuperAdminDashboard from "../pages/Sadmin/Dashboard";
 import ViewAdmins from "./../pages/Sadmin/ViewAdmins";
 import AddAdmin from "../pages/Sadmin/AddAdmin";
 import AdminRequests from "../pages/Sadmin/AdminRequests";
+
 
 function Routers() {
   return (
@@ -37,6 +43,12 @@ function Routers() {
       <Route path="/create-collection" element={<CreateCollection />} />
       <Route path="/edit-profile" element={<EditProfile/>} />
       <Route path="/seller-profile/:address" element={<SellerProfile />} />
+      <Route path='/explore/collection/NFT/:id' element={<NFTDetailsB/>}/>
+      <Route path='/seller-profile/seller-collection/NFT' element={<NFTDetailsU/>} />
+      <Route path='/seller-profile/seller-collection/NFT/transfer-form' element={<TransferForm/>} />
+      <Route path='/seller-profile/seller-collection/NFT/listing-form' element={<ListingForm/>} />
+
+
 
       <Route path="/nadmin-dashboard" element={<NormalAdminDashboard />} />
       <Route path="/nadmin-viewreports" element={<ViewReports />} />
