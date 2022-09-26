@@ -5,27 +5,24 @@ import { NavLink, Link } from "react-router-dom";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 
 const NAV_LINKS = [
-  {
-    display: "Home",
-    url: "/home",
-  },
-  {
-    display: "Explore",
-    url: "/explore",
-  },
-  {
-    display: "Create",
-    url: "/create",
-  },
-  {
-    display: "Contact",
-    url: "/contact",
-  },
-  {
-    display: "Profile",
-    url: "/seller-profile",
-  },
-];
+    {
+        display : 'Home',
+        url : '/home'
+    },
+    {
+        display : 'Explore',
+        url : '/explore'
+    },
+    {
+        display : 'Create',
+        url : '/create'
+    },
+    {
+        display: "Profile",
+        url: "/seller-profile",
+      }
+]
+
 
 function Header() {
   const {enableWeb3, isWeb3Enabled, web3, Moralis} = useMoralis();
