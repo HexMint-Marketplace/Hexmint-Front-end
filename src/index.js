@@ -6,15 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'remixicon/fonts/remixicon.css'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
-
+// import {MoralisProvider} from 'react-moralis';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
-   
+    {/* <MoralisProvider initializeOnMount={false}> */}
       <App />
-
+    {/* </MoralisProvider> */}
     </Router>
   </React.StrictMode>
 );

@@ -35,6 +35,8 @@ function Routers() {
       <Route path="/wallet" element={<Wallet />} />
       <Route path="/NFTs" element={<NFTs />} />
       <Route path="/create-collection" element={<CreateCollection />} />
+      <Route path="/edit-profile" element={<EditProfile/>} />
+      <Route path="/seller-profile/:address" element={<SellerProfile />} />
 
       <Route path="/nadmin-dashboard" element={<NormalAdminDashboard />} />
       <Route path="/nadmin-viewreports" element={<ViewReports />} />
@@ -43,6 +45,7 @@ function Routers() {
       <Route path="/sadmin-viewadmins" element={<ViewAdmins />} />
       <Route path="/sadmin-addadmin" element={<AddAdmin />} />
       <Route path="/sadmin-adminrequests" element={<AdminRequests />} />
+      
     </Routes>
   );
 }

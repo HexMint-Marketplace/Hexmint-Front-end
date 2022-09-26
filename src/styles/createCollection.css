@@ -1,6 +1,6 @@
-.form__input input,
-.form__input textarea,
-.form__input select {
+.form-input input,
+.form-input textarea,
+.form-input select {
   width: 100%;
   padding: 7px 25px;
   color: #fff;
@@ -12,11 +12,11 @@
   cursor: pointer;
 }
 
-.form__input {
+.form-input {
   margin-bottom: 15px;
 }
 
-.form__input label {
+.form-input label {
   color: #fff;
   margin-bottom: 10px;
 }
@@ -31,7 +31,7 @@ select option{
     
 }
 
-.form__input .upload__input {
+.form-input .upload-input {
   padding: 40px 25px;
 }
 
@@ -40,11 +40,7 @@ select option{
   cursor: pointer;
 }
 
-/* .hero_buttons{
-    margin-top: 40px;
-} */
-
-.mint_button{
+.create-collection-button{
 
     padding: 13px 40px !important;
     border-radius: 50px !important;
@@ -52,26 +48,20 @@ select option{
     
 }
 
-.mint_button{
+.create-collection-button{
     background: linear-gradient(to right, #59f9b7, #66feea);
 }
 
-.mint_button a{
+.create-collection-button a{
 
     text-decoration: none;
-    color: black;
+    color: black !important;
     font-weight: 650;
     font-size: 1rem;
     
 }
 
-.mint_button a:hover{
+.create-collection-button a:hover{
     color:rgb(103, 38, 38);
     text-shadow: black 2px 2px 20px;
-}
-
-@media only screen and (max-width: 576px) {
-  .create__item {
-    margin-top: 15px;
-  }
 }

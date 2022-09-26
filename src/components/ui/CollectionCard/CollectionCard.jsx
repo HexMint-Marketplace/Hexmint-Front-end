@@ -16,7 +16,7 @@ const CollectionCard = (props) => {
 
       <div className="creator_info-wrapper d-flex gap-3  align-items-center">
           <div className="creator_img">
-            <img src={creatorImg} alt="" className="creator_image w-100" />
+            <Link to={`/explore/collection/${id}`}><img src={creatorImg} alt="" className="creator_image w-100" /></Link>
           </div>
 
           <div className="collection_content">

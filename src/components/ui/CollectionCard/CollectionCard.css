@@ -14,10 +14,14 @@
 
   }
 
-.creator_img{
-    width: 50px !important;
-    height: 50px !important;
+/* .creator_img{
+    
     background-color: #fff;
+} */
+
+.creator_image{
+  width: 50px !important;
+  height: 50px !important;
 }
 
 .collection_title{
@@ -26,4 +30,10 @@
 .nft-price-wrapper{
   color: #fff;
   font-style: italic;
+}
+
+.single_collection_card
+{
+  width: 100%;
+  height: 100%;
 }
