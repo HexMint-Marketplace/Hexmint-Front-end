@@ -15,7 +15,7 @@ const NAV_LINKS = [
     },
     {
         display : 'EDIT PROFILE',
-        url : '/create'
+        url : '/edit-profile'
     }
 ]
 const SingleCollectionHead = (props) => {
@@ -45,9 +45,13 @@ const SingleCollectionHead = (props) => {
                     </div>
 
                     <div className='d-flex justify-content-end'>
+                        <Link to={'/create-collection'}>
                             <button className='btn gap-2 align-items-center '>
-                                <Link to='/seller-profile/create-collection-form'>Create a Collection</Link>
+
+                                <b>Create a Collection</b>
+
                             </button>
+                        </Link>
                     </div>
 
                 </div>

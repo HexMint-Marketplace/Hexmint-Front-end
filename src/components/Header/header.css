@@ -87,6 +87,17 @@
     } */
 /* } */
 
+.custom-width{
+    max-width: 150px !important;
+    
+}
 
-
+.wallet-address:hover{
+    color: brown;
+}
+.custom-width:hover{
+    
+    transform: scale(1.1);
+   
+}
 

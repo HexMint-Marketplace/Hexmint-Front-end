@@ -40,10 +40,14 @@ function Routers() {
       <Route path="/seller-profile" element={<SellerProfile />} />
       <Route path="/wallet" element={<Wallet />} />
       <Route path="/NFTs" element={<NFTs />} />
+      <Route path="/create-collection" element={<CreateCollection />} />
+      <Route path="/edit-profile" element={<EditProfile/>} />
+      <Route path="/seller-profile/:address" element={<SellerProfile />} />
       <Route path='/explore/collection/NFT/:id' element={<NFTDetailsB/>}/>
       <Route path='/seller-profile/seller-collection/NFT' element={<NFTDetailsU/>} />
       <Route path='/seller-profile/seller-collection/NFT/transfer-form' element={<TransferForm/>} />
       <Route path='/seller-profile/seller-collection/NFT/listing-form' element={<ListingForm/>} />
+
 
 
       <Route path="/nadmin-dashboard" element={<NormalAdminDashboard />} />
@@ -53,6 +57,7 @@ function Routers() {
       <Route path="/sadmin-viewadmins" element={<ViewAdmins />} />
       <Route path="/sadmin-addadmin" element={<AddAdmin />} />
       <Route path="/sadmin-adminrequests" element={<AdminRequests />} />
+      
     </Routes>
   );
 }

@@ -1,13 +1,27 @@
 import './App.css';
 import Layout from './components/Layout/Layout.jsx';
-import { MoralisProvider } from "react-moralis";
+// import { MoralisProvider } from "react-moralis";
 
+import { configureChains, chain, WagmiConfig,
+  createClient } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+
+const { chains, provider, webSocketProvider } = configureChains(
+  [chain.mainnet, chain.polygon],
+  [publicProvider()],
+)
+
+const client = createClient({
+  autoConnect: true,
+  provider,
+  webSocketProvider,
+})
 
 
 function App() {
-  return <MoralisProvider initializeOnMount={false}>
+  return <WagmiConfig client={client}>
     <Layout/>
-  </MoralisProvider>
+  </WagmiConfig>
 }
 
 export default App;
