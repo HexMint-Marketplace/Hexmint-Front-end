@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
@@ -6,6 +6,8 @@ import AuthServices from "../../services/AuthServices";
 // import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useAccount, useConnect, useEnsName } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 
 const NAV_LINKS = [
@@ -29,79 +31,48 @@ const NAV_LINKS = [
 
 
 function Header() {
+  const navigate = useNavigate();
   // const {enableWeb3, isWeb3Enabled, web3, Moralis} = useMoralis();
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address })
   const { connect } = useConnect({
     connector: new InjectedConnector(),
+    
   })
+
+  const [userType, setuserType] = useState();
 
   useEffect(() => {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`)
       const response = await AuthServices.connectwallet({ address });
-      console.log(address);
+      console.log(response);
+      console.log("address",address);
+      console.log("type", response.data.userType);
+      setuserType(response.data.userType)
+      {if (response.data.userType === 'Admin'){
+        console.log(response.data.userType);
+        // <Link to={'/nadmin-dashboard'}></Link>
+        navigate("/nadmin-dashboard");
+      }else if(response.data.userType === 'Super Admin'){
+        console.log(response.data.userType);
+        navigate("/sadmin-dashboard");
+      }else{
+        navigate("/home");
+      }
+
+      }
       console.log("response : ", response);
       
     }
   
     if (isConnected) {
       handleConnectWallet()
+      
     }
   
   }, [address]);
 
-
-
-
-  // const handleConnectWallet = async (e) => {
-  //   console.log("clicked");
-  //     try {
-  //       const response = await AuthServices.login({ username, password });
-  //       // console.log("response - 2", response);
-  //       if (response.status === 200) {
-  //         // toast.success("Login Successfully", {
-  //         //   position: "top-center",
-  //         //   autoClose: 5000,
-  //         //   hideProgressBar: false,
-  //         //   closeOnClick: true,
-  //         //   pauseOnHover: true,
-  //         //   draggable: true,
-  //         //   progress: undefined,
-  //         // });
-  //         Messages.SuccessMessage("Successfully Logged In.");
-  //         // navigate(redirectPath,{replace:true})
-  //         // const user=jwtDecode(Token.getAccessToken())
-  //         // console.log(user);
-  //         // setAuth({userRole:user.role,profile_complete:user.profile_complete})
-  //         navigate(from, { replace: true })
-          
-
-  //       }
-  //     } catch (error) {
-  //       console.log("error response : ",error.response.data.message);
-  //       // console.log(error.response);
-  //       // toast.error(error.message, {
-  //       //   position: "top-center",
-  //       //   autoClose: 5000,
-  //       //   hideProgressBar: false,
-  //       //   closeOnClick: true,
-  //       //   pauseOnHover: true,
-  //       //   draggable: true,
-  //       //   progress: undefined,
-  //       // });
-  //       console.log(error.response.data.message);
-  //       const errormessage=error.response.data.message;
-  //       Messages.ErrorMessage({
-  //         error: error,
-  //         custom_message:error.response.data.message.user
-  //       });
-  //     }
-  //   }
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 200);
-  
 
   return (
     <header className="header w-100">
@@ -118,18 +89,51 @@ function Header() {
 
           <div className="nav_menu ">
             <ul className="nav_list d-flex align-items-center">
-              {NAV_LINKS.map((item, index) => (
-                <li className="nav_item" key={index}>
-                  <NavLink
-                    to={item.url}
-                    className={(navClass) =>
+              
+                <li className="nav_item">
+                {userType === 'Customer' &&
+                  <NavLink to={'/home'} className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
                   >
-                    {item.display}
+                    {'Home'}
+                  </NavLink>
+                }
+                </li>
+
+                <li className="nav_item">
+
+                  <NavLink to={'/explore'} className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                    >
+                    {'Explore'}
                   </NavLink>
                 </li>
-              ))}
+                
+                <li className="nav_item">
+                    <NavLink to={"/seller-profile"} className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                    >
+                    {"Profile"}
+                    </NavLink>
+                </li>
+
+                <li className="nav_item">
+                  {userType === 'Customer' &&
+                  
+                    <NavLink to={'/create'} className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                    >
+                    {'Create'}
+                    </NavLink>
+                }
+                </li>
+
+
+              
             </ul>
           </div>
 
@@ -154,7 +158,7 @@ function Header() {
               {/* // <Link to={`/seller-profile/`} className="text-decoration-none">  */}
               <button className="btn d-flex gap-1 align-items-center custom-width ">
                 
-                <span className="overflow-hidden wallet-address"><b>{(ensName ?? address).substring(0,8)}.....</b></span>
+                <span className="overflow-hidden wallet-address"><b><FontAwesomeIcon icon="fa-solid fa-user"/>{(ensName ?? address).substring(0,8)}.....</b></span>
               </button>
               </Link>
             ) : (

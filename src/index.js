@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'remixicon/fonts/remixicon.css'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import {MoralisProvider} from 'react-moralis';
+import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
