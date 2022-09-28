@@ -6,17 +6,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'remixicon/fonts/remixicon.css'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
+// import {MoralisProvider} from 'react-moralis';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Router>
     {/* <MoralisProvider initializeOnMount={false}> */}
       <App />
     {/* </MoralisProvider> */}
     </Router>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

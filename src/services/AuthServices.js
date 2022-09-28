@@ -1,4 +1,4 @@
-import config from "../config";
+import config from "../config.json";
 import axios from "axios";
 
 //API endpoint

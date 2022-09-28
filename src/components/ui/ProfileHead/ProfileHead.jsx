@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Container, Row, Col } from 'reactstrap';
 import "../../ui/SingleCollectionHead/singleCollectionHead.css";
 import "../ProfileHead/profileHead.css";
 import { NavLink, Link } from 'react-router-dom';
+import Loader from '../Loader/Loader';
 
 const NAV_LINKS = [
     {
@@ -18,9 +19,13 @@ const NAV_LINKS = [
         url : '/edit-profile'
     }
 ]
-const SingleCollectionHead = (props) => {
+const ProfileHead = (props) => {
   const{contractAddress, collectionName, description, collectionIcon} = props.collectionData[0];
+  const {userWallet}=props;
   console.log(props.collectionData)
+
+
+
   return (
     <section>
     <Container>
@@ -37,11 +42,13 @@ const SingleCollectionHead = (props) => {
             <Col lg="12" md="3" sm="12">
                 <div className=''>
                     <div className='text-center h2 px-4 mt-3 collection-name'>
-                        {collectionName}
+                        {
+                            (userWallet?.address)
+                        }
                     </div>
                                     
                     <div className='text-center px-4 collection-name'>
-                        @Thilina Perera
+                        @{userWallet?.address}
                     </div>
 
                     <div className='d-flex justify-content-end'>
@@ -77,4 +84,4 @@ const SingleCollectionHead = (props) => {
   )
 }
 
-export default SingleCollectionHead
+export default ProfileHead

@@ -42,11 +42,18 @@ function Header() {
 
   const [userType, setuserType] = useState();
 
+  const[userAddress, setuserAddress] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('userAddress', JSON.stringify({address}));
+  }, [{address}]);
+
   useEffect(() => {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`)
       const response = await AuthServices.connectwallet({ address });
-      console.log(response);
+      setuserAddress({address})
+      console.log("This is user details",userAddress)
       console.log("address",address);
       console.log("type", response.data.userType);
       setuserType(response.data.userType)
@@ -68,7 +75,8 @@ function Header() {
   
     if (isConnected) {
       handleConnectWallet()
-      
+    }else{
+      navigate("/home");
     }
   
   }, [address]);
@@ -112,7 +120,7 @@ function Header() {
                 </li>
                 
                 <li className="nav_item">
-                    <NavLink to={"/seller-profile"} className={(navClass) =>
+                    <NavLink to={`/seller-profile/${address}`} className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
                     >
