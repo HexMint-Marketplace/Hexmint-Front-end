@@ -5,18 +5,25 @@ import ProfileHead from '../components/ui/ProfileHead/ProfileHead'
 import UserCollectionList from '../components/ui/UserCollectionList/UserCollectionList'
 import Loader from '../components/ui/Loader/Loader.jsx';
 import UserServices from '../services/API/UserServices';
+import { useNavigate } from "react-router-dom";
+
 
 
 function SellerProfile() {
   const[userWallet, setuserWallet] = useState({});
   const [loader, setLoader] = useState(false);
+  const [userType, setUserType] = useState('');
+  // const [showAddress,setShowAddress] = useState([]);
 
   useEffect(() => {
     setLoader(true)
     const walletAddress = JSON.parse(localStorage.getItem('userAddress'));
-    console.log("Should display",walletAddress);
+   
+
+    // console.log("Should display",showAddress);
+
     // call the backend and get details
-    getuserdetails({walletAddress});
+    getusertype(walletAddress.address);
 
     setuserWallet(walletAddress);
     console.log("I fire once")
@@ -29,10 +36,19 @@ function SellerProfile() {
     
   }, []);
 
-  const getuserdetails = async (walletAddress) => {
+  const getusertype = async (walletAddress) => {
     try {
-      const UDetails = await UserServices.getUserDetails(walletAddress);
-      
+      const details = await UserServices.getUserType(walletAddress);
+      const UType = details.data.userType;
+      console.log(UType)
+      setUserType(UType);
+      // if(UType === "Customer"){
+      //   console.log("I am a seller")
+      // }else if(UType === "Admin"){
+      //   console.log("I am a customer")
+      // }else{
+      //   console.log("I am a guest")
+      // }
 
     }
     catch (err) {
@@ -40,7 +56,7 @@ function SellerProfile() {
 
     }
   }
-  
+
   return (
     <section>
 
@@ -48,10 +64,13 @@ function SellerProfile() {
       :<div>
         <ProfileHead 
           userWallet={userWallet}
+          userType = {userType}
           key={COLLECTION_DATA.collectionId} 
           collectionData = {COLLECTION_DATA}
           />
+      {userType === "Customer" &&    
         <UserCollectionList/>
+      }
       </div>}
     </section>
 
