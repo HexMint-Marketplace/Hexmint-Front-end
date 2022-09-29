@@ -39,20 +39,29 @@ function Header() {
 
   const [userType, setuserType] = useState();
 
+  const [userAddress, setuserAddress] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("userAddress", JSON.stringify({ address }));
+  }, [{ address }]);
+
   useEffect(() => {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`);
       const response = await AuthServices.connectwallet({ address });
-      console.log(response);
+      setuserAddress({ address });
+      console.log("This is user details", userAddress);
       console.log("address", address);
       console.log("type", response.data.userType);
       setuserType(response.data.userType);
       {
-        if (response.data.userType === "Admin") {
+
+        if (response.data.userType === "Admin" && isConnected) {
           console.log(response.data.userType);
           // <Link to={'/nadmin-dashboard'}></Link>
           navigate("/nadmin-dashboard");
-        } else if (response.data.userType === "Super Admin") {
+        } else if (response.data.userType === "Super Admin" && isConnected) {
+
           console.log(response.data.userType);
           navigate("/sadmin-dashboard");
         } else {
@@ -64,6 +73,10 @@ function Header() {
 
     if (isConnected) {
       handleConnectWallet();
+
+    } else {
+      navigate("/home");
+
     }
   }, [address]);
 
@@ -106,7 +119,9 @@ function Header() {
 
               <li className="nav_item">
                 <NavLink
-                  to={"/seller-profile"}
+
+                  to={`/seller-profile/${address}`}
+
                   className={(navClass) => (navClass.isActive ? "active" : "")}
                 >
                   {"Profile"}

@@ -24,6 +24,7 @@ import SuperAdminDashboard from "../pages/Sadmin/Dashboard";
 import ViewAdmins from "./../pages/Sadmin/ViewAdmins";
 import AddAdmin from "../pages/Sadmin/AddAdmin";
 import AdminRequests from "../pages/Sadmin/AdminRequests";
+import EditAdminDetails from "../pages/Nadmin/EditAdminDetails";
 
 // import SuperAdmin from "../pages/Sadmin/index";
 
@@ -67,7 +68,8 @@ function Routers() {
       <Route path="/sadmin-addadmin" element={<AddAdmin />} />
       <Route path="/sadmin-adminrequests" element={<AdminRequests />} />
 
-      {/* <Route path="/sadmin" element={<SuperAdmin />} /> */}
+      <Route path="/edit-admin-details" element={<EditAdminDetails />} />
+      
     </Routes>
   );
 }
