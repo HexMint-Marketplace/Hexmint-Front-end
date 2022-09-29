@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
 import "../../styles/create.css";
+import "../../styles/superAdmin.css";
+import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
 
 function ViewReports() {
   return (
     <div>
+      <div className="side-bar">
+        <NormalAdminNav />
+      </div>
       <CommonHeader title={"Block an User"} />
       <section>
         <Container>

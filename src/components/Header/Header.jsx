@@ -55,11 +55,13 @@ function Header() {
       console.log("type", response.data.userType);
       setuserType(response.data.userType);
       {
+
         if (response.data.userType === "Admin" && isConnected) {
           console.log(response.data.userType);
           // <Link to={'/nadmin-dashboard'}></Link>
           navigate("/nadmin-dashboard");
         } else if (response.data.userType === "Super Admin" && isConnected) {
+
           console.log(response.data.userType);
           navigate("/sadmin-dashboard");
         } else {
@@ -71,8 +73,10 @@ function Header() {
 
     if (isConnected) {
       handleConnectWallet();
+
     } else {
       navigate("/home");
+
     }
   }, [address]);
 
@@ -115,7 +119,9 @@ function Header() {
 
               <li className="nav_item">
                 <NavLink
+
                   to={`/seller-profile/${address}`}
+
                   className={(navClass) => (navClass.isActive ? "active" : "")}
                 >
                   {"Profile"}

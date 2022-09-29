@@ -3,10 +3,15 @@ import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import "../../styles/create.css";
+import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
+import "../../styles/superAdmin.css";
 
 function AddAdmin() {
   return (
     <div>
+      <div className="side-bar">
+        <SuperAdminNav />
+      </div>
       <CommonHeader title={"Add an Admin"} />
       <section>
         <Container>
