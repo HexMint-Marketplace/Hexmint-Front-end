@@ -63,7 +63,7 @@ export const NFT__DATA = [
     creatorImg: ava01,
     currentBid: 5.89,
     createrUsername: "@TristaF",
-    collectionName: "Cyber Punks"
+    collectionName: "Cyber Punks",
   },
 
   {
@@ -127,7 +127,7 @@ export const USER_COLLECTION_DATA = [
     creatorImg: ava01,
     currentBid: 5.89,
     createrUsername: "@TristaF",
-    collectionName: "Cyber Punks"
+    collectionName: "Cyber Punks",
   },
 
   {
@@ -178,8 +178,8 @@ export const USER_COLLECTION_DATA = [
     creator: "Trista Francis",
     creatorImg: ava06,
     currentBid: 4.99,
-  }
-]
+  },
+];
 
 export const SELLER__DATA = [
   {
@@ -625,5 +625,43 @@ export const REQUEST__DATA = [
     walletAddress: "0xbc21776...8332",
     reason:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia",
+  },
+];
+
+export const USER__DATA = [
+  {
+    id: "01",
+    walletAddress: "0xbc23866...8332",
+    user: "Thilina",
+  },
+
+  {
+    id: "02",
+    walletAddress: "0xbc23866...8532",
+    user: "Dinusha",
+  },
+
+  {
+    id: "03",
+    walletAddress: "0xbc23766...8332",
+    user: "Dasith",
+  },
+
+  {
+    id: "04",
+    walletAddress: "0xbc23846...8332",
+    user: "Kamal",
+  },
+
+  {
+    id: "05",
+    walletAddress: "0xbc29866...8332",
+    user: "Janith",
+  },
+
+  {
+    id: "06",
+    walletAddress: "0xbc23776...8332",
+    user: "Dasun",
   },
 ];

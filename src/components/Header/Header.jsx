@@ -4,75 +4,68 @@ import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
 import AuthServices from "../../services/AuthServices";
 // import { useMoralis, useWeb3Contract } from "react-moralis";
-import { useAccount, useConnect, useEnsName } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
+import { useAccount, useConnect, useEnsName } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
-
 const NAV_LINKS = [
-    {
-        display : 'Home',
-        url : '/home'
-    },
-    {
-        display : 'Explore',
-        url : '/explore'
-    },
-    {
-        display : 'Create',
-        url : '/create'
-    },
-    {
-        display: "Profile",
-        url: "/seller-profile",
-      }
-]
-
+  {
+    display: "Home",
+    url: "/home",
+  },
+  {
+    display: "Explore",
+    url: "/explore",
+  },
+  {
+    display: "Create",
+    url: "/create",
+  },
+  {
+    display: "Profile",
+    url: "/seller-profile",
+  },
+];
 
 function Header() {
   const navigate = useNavigate();
   // const {enableWeb3, isWeb3Enabled, web3, Moralis} = useMoralis();
-  const { address, isConnected } = useAccount()
-  const { data: ensName } = useEnsName({ address })
+  const { address, isConnected } = useAccount();
+  const { data: ensName } = useEnsName({ address });
   const { connect } = useConnect({
     connector: new InjectedConnector(),
-    
-  })
+  });
 
   const [userType, setuserType] = useState();
 
   useEffect(() => {
     const handleConnectWallet = async (e) => {
-      console.log(`${address} InhandleConnectWallet`)
+      console.log(`${address} InhandleConnectWallet`);
       const response = await AuthServices.connectwallet({ address });
       console.log(response);
-      console.log("address",address);
+      console.log("address", address);
       console.log("type", response.data.userType);
-      setuserType(response.data.userType)
-      {if (response.data.userType === 'Admin'){
-        console.log(response.data.userType);
-        // <Link to={'/nadmin-dashboard'}></Link>
-        navigate("/nadmin-dashboard");
-      }else if(response.data.userType === 'Super Admin'){
-        console.log(response.data.userType);
-        navigate("/sadmin-dashboard");
-      }else{
-        navigate("/home");
-      }
-
+      setuserType(response.data.userType);
+      {
+        if (response.data.userType === "Admin") {
+          console.log(response.data.userType);
+          // <Link to={'/nadmin-dashboard'}></Link>
+          navigate("/nadmin-dashboard");
+        } else if (response.data.userType === "Super Admin") {
+          console.log(response.data.userType);
+          navigate("/sadmin-dashboard");
+        } else {
+          navigate("/home");
+        }
       }
       console.log("response : ", response);
-      
-    }
-  
-    if (isConnected) {
-      handleConnectWallet()
-      
-    }
-  
-  }, [address]);
+    };
 
+    if (isConnected) {
+      handleConnectWallet();
+    }
+  }, [address]);
 
   return (
     <header className="header w-100">
@@ -89,51 +82,49 @@ function Header() {
 
           <div className="nav_menu ">
             <ul className="nav_list d-flex align-items-center">
-              
-                <li className="nav_item">
-                {userType === 'Customer' &&
-                  <NavLink to={'/home'} className={(navClass) =>
+              <li className="nav_item">
+                {userType === "Customer" && (
+                  <NavLink
+                    to={"/home"}
+                    className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
                   >
-                    {'Home'}
+                    {"Home"}
                   </NavLink>
-                }
-                </li>
+                )}
+              </li>
 
-                <li className="nav_item">
+              <li className="nav_item">
+                <NavLink
+                  to={"/explore"}
+                  className={(navClass) => (navClass.isActive ? "active" : "")}
+                >
+                  {"Explore"}
+                </NavLink>
+              </li>
 
-                  <NavLink to={'/explore'} className={(navClass) =>
+              <li className="nav_item">
+                <NavLink
+                  to={"/seller-profile"}
+                  className={(navClass) => (navClass.isActive ? "active" : "")}
+                >
+                  {"Profile"}
+                </NavLink>
+              </li>
+
+              <li className="nav_item">
+                {userType === "Customer" && (
+                  <NavLink
+                    to={"/create"}
+                    className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
-                    >
-                    {'Explore'}
+                  >
+                    {"Create"}
                   </NavLink>
-                </li>
-                
-                <li className="nav_item">
-                    <NavLink to={"/seller-profile"} className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                    >
-                    {"Profile"}
-                    </NavLink>
-                </li>
-
-                <li className="nav_item">
-                  {userType === 'Customer' &&
-                  
-                    <NavLink to={'/create'} className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                    >
-                    {'Create'}
-                    </NavLink>
-                }
-                </li>
-
-
-              
+                )}
+              </li>
             </ul>
           </div>
 
@@ -150,25 +141,34 @@ function Header() {
               Connect Wallet
               </button>
             )} */}
-          
 
-            { isConnected ? 
-            (
-            <Link to={`/seller-profile/${address}`} className="text-decoration-none to-user">
-              {/* // <Link to={`/seller-profile/`} className="text-decoration-none">  */}
-              <button className="btn d-flex gap-1 align-items-center custom-width ">
-                
-                <span className="overflow-hidden wallet-address"><b><FontAwesomeIcon icon="fa-solid fa-user"/>{(ensName ?? address).substring(0,8)}.....</b></span>
-              </button>
+            {isConnected ? (
+              <Link
+                to={`/seller-profile/${address}`}
+                className="text-decoration-none to-user"
+              >
+                {/* // <Link to={`/seller-profile/`} className="text-decoration-none">  */}
+                <button className="btn d-flex gap-1 align-items-center custom-width ">
+                  <span className="overflow-hidden wallet-address">
+                    <b>
+                      <FontAwesomeIcon icon="fa-solid fa-user" />
+                      {(ensName ?? address).substring(0, 8)}.....
+                    </b>
+                  </span>
+                </button>
               </Link>
             ) : (
-              <button onClick={() => {connect();
-              //  handleConnectWallet();
-               }} className="btn d-flex gap-2 align-items-center">
-              <span>
-                <i class="ri-wallet-line"></i>
-              </span>
-              Connect Wallet
+              <button
+                onClick={() => {
+                  connect();
+                  //  handleConnectWallet();
+                }}
+                className="btn d-flex gap-2 align-items-center"
+              >
+                <span>
+                  <i class="ri-wallet-line"></i>
+                </span>
+                Connect Wallet
               </button>
             )}
 

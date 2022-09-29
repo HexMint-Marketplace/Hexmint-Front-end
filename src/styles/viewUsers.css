@@ -1,7 +1,3 @@
-.add-button {
-  padding: 3% 8%;
-}
-
 .table {
   width: auto !important;
   height: auto !important;
@@ -10,6 +6,6 @@
   margin-bottom: 10% !important;
 }
 
-.act-button {
-  margin-right: 5% !important;
+.section {
+  padding-top: 10%;
 }
