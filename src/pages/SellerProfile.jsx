@@ -68,9 +68,9 @@ function SellerProfile() {
           key={COLLECTION_DATA.collectionId} 
           collectionData = {COLLECTION_DATA}
           />
-      {userType === "Customer" &&    
-        <UserCollectionList/>
-      }
+   
+        
+
       </div>}
     </section>
 

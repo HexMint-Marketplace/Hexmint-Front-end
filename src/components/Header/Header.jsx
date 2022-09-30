@@ -55,11 +55,11 @@ function Header() {
       console.log("type", response.data.userType);
       setuserType(response.data.userType);
       {
-        if (response.data.userType === "Admin" && isConnected) {
+        if (response.data.userType === "Admin") {
           console.log(response.data.userType);
           // <Link to={'/nadmin-dashboard'}></Link>
           navigate("/nadmin-dashboard");
-        } else if (response.data.userType === "Super Admin" && isConnected) {
+        } else if (response.data.userType === "Super Admin") {
           console.log(response.data.userType);
           navigate("/sadmin-dashboard");
         } else {
@@ -114,12 +114,16 @@ function Header() {
               </li>
 
               <li className="nav_item">
-                <NavLink
-                  to={`/seller-profile/${address}`}
-                  className={(navClass) => (navClass.isActive ? "active" : "")}
-                >
-                  {"Profile"}
-                </NavLink>
+                {isConnected && (
+                  <NavLink
+                    to={`/seller-profile/${address}`}
+                    className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                  >
+                    {"Profile"}
+                  </NavLink>
+                )}
               </li>
 
               <li className="nav_item">
