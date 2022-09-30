@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import "../../styles/create.css";
 import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
 import "../../styles/superAdmin.css";
+import AdminServices from "../../services/AdminServices";
 
 function AddAdmin() {
   return (
@@ -26,6 +27,11 @@ function AddAdmin() {
                   </div>
 
                   <div className="form__input">
+                    <label htmlFor="">Wallet Address</label>
+                    <input type="text" placeholder="Enter Wallet Address" />
+                  </div>
+
+                  <div className="form__input">
                     <label htmlFor="">Email</label>
                     <input type="email" placeholder="Enter Email" />
                   </div>
@@ -41,7 +47,12 @@ function AddAdmin() {
                   </div>
 
                   <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button className="btn mint_button d-flex align-items-center gap-2">
+                    <button
+                      className="btn mint_button d-flex align-items-center gap-2"
+                      onClick={() => {
+                        AdminServices.addAdmin();
+                      }}
+                    >
                       <Link to="">Add</Link>
                     </button>
                   </div>
@@ -57,3 +68,5 @@ function AddAdmin() {
 }
 
 export default AddAdmin;
+
+// onClick={() => {connect();}}
