@@ -4,6 +4,11 @@ import "../../ui/SingleCollectionHead/singleCollectionHead.css";
 import "../ProfileHead/profileHead.css";
 import { NavLink, Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import UserCollectionList from "../UserCollectionList/UserCollectionList";
+import EditProfile from "../../../pages/EditProfile";
+import { useNavigate } from "react-router-dom";
 
 const NAV_LINKS = [
   {
@@ -24,6 +29,7 @@ const ProfileHead = (props) => {
     props.collectionData[0];
   const { userWallet } = props;
   const { userType } = props;
+  const { walletaddress } = props;
   console.log("In profile head to find user type", userType);
   console.log(props.collectionData);
 
@@ -84,22 +90,43 @@ const ProfileHead = (props) => {
               </div>
 
               {userType === "Customer" && (
-                <div className="nav_menu d-flex justify-content-center mt-4">
-                  <ul className="nav_list d-flex align-items-center">
-                    {NAV_LINKS.map((item, index) => (
-                      <li className="nav_item" key={index}>
-                        <NavLink
-                          to={item.url}
-                          className={(navClass) =>
-                            navClass.isActive ? "active" : ""
-                          }
-                        >
-                          {item.display}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                // <div className="nav_menu d-flex justify-content-center mt-4">
+                //   <ul className="nav_list d-flex align-items-center">
+                //     {NAV_LINKS.map((item, index) => (
+                //       <li className="nav_item" key={index}>
+                //         <NavLink
+                //           to={item.url}
+                //           className={(navClass) =>
+                //             navClass.isActive ? "active" : ""
+                //           }
+                //         >
+                //           {item.display}
+                //         </NavLink>
+                //       </li>
+                //     ))}
+                //   </ul>
+                // </div>
+                <Row>
+                  <Col lg="12" md="3" sm="12">
+                    <Tabs
+                      defaultActiveKey="COLLECTIONS"
+                      id="uncontrolled-tab-example"
+                      className="mb-3 mt-5 justify-content-center"
+                    >
+                      <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
+                        <UserCollectionList />
+                      </Tab>
+                      <Tab eventKey="ACTIVITY" title="ACTIVITY">
+                        {/* <Sonnet /> */} <div>"Have to build</div>
+                      </Tab>
+                      <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
+                        <EditProfile
+                          walletaddress = {userWallet.address}
+                        />
+                      </Tab>
+                    </Tabs>
+                  </Col>
+                </Row>
               )}
             </Col>
           </Row>
