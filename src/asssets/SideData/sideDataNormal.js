@@ -1,4 +1,9 @@
-import { FaEdit, FaLaptop, FaList } from "react-icons/fa";
+import {
+  FaCreativeCommonsBy,
+  FaLaptop,
+  FaCreativeCommonsShare,
+  FaExpeditedssl,
+} from "react-icons/fa";
 
 export const SideDataNormal = [
   {
@@ -9,19 +14,19 @@ export const SideDataNormal = [
   },
   {
     id: 1,
-    icon: <FaList />,
+    icon: <FaCreativeCommonsShare />,
     text: "View Reports",
     link: "/nadmin-viewreports",
   },
   {
     id: 2,
-    icon: <FaEdit />,
+    icon: <FaExpeditedssl />,
     text: "Block Users",
     link: "/nadmin-blockusers",
   },
   {
     id: 3,
-    icon: <FaEdit />,
+    icon: <FaCreativeCommonsBy />,
     text: "View Users",
     link: "/nadmin-viewusers",
   },
