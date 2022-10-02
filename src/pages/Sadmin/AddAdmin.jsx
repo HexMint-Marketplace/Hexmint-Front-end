@@ -7,6 +7,7 @@ import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
 import "../../styles/superAdmin.css";
 import AdminServices from "../../services/AdminServices";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 function AddAdmin() {
   const formValues = {
@@ -31,7 +32,7 @@ function AddAdmin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    state = { ...state };
+    state = { ...state, DOB: moment(state["DOB"]).format("MM-DD-YYYY") };
     console.log(state);
     try {
       const response = await AdminServices.addAdmin(state);
