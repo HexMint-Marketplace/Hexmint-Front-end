@@ -19,6 +19,7 @@ const addAdmin = async (data) => {
   });
 };
 
+
 export default {
-  addAdmin,
+  addAdmin
 };
