@@ -19,6 +19,14 @@ const addAdmin = async (data) => {
   });
 };
 
+const getAdmins = async () => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-all-admins",
+  });
+};
+
 export default {
   addAdmin,
+  getAdmins,
 };
