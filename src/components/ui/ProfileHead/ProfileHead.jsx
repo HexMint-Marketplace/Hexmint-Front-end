@@ -58,13 +58,23 @@ const ProfileHead = (props) => {
           <Row>
             <Col lg="12" md="3" sm="12">
               <div className="px-4 text-center">
-                <img
-                  src={collectionIcon}
-                  alt=""
-                  className="rounded-circle rounded border border-5 img-fluid"
-                  height="200"
-                  width="200"
-                />
+                {proPic == null ? (
+                  <img
+                    src={collectionIcon}
+                    alt=""
+                    className="rounded-circle rounded border border-5 img-fluid"
+                    height="200"
+                    width="200"
+                  />
+                ) : (
+                  <img
+                    src={"data:image/png;base64,"+proPic}
+                    alt=""
+                    className="rounded-circle rounded border border-5 img-fluid"
+                    height="200"
+                    width="200"
+                  />
+                )}
               </div>
             </Col>
           </Row>
@@ -122,7 +132,14 @@ const ProfileHead = (props) => {
 
                       <Row>
                         <Col lg="12" md="3" sm="12">
-                          <div>{isShown && <EditAdminDetails />}</div>
+                          <div>
+                            {isShown && (
+                              <EditAdminDetails
+                                walletaddress={userWallet.address}
+                                setissubmit={props.setissubmit}
+                              />
+                            )}
+                          </div>
                         </Col>
                       </Row>
                     </>
@@ -146,7 +163,7 @@ const ProfileHead = (props) => {
                       </Tab>
                       <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                         <EditProfile
-                          reloadNow={props.reloadNow}
+                          // reloadNow={props.reloadNow}
                           // profileUpdate={props.profileUpdate}
                           walletaddress={userWallet.address}
                           setissubmit={props.setissubmit}

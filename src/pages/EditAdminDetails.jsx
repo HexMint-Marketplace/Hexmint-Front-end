@@ -9,13 +9,14 @@ import Loader from "../components/ui/Loader/Loader";
 
 function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
+  console.log("In the admin details edit and wallet address is", walletaddress);
   // const { setissubmit } = props;
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
   const [base64_img, setBase64Img] = useState("");
-  const [name, setname] = useState("");
-  const [username, setusername] = useState("");
+  const [email, setemail] = useState("");
+  const [mobilenumber, setmobilenumber] = useState("");
   const navigate = useNavigate();
 
   // Validate uploaded image file
@@ -46,9 +47,11 @@ function EditAdminDetails(props) {
       e.preventDefault();
       setLoader(true);
       const formData = new FormData();
+      console.log("In the form data and wallet address is", walletaddress,
+        "email is", email, "mobile number is", mobilenumber);
       formData.append("walletaddress", walletaddress);
-      formData.append("username", username);
-      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("mobilenumber", mobilenumber);
       formData.append("proiic", base64_img);
       console.log("In the form data", formData);
       const response = await AdminServices.updateAdminDetails(formData);
@@ -62,7 +65,7 @@ function EditAdminDetails(props) {
         },1500 )
         // setissubmit(true);
         // navigate(`/seller-profile/${walletaddress}`);
-        console.log("In the if and updated user details succesfully");
+        console.log("In the if and updated admin details succesfully");
       }
     } catch (error) {
       console.log("error", error);
@@ -96,7 +99,7 @@ function EditAdminDetails(props) {
                       type="email"
                       placeholder="Enter Your Email Address"
                       name="email"
-                      onChange={(e) => setname(e.target.value)}
+                      onChange={(e) => setemail(e.target.value)}
                     />
                   </div>
 
@@ -106,7 +109,7 @@ function EditAdminDetails(props) {
                       type="text"
                       placeholder="Enter Your Mobile Number"
                       name="mobilenumber"
-                      onChange={(e) => setusername(e.target.value)}
+                      onChange={(e) => setmobilenumber(e.target.value)}
                     />
                   </div>
 
