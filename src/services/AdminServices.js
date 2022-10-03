@@ -4,6 +4,13 @@ import axios from "axios";
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
 
+const deleteAdmin = async (id) => {
+  return axios({
+    method: "delete",
+    url: APIEndpoint + `/delete-admin/${id}`,
+  });
+};
+
 const addAdmin = async (data) => {
   return axios({
     method: "post",
@@ -30,5 +37,6 @@ export default {
 
   addAdmin,
   getAdmins,
+  deleteAdmin,
 
 };
