@@ -206,6 +206,8 @@ function SellerProfile() {
             mobile={mobile}
             key={COLLECTION_DATA.collectionId}
             collectionData={COLLECTION_DATA}
+            data={data} 
+    
             // profileUpdate = {profileUpdate}
             setissubmit={toggleisSubmit}
             // reloadNow  = {reloadNow}

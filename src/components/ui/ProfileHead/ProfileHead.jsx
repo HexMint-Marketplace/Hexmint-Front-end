@@ -30,7 +30,7 @@ const ProfileHead = (props) => {
 
   const { contractAddress, collectionName, description, collectionIcon } =
     props.collectionData[0];
-  const { userWallet, userType, name, userName, proPic } = props;
+  const { userWallet, userType, name, userName, proPic, data } = props;
   const { email, DOB, mobile } = props;
 
   // console.log("In Profile Head", name);
@@ -156,7 +156,9 @@ const ProfileHead = (props) => {
                       className="mb-3 mt-5 justify-content-center"
                     >
                       <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
-                        <UserCollectionList />
+                        <UserCollectionList
+                          data ={data}
+                        />
                       </Tab>
                       <Tab eventKey="ACTIVITY" title="ACTIVITY">
                         {/* <Sonnet /> */} <div>"Have to build</div>

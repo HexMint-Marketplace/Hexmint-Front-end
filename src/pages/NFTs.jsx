@@ -1,9 +1,28 @@
-import React from 'react'
 
-function NFTs() {
+import {
+    BrowserRouter as Router,
+    Link,
+  } from "react-router-dom";
+
+
+function NFTs(data) {
+  const newTo = {
+    pathname:"/nftPage/"+data.data.tokenId
+}
   return (
-    <div>NFTs</div>
+      <Link to={newTo}>
+      <div className="">
+          <img src={data.data.image} alt="" width="300" height="200" />
+          <div className= "">
+              <strong className="text-xl">{data.data.name}</strong>
+              <p className="display-inline">
+                  {data.data.description}
+              </p>
+          </div>
+      </div>
+      </Link>
   )
+
 }
 
 export default NFTs
