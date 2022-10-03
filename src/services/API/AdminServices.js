@@ -2,7 +2,7 @@ import config from '../../config.json';
 import axios from "axios";
 
 //API endpoint
-const APIEndpoint = config.DOMAIN_NAME + '/user';
+const APIEndpoint = config.DOMAIN_NAME + '/admin';
 
 const getAdminDetails = (walletAddress) => {
     console.log(`in user services ${walletAddress}`);
@@ -13,6 +13,20 @@ const getAdminDetails = (walletAddress) => {
     });
 }
 
+const updateAdminDetails = (formData) => {
+    console.log(`in admin services ${formData}`);
+    return axios({
+      method: "post",
+      url: APIEndpoint + "/update-admin-details",
+      data: formData,
+      // headers: {
+      //   Authorization: `Bearer ${token.getAccessToken()}`,
+      //   content_type: 'multipart/form-data',
+      // },
+    });
+  };
+
 export default {
     getAdminDetails,
+    updateAdminDetails,
 }
