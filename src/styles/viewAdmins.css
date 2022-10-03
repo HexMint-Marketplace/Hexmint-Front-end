@@ -13,3 +13,11 @@
 .act-button {
   margin-right: 5% !important;
 }
+
+.alert {
+  background-color: #000 !important;
+}
+
+#alert-dialog-title {
+  color: #000 !important;
+}
