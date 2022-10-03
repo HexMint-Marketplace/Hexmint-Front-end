@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
-import "../styles/editProfile.css";
+import "../styles/editProfile.css"
 import FormData from "form-data";
-import CustomerServices from "../services/API/CustomerServices";
+import AdminServices from "../services/API/AdminServices";
 import Loader from "../components/ui/Loader/Loader";
 
-function EditProfile(props) {
+function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
   // const { setissubmit } = props;
   const [loader, setLoader] = useState(false);
@@ -51,7 +51,7 @@ function EditProfile(props) {
       formData.append("name", name);
       formData.append("proiic", base64_img);
       console.log("In the form data", formData);
-      const response = await CustomerServices.updateUserDetails(formData);
+      const response = await AdminServices.updateAdminDetails(formData);
       console.log("In the response", response);
       if (response.status === 200) {
   
@@ -71,7 +71,7 @@ function EditProfile(props) {
 
   return (
     <div>
-      <CommonHeader title={"Edit Profile"} />
+      <h2>Edit Profile</h2>
       <section>
         <Container>
           <Row>
@@ -91,21 +91,21 @@ function EditProfile(props) {
                   </div>
 
                   <div className="form-input mt-4">
-                    <label htmlFor="">Name</label>
+                    <label htmlFor="">Email</label>
                     <input
-                      type="text"
-                      placeholder="Enter Your Name"
-                      name="name"
+                      type="email"
+                      placeholder="Enter Your Email Address"
+                      name="email"
                       onChange={(e) => setname(e.target.value)}
                     />
                   </div>
 
                   <div className="form-input mt-4">
-                    <label htmlFor="">Username</label>
+                    <label htmlFor="">Mobile Number</label>
                     <input
                       type="text"
-                      placeholder="Enter Your Name"
-                      name="username"
+                      placeholder="Enter Your Mobile Number"
+                      name="mobilenumber"
                       onChange={(e) => setusername(e.target.value)}
                     />
                   </div>
@@ -130,4 +130,4 @@ function EditProfile(props) {
   );
 }
 
-export default EditProfile;
+export default EditAdminDetails;

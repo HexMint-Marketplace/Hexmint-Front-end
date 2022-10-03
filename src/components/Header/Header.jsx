@@ -71,10 +71,8 @@ function Header() {
 
     if (isConnected) {
       handleConnectWallet();
-
     } else {
       navigate("/home");
-
     }
   }, [address]);
 
@@ -94,7 +92,7 @@ function Header() {
           <div className="nav_menu ">
             <ul className="nav_list d-flex align-items-center">
               <li className="nav_item">
-                {userType === "Customer" && (
+                {(userType === "Customer" || !isConnected) && (
                   <NavLink
                     to={"/home"}
                     className={(navClass) =>
@@ -102,6 +100,28 @@ function Header() {
                     }
                   >
                     {"Home"}
+                  </NavLink>
+                )}
+
+                {(userType === "Super Admin" && isConnected) && (
+                  <NavLink
+                    to={"/sadmin-dashboard"}
+                    className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                  >
+                    {"Dashboard"}
+                  </NavLink>
+                )}
+
+                {(userType === "Admin" && isConnected) && (
+                  <NavLink
+                    to={"/nadmin-dashboard"}
+                    className={(navClass) =>
+                      navClass.isActive ? "active" : ""
+                    }
+                  >
+                    {"Dashboard"}
                   </NavLink>
                 )}
               </li>
@@ -114,9 +134,9 @@ function Header() {
                   {"Explore"}
                 </NavLink>
               </li>
-
+              
               <li className="nav_item">
-                {isConnected && (
+                {isConnected &&(
                   <NavLink
                     to={`/seller-profile/${address}`}
                     className={(navClass) =>
@@ -125,11 +145,14 @@ function Header() {
                   >
                     {"Profile"}
                   </NavLink>
-                )}
-              </li>
+                )
+                  }
+                </li>
+
+             
 
               <li className="nav_item">
-                {userType === "Customer" && (
+                {isConnected && userType === "Customer" && (
                   <NavLink
                     to={"/create"}
                     className={(navClass) =>

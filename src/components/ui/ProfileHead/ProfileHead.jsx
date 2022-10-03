@@ -9,6 +9,7 @@ import Tabs from "react-bootstrap/Tabs";
 import UserCollectionList from "../UserCollectionList/UserCollectionList";
 import EditProfile from "../../../pages/EditProfile";
 import { useNavigate } from "react-router-dom";
+import EditAdminDetails from "../../../pages/EditAdminDetails";
 
 const NAV_LINKS = [
   {
@@ -25,10 +26,16 @@ const NAV_LINKS = [
   },
 ];
 const ProfileHead = (props) => {
+  const [isShown, setisShown] = useState(false);
+
   const { contractAddress, collectionName, description, collectionIcon } =
     props.collectionData[0];
-  const { userWallet } = props;
-  const { userType } = props;
+  const { userWallet, userType, name, userName, proPic } = props;
+  const { email, DOB, mobile } = props;
+
+  // console.log("In Profile Head", name);
+  // const [setissubmit] = props;
+
   const { walletaddress } = props;
   console.log("In profile head to find user type", userType);
   console.log(props.collectionData);
@@ -39,6 +46,10 @@ const ProfileHead = (props) => {
       userWallet.address.substring(38, 42)
     : "@";
   console.log(typeof showAddress);
+
+  const handleClick = (e) => {
+    setisShown(!isShown);
+  };
 
   return (
     <section>
@@ -63,11 +74,17 @@ const ProfileHead = (props) => {
               <div className="">
                 <div className="text-center h2 px-4 mt-3 collection-name">
                   {/* {showAddress} */}
-                  {userType === "Customer" ? showAddress : "Admin"}
+                  {userType === "Customer"
+                    ? name === "Customer"
+                      ? showAddress
+                      : name
+                    : name === "Admin"
+                    ? showAddress + "(Admin)"
+                    : name}
                 </div>
 
                 <div className="text-center px-4 collection-name">
-                  @{showAddress}
+                  @{userName}
                 </div>
 
                 {userType === "Customer" ? (
@@ -79,33 +96,41 @@ const ProfileHead = (props) => {
                     </Link>
                   </div>
                 ) : (
-                  <div className="d-flex justify-content-center py-4">
-                    <Link to={"/edit-admin-details"}>
-                      <button className="btn gap-2 align-items-center ">
-                        <b>Edit Profile</b>
-                      </button>
-                    </Link>
-                  </div>
+                  (userType === "Admin" || userType === "Super Admin") && (
+                    <>
+                      <hr class="hr-primary mt-3" />
+                      <Row>
+                        <Col lg="3" md="3" sm="12"></Col>
+                        <Col lg="6" md="6" sm="12">
+                          <div className="admin-details mt-3 p-4">
+                            <h5>Name : {name}</h5>
+                            <h5>Email : {email}</h5>
+                            <h5>DOB : {DOB}</h5>
+                            <h5>Mobie : {mobile}</h5>
+                          </div>
+                        </Col>
+                        <Col lg="3" md="3" sm="12"></Col>
+                      </Row>
+                      <div className="d-flex justify-content-center py-4">
+                        <button
+                          onClick={handleClick}
+                          className="btn gap-2 align-items-center "
+                        >
+                          <b>Edit Profile</b>
+                        </button>
+                      </div>
+
+                      <Row>
+                        <Col lg="12" md="3" sm="12">
+                          <div>{isShown && <EditAdminDetails />}</div>
+                        </Col>
+                      </Row>
+                    </>
+                  )
                 )}
               </div>
 
               {userType === "Customer" && (
-                // <div className="nav_menu d-flex justify-content-center mt-4">
-                //   <ul className="nav_list d-flex align-items-center">
-                //     {NAV_LINKS.map((item, index) => (
-                //       <li className="nav_item" key={index}>
-                //         <NavLink
-                //           to={item.url}
-                //           className={(navClass) =>
-                //             navClass.isActive ? "active" : ""
-                //           }
-                //         >
-                //           {item.display}
-                //         </NavLink>
-                //       </li>
-                //     ))}
-                //   </ul>
-                // </div>
                 <Row>
                   <Col lg="12" md="3" sm="12">
                     <Tabs
@@ -121,7 +146,10 @@ const ProfileHead = (props) => {
                       </Tab>
                       <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                         <EditProfile
-                          walletaddress = {userWallet.address}
+                          reloadNow={props.reloadNow}
+                          // profileUpdate={props.profileUpdate}
+                          walletaddress={userWallet.address}
+                          setissubmit={props.setissubmit}
                         />
                       </Tab>
                     </Tabs>

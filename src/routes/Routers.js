@@ -17,6 +17,7 @@ import TransferForm from "../components/ui/TransferForm/TransferForm";
 import ListingForm from "../components/ui/ListingForm/ListingForm";
 
 import NormalAdminDashboard from "../pages/Nadmin/Dashboard";
+import AdminProfile from "../pages/Nadmin/AdminProfile"
 import ViewReports from "./../pages/Nadmin/ViewReports";
 import BlockUsers from "./../pages/Nadmin/BlockUsers";
 import ViewUsers from "./../pages/Nadmin/ViewUsers";
@@ -24,7 +25,7 @@ import SuperAdminDashboard from "../pages/Sadmin/Dashboard";
 import ViewAdmins from "./../pages/Sadmin/ViewAdmins";
 import AddAdmin from "../pages/Sadmin/AddAdmin";
 import AdminRequests from "../pages/Sadmin/AdminRequests";
-import EditAdminDetails from "../pages/Nadmin/EditAdminDetails";
+import EditAdminDetails from "../pages/EditAdminDetails";
 
 // import SuperAdmin from "../pages/Sadmin/index";
 
@@ -43,7 +44,7 @@ function Routers() {
       <Route path="/wallet" element={<Wallet />} />
       <Route path="/NFTs" element={<NFTs />} />
       <Route path="/create-collection" element={<CreateCollection />} />
-      <Route path="/edit-profile" element={<EditProfile />} />
+      {/* <Route path="/edit-profile" element={<EditProfile />} /> */}
       <Route path="/seller-profile/:address" element={<SellerProfile />} />
       <Route path="/explore/collection/NFT/:id" element={<NFTDetailsB />} />
       <Route
@@ -67,8 +68,8 @@ function Routers() {
       <Route path="/sadmin-viewadmins" element={<ViewAdmins />} />
       <Route path="/sadmin-addadmin" element={<AddAdmin />} />
       <Route path="/sadmin-adminrequests" element={<AdminRequests />} />
-
-      <Route path="/edit-admin-details" element={<EditAdminDetails />} />
+      {/* <Route path="/admin-profile/:address" element={<AdminProfile />} /> */}
+      {/* <Route path="/edit-admin-details" element={<EditAdminDetails />} /> */}
       
     </Routes>
   );

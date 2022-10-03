@@ -5,13 +5,23 @@
 	padding: 0;
 }
 .loader-element:root {
+
 	--hue: 223;
 	--bg: hsl(var(--hue),10%,90%);
 	--fg: hsl(var(--hue),10%,10%);
 	--trans-dur: 0.3s;
 	font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320));
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
 }
 .loader-element {
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 46267;
 	background: var(--bg);
 	color: var(--fg);
 	font: 1em/1.5 sans-serif;

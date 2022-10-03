@@ -27,6 +27,8 @@ const getAdmins = async () => {
 };
 
 export default {
+
   addAdmin,
   getAdmins,
+
 };
