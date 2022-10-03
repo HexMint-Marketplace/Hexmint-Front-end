@@ -26,7 +26,7 @@ const TransferForm = () => {
                 <form className='text-center'>
                   <div className="form__input">
                     <label htmlFor="" className='text-center'>Receiver's Wallet Address</label>
-                    <input type="text" placeholder="Enter Reeiver's Wallet Address" />
+                    <input type="text" placeholder="Enter Receiver's Wallet Address" />
                   </div>
 
                   <button type='submit' className='btn text-center p-2 px-5 mt-3 mb-5'>
