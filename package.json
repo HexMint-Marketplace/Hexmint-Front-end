@@ -38,7 +38,6 @@
     "styled-components": "^5.3.6",
     "wagmi": "^0.6.7",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
