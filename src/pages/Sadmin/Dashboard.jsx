@@ -22,7 +22,13 @@ function NormalAdminDashboard() {
             </h1>
           </div>
           <div className="profit col-4">
-            <h1>Display balance</h1>
+            <div className="card bg-transparent">
+              <div className="card-body border border-5 rounded rounded-4 border-primary text-center">
+                <h5 className="card-title text-white">Balance</h5>
+                <h4 className="card-title text-danger">76.2 ETH</h4>
+                <p className="card-text text-white">Total Customers - 148</p>
+              </div>
+            </div>
           </div>
         </div>
         <div>

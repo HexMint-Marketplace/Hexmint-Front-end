@@ -4,8 +4,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* z-index: 22222; */
-  background-color: #14141f;
+  z-index: 22222;
+  background-color: #14141f !important;
 }
 
 .nav_list {

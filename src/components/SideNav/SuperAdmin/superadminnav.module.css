@@ -3,26 +3,34 @@
   transition: width 0.3s ease-in-out;
   height: 100vh;
   background-color: #2f2f4b;
-  padding-top: 28px;
+  padding-top: 30px;
+  -webkit-transition: width 0.3s ease-in-out;
+  -moz-transition: width 0.3s ease-in-out;
+  -ms-transition: width 0.3s ease-in-out;
+  -o-transition: width 0.3s ease-in-out;
 }
 
 .sidenavClosed {
   composes: sidenav;
   transition: width 0.3s ease-in-out;
-  width: 60px;
+  width: 70px;
+  -webkit-transition: width 0.3s ease-in-out;
+  -moz-transition: width 0.3s ease-in-out;
+  -ms-transition: width 0.3s ease-in-out;
+  -o-transition: width 0.3s ease-in-out;
 }
 
 .sideitem {
   display: flex;
   align-items: center;
-  padding: 10px 20px;
+  padding: 20px 20px;
   cursor: pointer;
   color: #b2bac2;
   text-decoration: none;
 }
 
 .linkText {
-  padding-left: 16px;
+  padding-left: 18px;
 }
 
 .linkTextClosed {
