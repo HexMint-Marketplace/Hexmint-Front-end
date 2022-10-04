@@ -30,7 +30,6 @@ const NAV_LINKS = [
 
 function Header() {
   const navigate = useNavigate();
-  // const {enableWeb3, isWeb3Enabled, web3, Moralis} = useMoralis();
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
   const { connect } = useConnect({
@@ -38,8 +37,7 @@ function Header() {
   });
 
   const [userType, setuserType] = useState();
-
-  const [userAddress, setuserAddress] = useState("");
+   const [userAddress, setuserAddress] = useState("");
 
   useEffect(() => {
     localStorage.setItem("userAddress", JSON.stringify({ address }));
@@ -57,7 +55,6 @@ function Header() {
       {
         if (response.data.userType === "Admin") {
           console.log(response.data.userType);
-          // <Link to={'/nadmin-dashboard'}></Link>
           navigate("/nadmin-dashboard");
         } else if (response.data.userType === "Super Admin") {
           console.log(response.data.userType);
@@ -66,7 +63,6 @@ function Header() {
           navigate("/home");
         }
       }
-      console.log("response : ", response);
     };
 
     if (isConnected) {

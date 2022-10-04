@@ -117,7 +117,7 @@ export const NFT__DATA = [
   },
 ];
 
-export const USER_COLLECTION_DATA = [
+export const USER_NFT_DATA = [
   {
     id: "01",
     title: "Apes Club",

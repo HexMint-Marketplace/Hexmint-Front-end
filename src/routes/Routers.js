@@ -48,7 +48,7 @@ function Routers() {
       <Route path="/seller-profile/:address" element={<SellerProfile />} />
       <Route path="/explore/collection/NFT/:id" element={<NFTDetailsB />} />
       <Route
-        path="/seller-profile/seller-collection/NFT"
+        path="/seller-profile/seller-collection/NFT/:id"
         element={<NFTDetailsU />}
       />
       <Route
