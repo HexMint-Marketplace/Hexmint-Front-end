@@ -22,7 +22,7 @@ function NormalAdminDashboard() {
             </h1>
           </div>
           <div className="profit col-4">
-            <div className="card bg-transparent">
+            <div className="card bg-transparent" style={{ zIndex: -1 }}>
               <div className="card-body border border-5 rounded rounded-4 border-primary text-center">
                 <h5 className="card-title text-white">Balance</h5>
                 <h4 className="card-title text-danger">76.2 ETH</h4>
