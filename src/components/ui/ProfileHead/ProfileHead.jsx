@@ -6,10 +6,10 @@ import { NavLink, Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import UserCollectionList from "../UserCollectionList/UserCollectionList";
 import EditProfile from "../../../pages/EditProfile";
 import { useNavigate } from "react-router-dom";
 import EditAdminDetails from "../../../pages/EditAdminDetails";
+import UserNFTList from "../../ui/UserNFTList/UserNFTList"
 
 const NAV_LINKS = [
   {
@@ -28,13 +28,11 @@ const NAV_LINKS = [
 const ProfileHead = (props) => {
   const [isShown, setisShown] = useState(false);
 
-  const { contractAddress, collectionName, description, collectionIcon } =
-    props.collectionData[0];
+  const { contractAddress, collectionName, description, collectionIcon } =props.collectionData[0];
   const { userWallet, userType, name, userName, proPic, data } = props;
   const { email, DOB, mobile } = props;
 
-  // console.log("In Profile Head", name);
-  // const [setissubmit] = props;
+  console.log("Pro pic is", proPic);
 
   const { walletaddress } = props;
   console.log("In profile head to find user type", userType);
@@ -58,7 +56,7 @@ const ProfileHead = (props) => {
           <Row>
             <Col lg="12" md="3" sm="12">
               <div className="px-4 text-center">
-                {proPic == null ? (
+                {/* {proPic == null ? ( */}
                   <img
                     src={collectionIcon}
                     alt=""
@@ -66,15 +64,15 @@ const ProfileHead = (props) => {
                     height="200"
                     width="200"
                   />
-                ) : (
-                  <img
+                {/* ) : ( */}
+                  {/* <img
                     src={"data:image/png;base64,"+proPic}
                     alt=""
                     className="rounded-circle rounded border border-5 img-fluid"
                     height="200"
                     width="200"
                   />
-                )}
+                )} */}
               </div>
             </Col>
           </Row>
@@ -156,7 +154,7 @@ const ProfileHead = (props) => {
                       className="mb-3 mt-5 justify-content-center"
                     >
                       <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
-                        <UserCollectionList
+                        <UserNFTList
                           data ={data}
                         />
                       </Tab>
@@ -165,8 +163,6 @@ const ProfileHead = (props) => {
                       </Tab>
                       <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                         <EditProfile
-                          // reloadNow={props.reloadNow}
-                          // profileUpdate={props.profileUpdate}
                           walletaddress={userWallet.address}
                           setissubmit={props.setissubmit}
                         />
