@@ -4,6 +4,8 @@ import { Container, Row, Col} from "reactstrap";
 import "./footer.css";
 
 import { Link } from "react-router-dom";
+import { useAccount, useConnect, useEnsName } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 
 const Basic_Navs = [
@@ -31,6 +33,11 @@ const Basic_Navs = [
 
 
 const Footer = () => {
+  const { address, isConnected } = useAccount();
+  const { data: ensName } = useEnsName({ address });
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
   return (
     <footer className="footer">
       <Container>
@@ -71,24 +78,33 @@ const Footer = () => {
 
           <Col lg="1" md="1" sm="6" className="mb-2">
             <div className="list__group">
+              
                     <div className="list__item">
+                    {isConnected ? (
                         <Link to={'/create'}>{'Create'}</Link>
+                    ):(
+                      <Link onClick={() => connect()} to=''>{'Create'}</Link>
+                    )}
                     </div>
             </div>
           </Col>
 
-          <Col lg="1" md="1" sm="6" className="mb-2">
+          {/* <Col lg="1" md="1" sm="6" className="mb-2">
             <div className="list__group">
                     <div className="list__item">
                         <Link to={'/contact'}>{'Contact'}</Link>
                     </div>
             </div>
-          </Col>
+          </Col> */}
 
           <Col lg="2" md="2" sm="6" className="mb-2">
             <div className="list__group">
                     <div className="list__item">
-                        <Link to={'/wallet'}>{'Connect Wallet'}</Link>
+                    {isConnected ? (
+                        <Link to=''>{'Connect Wallet'}</Link>
+                    ):(
+                      <Link onClick={() => connect()} to=''>{'Connect Wallet'}</Link>
+                    )}
                     </div>
             </div>
           </Col>

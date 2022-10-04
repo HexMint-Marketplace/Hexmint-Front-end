@@ -8,6 +8,8 @@ import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const NAV_LINKS = [
   {
@@ -37,7 +39,7 @@ function Header() {
   });
 
   const [userType, setuserType] = useState();
-   const [userAddress, setuserAddress] = useState("");
+  const [userAddress, setuserAddress] = useState("");
 
   useEffect(() => {
     localStorage.setItem("userAddress", JSON.stringify({ address }));
@@ -99,7 +101,7 @@ function Header() {
                   </NavLink>
                 )}
 
-                {(userType === "Super Admin" && isConnected) && (
+                {userType === "Super Admin" && isConnected && (
                   <NavLink
                     to={"/sadmin-dashboard"}
                     className={(navClass) =>
@@ -110,7 +112,7 @@ function Header() {
                   </NavLink>
                 )}
 
-                {(userType === "Admin" && isConnected) && (
+                {userType === "Admin" && isConnected && (
                   <NavLink
                     to={"/nadmin-dashboard"}
                     className={(navClass) =>
@@ -130,9 +132,9 @@ function Header() {
                   {"Explore"}
                 </NavLink>
               </li>
-              
+
               <li className="nav_item">
-                {isConnected &&(
+                {isConnected && (
                   <NavLink
                     to={`/seller-profile/${address}`}
                     className={(navClass) =>
@@ -141,11 +143,8 @@ function Header() {
                   >
                     {"Profile"}
                   </NavLink>
-                )
-                  }
-                </li>
-
-             
+                )}
+              </li>
 
               <li className="nav_item">
                 {isConnected && userType === "Customer" && (
@@ -185,8 +184,13 @@ function Header() {
                 <button className="btn d-flex gap-1 align-items-center custom-width ">
                   <span className="overflow-hidden wallet-address">
                     <b>
-                      <FontAwesomeIcon icon="fa-solid fa-user" />
-                      {(ensName ?? address).substring(0, 8)}.....
+                      <span className="px-1">
+                        {/* <CgProfile className="cg-4x" /> */}
+                        <AccountCircleIcon fontSize="large" />
+                      </span>
+                      <span style={{ "font-size": "1rem" }}>
+                        {(ensName ?? address).substring(0, 8)}.....
+                      </span>
                     </b>
                   </span>
                 </button>
