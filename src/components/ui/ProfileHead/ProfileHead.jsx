@@ -9,7 +9,7 @@ import Tabs from "react-bootstrap/Tabs";
 import EditProfile from "../../../pages/EditProfile";
 import { useNavigate } from "react-router-dom";
 import EditAdminDetails from "../../../pages/EditAdminDetails";
-import UserNFTList from "../../ui/UserNFTList/UserNFTList"
+import UserNFTList from "../../ui/UserNFTList/UserNFTList";
 
 const NAV_LINKS = [
   {
@@ -28,7 +28,8 @@ const NAV_LINKS = [
 const ProfileHead = (props) => {
   const [isShown, setisShown] = useState(false);
 
-  const { contractAddress, collectionName, description, collectionIcon } =props.collectionData[0];
+  const { contractAddress, collectionName, description, collectionIcon } =
+    props.collectionData[0];
   const { userWallet, userType, name, userName, proPic, data } = props;
   const { email, DOB, mobile } = props;
 
@@ -57,15 +58,15 @@ const ProfileHead = (props) => {
             <Col lg="12" md="3" sm="12">
               <div className="px-4 text-center">
                 {/* {proPic == null ? ( */}
-                  <img
-                    src={collectionIcon}
-                    alt=""
-                    className="rounded-circle rounded border border-5 img-fluid"
-                    height="200"
-                    width="200"
-                  />
+                <img
+                  src={collectionIcon}
+                  alt=""
+                  className="rounded-circle rounded border border-5 img-fluid"
+                  height="200"
+                  width="200"
+                />
                 {/* ) : ( */}
-                  {/* <img
+                {/* <img
                     src={"data:image/png;base64,"+proPic}
                     alt=""
                     className="rounded-circle rounded border border-5 img-fluid"
@@ -113,7 +114,7 @@ const ProfileHead = (props) => {
                           <div className="admin-details mt-3 p-4">
                             <h5>Name : {name}</h5>
                             <h5>Email : {email}</h5>
-                            <h5>DOB : {DOB}</h5>
+                            <h5>DOB : {DOB.substring(0, 10)}</h5>
                             <h5>Mobie : {mobile}</h5>
                           </div>
                         </Col>
@@ -154,9 +155,7 @@ const ProfileHead = (props) => {
                       className="mb-3 mt-5 justify-content-center"
                     >
                       <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
-                        <UserNFTList
-                          data ={data}
-                        />
+                        <UserNFTList data={data} />
                       </Tab>
                       <Tab eventKey="ACTIVITY" title="ACTIVITY">
                         {/* <Sonnet /> */} <div>"Have to build</div>
