@@ -47,6 +47,7 @@ function SellerProfile() {
 
   const getuserdetails = async (walletAddress) => {
     try {
+      //Get user details by passing the user's wallet address
       const details = await UserServices.getUserDetails(walletAddress);
       console.log("In get user details", details);
       console.log("In user details. details -", details);

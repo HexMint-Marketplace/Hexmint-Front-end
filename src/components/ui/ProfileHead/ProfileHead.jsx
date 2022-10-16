@@ -28,8 +28,7 @@ const NAV_LINKS = [
 const ProfileHead = (props) => {
   const [isShown, setisShown] = useState(false);
 
-  const { contractAddress, collectionName, description, collectionIcon } =
-    props.collectionData[0];
+  const { contractAddress, collectionName, description, collectionIcon } =props.collectionData[0];
   const { userWallet, userType, name, userName, proPic, data } = props;
   const { email, DOB, mobile } = props;
 

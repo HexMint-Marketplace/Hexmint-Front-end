@@ -9,7 +9,6 @@ import Loader from "../components/ui/Loader/Loader";
 
 function EditProfile(props) {
   const { walletaddress, setissubmit } = props;
-  // const { setissubmit } = props;
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();

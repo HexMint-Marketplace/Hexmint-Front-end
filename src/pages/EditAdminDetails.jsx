@@ -10,7 +10,6 @@ import Loader from "../components/ui/Loader/Loader";
 function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
   console.log("In the admin details edit and wallet address is", walletaddress);
-  // const { setissubmit } = props;
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
@@ -42,6 +41,7 @@ function EditAdminDetails(props) {
     }
   };
 
+  //Update user details
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -54,6 +54,7 @@ function EditAdminDetails(props) {
       formData.append("mobilenumber", mobilenumber);
       formData.append("proiic", base64_img);
       console.log("In the form data", formData);
+      //Update user details API call
       const response = await AdminServices.updateAdminDetails(formData);
       console.log("In the response", response);
       if (response.status === 200) {
