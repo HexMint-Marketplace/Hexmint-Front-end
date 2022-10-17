@@ -127,7 +127,7 @@ function SellerProfile() {
           seller: i.seller,
           owner: i.owner,
           image: meta.image,
-          name: meta.name,
+          NFTname: meta.name,
           description: meta.description,
         };
         sumPrice += Number(price);
@@ -166,6 +166,7 @@ function SellerProfile() {
             collectionData={COLLECTION_DATA}
             data={data} 
             setissubmit={toggleisSubmit}
+
           />
         </div>
       )}

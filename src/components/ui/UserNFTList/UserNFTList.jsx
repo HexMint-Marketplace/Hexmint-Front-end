@@ -13,14 +13,20 @@ function UserNFTList(props) {
         <Container>
             <Row>
 
-                {USER_NFT_DATA.slice(0, 6).map((item) => (
+                {/* {USER_NFT_DATA.slice(0, 6).map((item) => (
                     <Col lg="3" md="4" sm="6" className="mb-4">
                         <SellerNFTCard key={item.id} item={item} />
+                    </Col>
+                ))} */}
+
+                {data.map((value, index) => (
+                    <Col lg="3" md="4" sm="6" className="mb-4">
+                        <SellerNFTCard key={index} item={value} />
                     </Col>
                 ))}
             </Row>
 
-            <Row>
+            {/* <Row>
                 <Col lg="3" md="4" sm="6">
                     <div className="">
                         <div className="">
@@ -35,7 +41,7 @@ function UserNFTList(props) {
                         </div>
                     </div>
                 </Col>
-            </Row>
+            </Row> */}
         </Container>
   </section>
   )
