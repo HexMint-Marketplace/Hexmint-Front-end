@@ -50,7 +50,6 @@ function SellerProfile() {
       //Get user details by passing the user's wallet address
       const details = await UserServices.getUserDetails(walletAddress);
       console.log("In get user details", details);
-      console.log("In user details. details -", details);
 
       if (details.data.usertype === "Customer") {
         const userType = details.data.usertype;
@@ -118,17 +117,19 @@ function SellerProfile() {
       transaction.map(async (i) => {
         const tokenURI = await contract.tokenURI(i.tokenId);
         let meta = await axios.get(tokenURI);
+        
         meta = meta.data;
-
+        // console.log("meta: ", meta);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
           tokenId: i.tokenId.toNumber(),
           seller: i.seller,
-          owner: i.owner,
+          contractAddress: i.contractAddress,
           image: meta.image,
-          NFTname: meta.name,
+          NFTname: meta.title,
           description: meta.description,
+          collectionId: meta.collectionId,
         };
         sumPrice += Number(price);
         return item;

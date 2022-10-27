@@ -6,6 +6,7 @@ import {
 
 
 function NFTs(data) {
+  console.log("data from NFts.jsx: ", data);
   const newTo = {
     pathname:"/nftPage/"+data.data.tokenId
 }
@@ -16,7 +17,7 @@ function NFTs(data) {
           <div className= "">
               <strong className="text-xl">{data.data.name}</strong>
               <p className="display-inline">
-                  {data.data.description}
+                  {data.data.title}
               </p>
           </div>
       </div>

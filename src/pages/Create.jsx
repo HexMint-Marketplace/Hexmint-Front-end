@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import { Link } from "react-router-dom";
 import Marketplace from "../Marketplace.json";
@@ -7,33 +7,36 @@ import { useLocation } from "react-router";
 import { Container, Row, Col } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/create.css";
+import CustomerServices from "../services/API/CustomerServices";
 
 function Create() {
   const [formParams, updateFormParams] = useState({
     title: "",
     description: "",
-    price: "",
-    collection: "",
+    collectionId: "",
   });
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
   const [message, updateMessage] = useState("");
   const location = useLocation();
-
+  const [allCollections, setAllCollections] = useState([]);
+  const [loader, setLoader] = useState(false);
+  
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
   async function OnChangeFile(e) {
     var file = e.target.files[0];
-    console.log("file: ", file);
+    // console.log("e from onchange function: ", e);
+    // console.log("file: ", file);
     console.log("process: ", PINATA_API_KEY);
     //check for file extension
     try {
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
-      console.log("response is: ", response);
+      // console.log("response is: ", response);
       if (response.success === true) {
-        console.log("Uploaded image to Pinata: ", response.pinataURL);
+        // console.log("Uploaded image to Pinata: ", response.pinataURL);
         setFileURL(response.pinataURL);
       }
     } catch (e) {
@@ -43,27 +46,24 @@ function Create() {
 
   //This function uploads the metadata to IPFS
   async function uploadMetadataToIPFS() {
-    const { title, description, price, collection } = formParams;
+    const { title, description, collectionId } = formParams;
     //Make sure that none of the fields are empty
-    console.log(
-      "title: ",
-      title,
-      " description: ",
-      description,
-      " price: ",
-      price,
-      " collection: ",
-      collection,
-      " fileURL: ",
-      fileURL
-    );
-    if (!title || !description || !price || !collection || !fileURL) return;
+    // console.log(
+    //   "title: ",
+    //   title,
+    //   " description: ",
+    //   description,
+    //   " collectionId: ",
+    //   collectionId,
+    //   " fileURL: ",
+    //   fileURL
+    // );
+    if (!title || !description || !collectionId || !fileURL) return;
 
     const nftJSON = {
       title,
       description,
-      price,
-      collection,
+      collectionId,
       image: fileURL,
     };
 
@@ -71,7 +71,7 @@ function Create() {
       //upload the metadata JSON to IPFS
       const response = await uploadJSONToIPFS(nftJSON);
       if (response.success === true) {
-        console.log("Uploaded JSON to Pinata: ", response);
+        // console.log("Uploaded JSON to Pinata: ", response);
         return response.pinataURL;
       }
     } catch (e) {
@@ -79,18 +79,18 @@ function Create() {
     }
   }
 
-  async function listNFT(e) {
+  async function mintNFT(e) {
     e.preventDefault();
-
+    // console.log("e from mintNFT function: ",e.target.files[0]);
     //Upload data to IPFS
     try {
-      console.log("before await");
+      // console.log("before await");
       const metadataURL = await uploadMetadataToIPFS();
-      console.log("metadataURL: ", metadataURL);
+      // console.log("metadataURL: ", metadataURL);
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log("before update message");
+      // console.log("before update message");
       updateMessage("Please wait.. uploading (upto 5 mins)");
 
       //Pull the deployed contract instance
@@ -101,32 +101,25 @@ function Create() {
       );
 
       //massage the params to be sent to the create NFT request
-      console.log("before price");
-      const price = ethers.utils.parseUnits(formParams.price, "ether");
-      let listingPrice = await contract.getListPrice();
-      console.log("after get listing price");
-      listingPrice = listingPrice.toString();
+      // console.log("before price");
+      // const price = ethers.utils.parseUnits(formParams.price, "ether");
+      // let listingPrice = await contract.getListPrice();
+      // console.log("after get listing price");
+      // listingPrice = listingPrice.toString();
 
       //actually create the NFT
-      console.log("before create token method called");
-      let transaction = await contract.createToken(
-        metadataURL.toString(),
-        price,
-        {
-          value: listingPrice,
-        }
-      );
-      console.log("after create token method called");
+      // console.log("before create token method called");
+      let transaction = await contract.createToken(metadataURL.toString());
+      // console.log("after create token method called");
       await transaction.wait();
-      console.log("await for transaction");
+      // console.log("await for transaction");
 
-      alert("Successfully listed your NFT!");
+      alert("Successfully minted your NFT!");
       updateMessage("");
       updateFormParams({
         title: "",
         description: "",
-        price: "",
-        collection: "",
+        collectionId: "",
       });
       window.location.replace("/");
     } catch (e) {
@@ -134,7 +127,31 @@ function Create() {
     }
   }
 
-  console.log("Working", process.env);
+  // console.log("Working", process.env);
+
+  useEffect(() => {
+    getCollections();
+  }, []);
+
+  const getCollections = async () => {
+    setLoader(true);
+    try {
+      const response = await CustomerServices.getAllCollections();
+
+      if (response.status === 200) {
+        // console.log("hi new data........", response.data.collections);
+        setAllCollections(response.data.collections);
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
 
   return (
     <div>
@@ -152,6 +169,7 @@ function Create() {
                       type={"file"}
                       onChange={OnChangeFile}
                       className="upload__input"
+                      required
                     />
                   </div>
 
@@ -167,6 +185,7 @@ function Create() {
                         })
                       }
                       placeholder="Enter title"
+                      required
                     ></input>
                   </div>
 
@@ -184,41 +203,33 @@ function Create() {
                           description: e.target.value,
                         })
                       }
+                      required
                     ></textarea>
-                  </div>
-
-                  <div className="form__input">
-                    <label htmlFor="price">Price (in ETH)</label>
-                    <input
-                      type="number"
-                      placeholder="Min 0.01 ETH"
-                      step="0.01"
-                      value={formParams.price}
-                      onChange={(e) =>
-                        updateFormParams({
-                          ...formParams,
-                          price: e.target.value,
-                        })
-                      }
-                    ></input>
                   </div>
 
                   <div className="form__input">
                     <label htmlFor="collection">Collection</label>
                     <select
                       class="form-select"
-                      aria-label="Default select example" onChange={(e) => updateFormParams({...formParams, collection: e.target.value,})}
+                      aria-label="Default select example"
+                      onChange={(e) =>
+                        updateFormParams({
+                          ...formParams,
+                          collectionId: e.target.value,
+                        })
+                      }
                     >
                       <option selected>Open this select menu</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                      {allCollections.map((row) => (
+                        <option value={row._id}>{row.collectionName}</option>
+                      ))}
+                      required
                     </select>
                   </div>
 
                   <div className="d-flex align-items-center gap-4 mt-5 mb-5">
                     <button
-                      onClick={listNFT}
+                      onClick={mintNFT}
                       className="btn mint_button d-flex align-items-center gap-2"
                     >
                       <Link to="/explore">Create</Link>

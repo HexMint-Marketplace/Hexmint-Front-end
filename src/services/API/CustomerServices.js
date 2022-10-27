@@ -21,7 +21,27 @@ const updateUserDetails = async (formData) => {
 
   });
 };
+
+const createCollection = async (formData) => {
+  console.log(`in customer services ${formData}`);
+  return axios({
+    method: "post",
+    url: APIEndpoint + "/create-collection",
+    data: formData,
+
+  });
+};
+
+const getAllCollections = async () => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-collection-count",
+  });
+};
+
 export default {
   updateUserDetails,
   getCustomers,
+  createCollection,
+  getAllCollections,
 };
