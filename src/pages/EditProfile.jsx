@@ -48,7 +48,7 @@ function EditProfile(props) {
       formData.append("walletaddress", walletaddress);
       formData.append("username", username);
       formData.append("name", name);
-      formData.append("proiic", base64_img);
+      formData.append("propic", base64_img);
       console.log("In the form data", formData);
       const response = await CustomerServices.updateUserDetails(formData);
       console.log("In the response", response);

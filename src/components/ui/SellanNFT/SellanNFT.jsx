@@ -4,7 +4,9 @@ import "./sellanNFT.css"
 import {Link} from 'react-router-dom'
 
 const SellanNFT = (props) => {
-  const {id, title, desc, imgUrl, creator, createrUsername, creatorImg, currentBid, collectionName} = props.NFTData[0]
+    console.log("props: ",props);
+  const {NFTname, collectionId, contractAddress, description, image, price, seller, tokenId} = props.NFTData;
+//   console.log("image: ",imgUrl);
   return (
 
     <Container>
@@ -15,7 +17,7 @@ const SellanNFT = (props) => {
                         <Row>
                         <Col lg='5' md='5' sm='6'>
                             <div>
-                                <img src={imgUrl} alt="" className='w-100 img-fluid snft-icon' />
+                                <img src={image} alt="" className='w-100 img-fluid snft-icon' />
                             </div>
                         </Col>
                         
@@ -23,10 +25,13 @@ const SellanNFT = (props) => {
                             <div className='text-start'>
 
                                 <div className='h2 snft-name'>
-                                    {title}
+                                    {[NFTname,"    #", tokenId]}
+                                </div>
+                                <div className='h2 snft-name'>
+                                    {description}
                                 </div>
                                 <div className='scollection-name'>
-                                    {collectionName}
+                                    {collectionId}
                                 </div>
 
                                 <div className='mt-4 d-flex align-items-center'>
@@ -41,11 +46,11 @@ const SellanNFT = (props) => {
                                 <div className="sell_buttons d-flex align-items-center gap-4 mb-2">
                                     <button className="sellNow_button  d-flex align-items-center">
                                  
-                                        <Link to='/seller-profile/seller-collection/NFT/listing-form'>Sell Now</Link>
+                                        <Link to='/seller-profile/seller-collection/NFT/listing-form' state = {{NFTData: props.NFTData}}>Sell Now</Link>
                                     </button>
 
                                     <button className='transfer_button d-flex align-items-center'>
-                                        <Link to='/seller-profile/seller-collection/NFT/transfer-form'>Transfer</Link>
+                                        <Link to='/seller-profile/seller-collection/NFT/transfer-form' state = {{NFTData: props.NFTData}}>Transfer</Link>
                                         {/* <Link to={{pathname:'seller-profile/NFT/transfer-form',img:imgUrl}}>Transfer</Link> */}
                                     </button>
                                 </div>
