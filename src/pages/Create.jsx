@@ -21,7 +21,7 @@ function Create() {
   const location = useLocation();
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
-  
+
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
@@ -115,6 +115,9 @@ function Create() {
       // console.log("await for transaction");
 
       alert("Successfully minted your NFT!");
+
+      //update the user activity(mint) in the database for the user
+      // saveUserActivity("minted", )
       updateMessage("");
       updateFormParams({
         title: "",

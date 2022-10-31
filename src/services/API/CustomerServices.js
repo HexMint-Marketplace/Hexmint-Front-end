@@ -39,9 +39,22 @@ const getAllCollections = async () => {
   });
 };
 
+const getUserActivityDetails = async (walletAddress) => {
+  console.log(`in customer services ${walletAddress}`);
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-user-activity-details",
+    params: {
+      walletAddress: walletAddress,
+    },
+  });
+};
+
+
 export default {
   updateUserDetails,
   getCustomers,
   createCollection,
   getAllCollections,
+  getUserActivityDetails
 };
