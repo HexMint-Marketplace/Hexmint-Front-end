@@ -12,9 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
     <Router>
-    {/* <MoralisProvider initializeOnMount={false}> */}
       <App />
-    {/* </MoralisProvider> */}
     </Router>
   // </React.StrictMode>
 );
