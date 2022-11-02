@@ -6,13 +6,14 @@ import "../styles/editProfile.css";
 import FormData from "form-data";
 import CustomerServices from "../services/API/CustomerServices";
 import Loader from "../components/ui/Loader/Loader";
+import { uploadFileToIPFS } from "../pinata";
 
 function EditProfile(props) {
   const { walletaddress, setissubmit } = props;
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
-  const [base64_img, setBase64Img] = useState("");
+  const [propic, setPropic] = useState("");
   const [name, setname] = useState("");
   const [username, setusername] = useState("");
   const navigate = useNavigate();
@@ -40,6 +41,21 @@ function EditProfile(props) {
     }
   };
 
+  async function OnChangeFile(e) {
+    var file = e.target.files[0];
+    try {
+      //upload the file to IPFS
+      const response = await uploadFileToIPFS(file);
+      // console.log("response is: ", response);
+      if (response.success === true) {
+        console.log("Uploaded image to Pinata: ", response.pinataURL);
+        setPropic(response.pinataURL);
+      }
+    } catch (e) {
+      console.log("Error during file upload", e);
+    }
+  }
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -48,7 +64,7 @@ function EditProfile(props) {
       formData.append("walletaddress", walletaddress);
       formData.append("username", username);
       formData.append("name", name);
-      formData.append("propic", base64_img);
+      formData.append("propic", propic);
       console.log("In the form data", formData);
       const response = await CustomerServices.updateUserDetails(formData);
       console.log("In the response", response);
@@ -85,7 +101,7 @@ function EditProfile(props) {
                       className="upload-input"
                       id="propic"
                       name="propic"
-                      onChange={fileValidation}
+                      onChange={OnChangeFile}
                     />
                   </div>
 

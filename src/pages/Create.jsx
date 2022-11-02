@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import { Link } from "react-router-dom";
 import Marketplace from "../Marketplace.json";
@@ -21,6 +20,11 @@ function Create() {
   const location = useLocation();
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
+  let tokenid = '';
+  const [contractAddress, setContractAddress] = useState();
+  const [price, setPrice] = useState();
+  const [currentlyListed, serCurrentlyListed] = useState();
+  // const stateRef = useRef(tokenid);
   
   const { PINATA_API_KEY } = process.env;
 
@@ -48,16 +52,6 @@ function Create() {
   async function uploadMetadataToIPFS() {
     const { title, description, collectionId } = formParams;
     //Make sure that none of the fields are empty
-    // console.log(
-    //   "title: ",
-    //   title,
-    //   " description: ",
-    //   description,
-    //   " collectionId: ",
-    //   collectionId,
-    //   " fileURL: ",
-    //   fileURL
-    // );
     if (!title || !description || !collectionId || !fileURL) return;
 
     const nftJSON = {
@@ -100,6 +94,30 @@ function Create() {
         signer
       );
 
+      contract.on("TokenStatusUpdatedSuccess", (tokenId, contractAddress, seller, price, currentlyListed, event)=>{
+        // let info = {
+        //   tokenId: tokenId,
+        //   contractAddress: contractAddress,
+        //   seller: seller,
+        //   price: price,
+        //   currentlyListed: currentlyListed,
+        //   data: event,
+        // };
+        
+        tokenid = tokenId;
+        // const _setTokenId = data =>{
+        //   stateRef.current = data;
+        //   setTokenId(data.toString());
+        // }
+        // _setTokenId(tokenId.toString());
+        // setTokenId(tokenid => {return tokenId.toString()});
+        // setContractAddress(info.contractAddress);
+
+        console.log("tokenId: ", tokenId.toString());
+        console.log("tokenId: ", tokenid.toString());
+        // console.log("tokenId: ", contractAddress);
+      });
+      // console.log("info: ", info);
       //massage the params to be sent to the create NFT request
       // console.log("before price");
       // const price = ethers.utils.parseUnits(formParams.price, "ether");
@@ -111,8 +129,9 @@ function Create() {
       // console.log("before create token method called");
       let transaction = await contract.createToken(metadataURL.toString());
       // console.log("after create token method called");
+      console.log("transaction 1: ", transaction);
       await transaction.wait();
-      // console.log("await for transaction");
+      // console.log("transaction 2: ", transaction);
 
       alert("Successfully minted your NFT!");
       updateMessage("");

@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import "../CollectionCard/CollectionCard.css";
 
 const NFTCard = (props) => {
-  const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
+  const {NFTname, collectionId, contractAddress, description, image, price, seller, tokenId} = props.item;
+  // const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
 
   return (
     <div className="single_collection_card">
       <div className="collection_img">
-      <Link to={`/explore/collection/NFT/${id}`}>
-        <img src={imgUrl} alt="" className="w-100" />
+      <Link to={`/explore/collection/NFT/${tokenId}`}>
+        <img src={image} alt="" className="w-100" />
       </Link>
       </div>
 
@@ -18,11 +19,11 @@ const NFTCard = (props) => {
 
           <div className="collection_content">
             <h5 className="collection_title mb-0">
-          <Link to={`/explore/collection/NFT/${id}`}>{title}</Link>
+          <Link to={`/explore/collection/NFT/${tokenId}`}>{NFTname}</Link>
             </h5>
 
             <div className="nft-price-wrapper">
-                    {currentBid}
+                    {/* {currentBid} */}
                     <span> ETH</span>   
             </div>
           </div>
