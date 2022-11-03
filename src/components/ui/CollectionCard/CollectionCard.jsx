@@ -10,7 +10,7 @@ const CollectionCard = (props) => {
     <div className="single_collection_card">
       <div className="collection_img">
       <Link to={`/explore/collection/${id}`}>
-        <img src={imgUrl} alt="" className="w-100" />
+        <img data-testid = 'collection_image' src={imgUrl} alt="" className="w-100" />
       </Link>
       </div>
 

@@ -39,6 +39,20 @@ const getAllCollections = async () => {
   });
 };
 
+const saveUserActivity = async (activityType, transaction,tokenID, transactionTime) => {
+  console.log(`in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`);
+  return axios({
+    method: "post",
+    url: APIEndpoint + "/save-user-activity",
+    data: {
+      activityType: activityType,
+      transaction: transaction,
+      tokenID : tokenID,
+      transactionTime: transactionTime,
+    },
+  });
+}
+
 const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
   return axios({
@@ -56,5 +70,6 @@ export default {
   getCustomers,
   createCollection,
   getAllCollections,
-  getUserActivityDetails
+  getUserActivityDetails,
+  saveUserActivity
 };

@@ -5,7 +5,7 @@ import CollectionCard from '../CollectionCard/CollectionCard.jsx'
 
 function ExploreList() {
   return (
-    <section>
+    <section data-testid = 'collection_section'>
     <Container>
       <Row>
 

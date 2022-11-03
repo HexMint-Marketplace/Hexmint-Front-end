@@ -27,66 +27,66 @@ const rows = [
 export default function UserActivity(props) {
   const { walletAddress } = props;
 
-  useEffect(() => {
-    setLoader(true);
-    getActivitydetails(walletAddress);
+  // useEffect(() => {
+  //   setLoader(true);
+  //   getActivitydetails(walletAddress);
 
-    setTimeout(() => {
-      console.log("loader false calling");
-      setLoader(false);
-    }, 2000);
-  }, [issubmit]);
+  //   setTimeout(() => {
+  //     console.log("loader false calling");
+  //     setLoader(false);
+  //   }, 2000);
+  // }, [issubmit]);
 
-  const toggleisSubmit = () => {
-    setissubmit(!issubmit);
-  };
+  // const toggleisSubmit = () => {
+  //   setissubmit(!issubmit);
+  // };
 
-  const getActivitydetails = async (walletAddress) => {
-    try {
-      //Get user Activity details by passing the user's wallet address
-      const Activitydetails = await CustomerServices.getUserActivityDetails(
-        walletAddress
-      );
-      console.log("In get user details", details);
+  // const getActivitydetails = async (walletAddress) => {
+  //   try {
+  //     //Get user Activity details by passing the user's wallet address
+  //     const Activitydetails = await CustomerServices.getUserActivityDetails(
+  //       walletAddress
+  //     );
+  //     console.log("In get user details", details);
 
-      if (details.data.usertype === "Customer") {
-        const userType = details.data.usertype;
-        setUserType(userType);
+  //     if (details.data.usertype === "Customer") {
+  //       const userType = details.data.usertype;
+  //       setUserType(userType);
 
-        const name = details.data.name;
-        setName(name);
+  //       const name = details.data.name;
+  //       setName(name);
 
-        const userName = details.data.username;
-        setUserName(userName);
+  //       const userName = details.data.username;
+  //       setUserName(userName);
 
-        const proPic = details.data.propic;
-        setProPic(proPic);
-      } else {
-        const userType = details.data.usertype;
-        setUserType(userType);
+  //       const proPic = details.data.propic;
+  //       setProPic(proPic);
+  //     } else {
+  //       const userType = details.data.usertype;
+  //       setUserType(userType);
 
-        const name = details.data.name;
-        setName(name);
+  //       const name = details.data.name;
+  //       setName(name);
 
-        const userName = details.data.username;
-        setUserName(userName);
+  //       const userName = details.data.username;
+  //       setUserName(userName);
 
-        const proPic = details.data.profilePic;
-        setProPic(proPic);
+  //       const proPic = details.data.profilePic;
+  //       setProPic(proPic);
 
-        const email = details.data.email;
-        setemail(email);
+  //       const email = details.data.email;
+  //       setemail(email);
 
-        const DOB = details.data.DOB;
-        setDOB(DOB);
+  //       const DOB = details.data.DOB;
+  //       setDOB(DOB);
 
-        const mobile = details.data.mobilenumber;
-        setmobile(mobile);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //       const mobile = details.data.mobilenumber;
+  //       setmobile(mobile);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
   return (
     <TableContainer
       component={Paper}

@@ -12,7 +12,7 @@ function CollectionList() {
         <Row>
           <Col lg="12" className="mb-5">
             <div className="explore_list d-flex align-items-center justify-content-between ">
-              <h3>Explore</h3>
+              <h3 data-testid = 'explore_txt'>Explore</h3>
             </div>
           </Col>
 

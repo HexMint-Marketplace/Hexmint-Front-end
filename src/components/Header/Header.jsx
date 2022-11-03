@@ -47,7 +47,7 @@ function Header() {
     localStorage.setItem("userAddress", JSON.stringify({ address }));
   }, [{ address }]);
 
-  //Getting user type by passing the wallet address after Connecting the wallet 
+  //Getting user type by passing the wallet address after Connecting the wallet
   useEffect(() => {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`);
@@ -83,9 +83,12 @@ function Header() {
       <Container>
         <div className="navigation d-flex  align-items-center justify-content-between ">
           <div className="logo">
-            <h2 className="d-flex gap-2 align-items-center">
+            <h2
+              data-testid="HeXmint_txt"
+              className="d-flex gap-2 align-items-center"
+            >
               <span>
-                <i class="ri-zcool-fill"></i>
+                <i className="ri-zcool-fill"></i>
               </span>
               HeXmint
             </h2>
@@ -154,6 +157,7 @@ function Header() {
                 {isConnected && userType === "Customer" && (
                   <NavLink
                     to={"/create"}
+                    state={{ walletAddress: userAddress }}
                     className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
@@ -166,7 +170,6 @@ function Header() {
           </div>
 
           <div className="nav_right d-flex align-items-center gap-5">
-
             {/* Connect the user's wallet into the system after click or display the wallet address if the user already connect to the system */}
             {isConnected ? (
               <Link
@@ -194,7 +197,7 @@ function Header() {
                 className="btn d-flex gap-2 align-items-center"
               >
                 <span>
-                  <i class="ri-wallet-line"></i>
+                  <i className="ri-wallet-line"></i>
                 </span>
                 Connect Wallet
               </button>
