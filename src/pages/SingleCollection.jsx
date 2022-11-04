@@ -9,46 +9,42 @@ import axios from "axios";
 function SingleCollection() {
   const location = useLocation();
   const { collectionData } = location.state;
-  console.log("collectionData: ", collectionData);
-  const {data} = "";
+  const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  const [address, updateAddress] = useState("0x");
+  const [numberofNfts, updateNumberofNFts] = useState("0");
   const [totalPrice, updateTotalPrice] = useState("0");
 
   useEffect(() => {
     const fetchData = async () => {
-      data =  await getNFTData();
-    }
-    fetchData()
-    .catch(console.error);
-    console.log("data: ",data);
+      let _data = await getNFTData();
+      updateData(_data);
+      updateFetched(true);
+      console.log("data: ", data);
+    };
+    fetchData().catch(console.error);
   }, []);
 
   async function getNFTData() {
     console.log("In the getNFTDATa method");
     const ethers = require("ethers");
     let sumPrice = 0;
+    let numofNfts = 0;
+    let floorPrize = Number.MAX_SAFE_INTEGER;
     //After adding your Hardhat network to metamask, get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // console.log("provider: ",provider);
-    // const signer = provider.getSigner();
-    // console.log("signer: ",signer);
-    // const addr = await signer.getAddress();
-    // console.log("signer: ",addr);
+    const signer = provider.getSigner(MarketplaceJSON.address);
+    const addr = await signer.getAddress();
 
     //Pull the deployed contract instance
     let contract = new ethers.Contract(
       MarketplaceJSON.address,
       MarketplaceJSON.abi,
-      provider
-      // signer
-      // MarketplaceJSON.address,
+      signer
     );
-    // console.log("contract: ", contract);
 
     //create an NFT Token
     let transaction = await contract.getAllNFTs();
-    console.log("transaction: ",transaction);
+    console.log("transaction: ", transaction);
     /*
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
@@ -56,13 +52,15 @@ function SingleCollection() {
 
     const items = await Promise.all(
       transaction.map(async (i) => {
+        console.log("tokenID", i.tokenId);
         const tokenURI = await contract.tokenURI(i.tokenId);
         let meta = await axios.get(tokenURI);
-        // console.log("meta: ", meta);
+        console.log("i: ", i);
         meta = meta.data;
         console.log("meta: ", meta);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-        // if (meta.collectionId == collectionData._id) {
+        console.log("price: ",Number(price));
+        if (meta.collectionId == collectionData._id) {
           let item = {
             price,
             tokenId: i.tokenId.toNumber(),
@@ -73,21 +71,28 @@ function SingleCollection() {
             description: meta.description,
             collectionId: meta.collectionId,
           };
-          console.log("item: ", item);
-          sumPrice += Number(price);
+          sumPrice += price;
+          numofNfts += 1;
+          if (Number(price) < floorPrize) {
+            console.log("floor prize updated: ", price);
+            floorPrize = Number(price);
+          }
           return item;
-        // }
+        }
       })
     );
 
-    updateData(items);
-    console.log("items: ", items);
-    // updateFetched(true);
-    // updateAddress(addr);
+    collectionData.numberofNfts = numofNfts;
+    collectionData.totalPrice = sumPrice;
+    collectionData.floorPrize = floorPrize;
+    console.log("collectionData: ", collectionData);
     // updateTotalPrice(sumPrice.toPrecision(3));
     return items;
   }
-
+  // console.log("fetched: ", dataFetched);
+  if (!dataFetched) {
+    return null;
+  }
   return (
     <section>
       <div>
@@ -95,11 +100,11 @@ function SingleCollection() {
           key={collectionData._id}
           collectionData={collectionData}
         />
-        {/* <NFTList
+        <NFTList
           key={collectionData._id}
           collectionData={collectionData}
           NFTData={data}
-        /> */}
+        />
       </div>
     </section>
   );

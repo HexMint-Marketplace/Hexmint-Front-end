@@ -90,15 +90,16 @@ function SellerProfile() {
     }
   };
 
-  async function getNFTData(tokenId) {
+  async function getNFTData() {
     const ethers = require("ethers");
     let sumPrice = 0;
     //After adding your Hardhat network to metamask, get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     console.log("signer: ",signer);
+    // console.log("signer: ",signer);
     const addr = await signer.getAddress();
-    // console.log("signer: ",addr);
+    console.log("addr: ",addr);
 
     //Pull the deployed contract instance
     let contract = new ethers.Contract(
@@ -109,7 +110,7 @@ function SellerProfile() {
 
     //create an NFT Token
     let transaction = await contract.getMyNFTs();
-    // console.log("transaction: ",transaction);
+    console.log("transaction: ",transaction);
     /*
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
@@ -117,6 +118,7 @@ function SellerProfile() {
 
     const items = await Promise.all(
       transaction.map(async (i) => {
+        console.log("tokenID", i.tokenId);
         const tokenURI = await contract.tokenURI(i.tokenId);
         let meta = await axios.get(tokenURI);
         // console.log("meta: ", meta);

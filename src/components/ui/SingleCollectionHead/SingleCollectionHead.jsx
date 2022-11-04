@@ -11,7 +11,10 @@ const SingleCollectionHead = (props) => {
     collectionName,
     createdAt,
     logoImg,
+    numberofNfts,
     ownersCount,
+    totalPrice,
+    floorPrize,
     updatedAt,
     userid,
   } = props.collectionData;
@@ -47,14 +50,14 @@ const SingleCollectionHead = (props) => {
             <Col lg="4" md="3" sm="12">
               <div className="d-flex">
                 <div className="NFT-count p-2 mt-4 mx-5">
-                  {/* {listedNFTcount + " total NFTs"} */}
+                  {numberofNfts + " total NFTs"}
                 </div>
 
                 <div className="owners-count p-2 mt-4">
                   {ownersCount + " Owner(s)"}
                 </div>
                 <div className="NFT-count p-2 mt-4 mx-5">
-                  {/* {"Floor Prize: " + floorprize} */}
+                  {"Floor Prize: " + floorPrize}
                 </div>
               </div>
             </Col>

@@ -18,29 +18,6 @@ function EditProfile(props) {
   const [username, setusername] = useState("");
   const navigate = useNavigate();
 
-  // Validate uploaded image file
-  const fileValidation = () => {
-    var fileInput = document.getElementById("propic");
-    console.log("In the file validation", fileInput);
-    console.log("In the file files", fileInput.files);
-
-    // Image preview
-    if (fileInput.files && fileInput.files[0]) {
-      console.log("In the if");
-      // var filesSelected = fileInput[0];
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        const a = reader.result.replace("data:", "").replace(/^.+,/, "");
-        console.log("In the reader", a);
-        setBase64Img(a);
-        // console.log("In the BASE 64", base64_img);
-        console.log("BASE 64 is", base64_img);
-      };
-
-      reader.readAsDataURL(fileInput.files[0]);
-    }
-  };
-
   async function OnChangeFile(e) {
     var file = e.target.files[0];
     try {

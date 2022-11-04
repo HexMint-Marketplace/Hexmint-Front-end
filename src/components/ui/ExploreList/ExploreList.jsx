@@ -3,6 +3,7 @@ import {Container,Col,Row} from 'reactstrap'
 import {NFT__DATA} from '../../../asssets/data/data.js'
 import CollectionCard from '../CollectionCard/CollectionCard.jsx'
 import CustomerServices from "../../../services/API/CustomerServices";
+import { toast } from "react-toastify";
 
 function ExploreList() {
 

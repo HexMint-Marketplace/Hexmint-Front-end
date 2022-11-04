@@ -129,16 +129,22 @@ contract NFTMarketplace is ERC721URIStorage {
 
     //This will return all the NFTs currently listed to be sold on the marketplace
     function getAllNFTs() public view returns (Token[] memory) {
-        uint256 nftCount = _tokenIds.current();
-        Token[] memory tokens = new Token[](nftCount);
+        uint256 totalNftCount = _tokenIds.current();
+        uint256 itemCount = 0;
         uint256 currentIndex = 0;
         uint256 currentId;
 
         //filter out currentlyListed == false over here
-        for (uint256 i = 0; i < nftCount; i++) {
+        for (uint256 i = 0; i < totalNftCount; i++) {
+            if (idToToken[i+1].currentlyListed) {
+                itemCount += 1;
+            }
+        }
+        Token[] memory tokens = new Token[](itemCount);
+        for (uint256 i = 0; i < totalNftCount; i++) {
             currentId = i + 1;
             Token storage currentItem = idToToken[currentId];
-            if (currentItem.currentlyListed == true) {
+            if (currentItem.currentlyListed) {
                 tokens[currentIndex] = currentItem;
                 currentIndex += 1;
             }
@@ -212,7 +218,7 @@ contract NFTMarketplace is ERC721URIStorage {
         );
 
         //update the details of the token
-        idToToken[tokenId].currentlyListed = true;
+        idToToken[tokenId].currentlyListed = false;
         idToToken[tokenId].seller = payable(msg.sender);
         _itemsSold.increment();
 
