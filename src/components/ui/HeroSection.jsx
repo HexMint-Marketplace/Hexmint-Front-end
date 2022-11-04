@@ -27,14 +27,14 @@ function HeroSection() {
 
             <div className="hero_buttons d-flex align-items-center gap-4 mb-5">
               <button className="btn explore_button  d-flex align-items-center gap-2">
-                <i class="ri-rocket-line"></i>
+                <i className="ri-rocket-line"></i>
                 <Link to="/explore">Explore</Link>
               </button>
 
               {/* Check if the user logged into the system when clicking the create button */}
               {isConnected ? (
                 <button className="btn  create_button d-flex align-items-center gap-2">
-                  <i class="ri-ball-pen-line"></i>
+                  <i className="ri-ball-pen-line"></i>
 
                   <Link to="/create">Create</Link>
                 </button>
@@ -43,7 +43,7 @@ function HeroSection() {
                   onClick={() => connect()}
                   className="btn  create_button d-flex align-items-center gap-2"
                 >
-                  <i class="ri-ball-pen-line"></i>
+                  <i className="ri-ball-pen-line"></i>
                     <b>Create</b>
                 </button>
               )}

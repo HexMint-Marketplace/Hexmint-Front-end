@@ -46,7 +46,7 @@ const Footer = () => {
             <div className="logo">
               <h2 className=" d-flex gap-2 align-items-center ">
                 <span>
-                  <i class="ri-fire-fill"></i>
+                  <i className="ri-fire-fill"></i>
                 </span>
                 NFTs
               </h2>

@@ -85,7 +85,7 @@ function Header() {
           <div className="logo">
             <h2 className="d-flex gap-2 align-items-center">
               <span>
-                <i class="ri-zcool-fill"></i>
+                <i className="ri-zcool-fill"></i>
               </span>
               HeXmint
             </h2>
@@ -179,7 +179,7 @@ function Header() {
                       <span className="px-1">
                         <AccountCircleIcon fontSize="large" />
                       </span>
-                      <span style={{ "font-size": "1rem" }}>
+                      <span style={{ "fontSize": "1rem" }}>
                         {(ensName ?? address).substring(0, 8)}.....
                       </span>
                     </b>
@@ -194,7 +194,7 @@ function Header() {
                 className="btn d-flex gap-2 align-items-center"
               >
                 <span>
-                  <i class="ri-wallet-line"></i>
+                  <i className="ri-wallet-line"></i>
                 </span>
                 Connect Wallet
               </button>

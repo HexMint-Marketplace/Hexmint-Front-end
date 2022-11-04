@@ -17,7 +17,7 @@ function SellerProfile() {
   const [userType, setUserType] = useState("");
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
-  const [proPic, setProPic] = useState("");
+  const [propic, setProPic] = useState("");
   const [email, setemail] = useState("");
   const [DOB, setDOB] = useState("");
   const [mobile, setmobile] = useState("");
@@ -48,7 +48,7 @@ function SellerProfile() {
   const getuserdetails = async (walletAddress) => {
     try {
       //Get user details by passing the user's wallet address
-      const details = await UserServices.getUserDetails(walletAddress);
+      const details = await UserServices.getUserDetailsFromWalletAddress(walletAddress);
       console.log("In get user details", details);
 
       if (details.data.usertype === "Customer") {
@@ -61,8 +61,8 @@ function SellerProfile() {
         const userName = details.data.username;
         setUserName(userName);
 
-        const proPic = details.data.propic;
-        setProPic(proPic);
+        const propic = details.data.propic;
+        setProPic(propic);
       } else {
         const userType = details.data.usertype;
         setUserType(userType);
@@ -73,8 +73,8 @@ function SellerProfile() {
         const userName = details.data.username;
         setUserName(userName);
 
-        const proPic = details.data.profilePic;
-        setProPic(proPic);
+        const propic = details.data.profilePic;
+        setProPic(propic);
 
         const email = details.data.email;
         setemail(email);
@@ -90,13 +90,16 @@ function SellerProfile() {
     }
   };
 
-  async function getNFTData(tokenId) {
+  async function getNFTData() {
     const ethers = require("ethers");
     let sumPrice = 0;
-    //After adding your Hardhat network to your metamask, this code will get providers and signers
+    //After adding your Hardhat network to metamask, get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+    console.log("signer: ",signer);
+    // console.log("signer: ",signer);
     const addr = await signer.getAddress();
+    console.log("addr: ",addr);
 
     //Pull the deployed contract instance
     let contract = new ethers.Contract(
@@ -107,7 +110,7 @@ function SellerProfile() {
 
     //create an NFT Token
     let transaction = await contract.getMyNFTs();
-
+    console.log("transaction: ",transaction);
     /*
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
@@ -115,11 +118,12 @@ function SellerProfile() {
 
     const items = await Promise.all(
       transaction.map(async (i) => {
+        console.log("tokenID", i.tokenId);
         const tokenURI = await contract.tokenURI(i.tokenId);
         let meta = await axios.get(tokenURI);
-        
-        meta = meta.data;
         // console.log("meta: ", meta);
+        meta = meta.data;
+        // console.log("i: ", i);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
@@ -159,7 +163,7 @@ function SellerProfile() {
             userType={userType}
             name={name}
             userName={userName}
-            proPic={proPic}
+            propic={propic}
             email={email}
             DOB={DOB}
             mobile={mobile}

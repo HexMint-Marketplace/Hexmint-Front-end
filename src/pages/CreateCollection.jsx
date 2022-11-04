@@ -6,52 +6,50 @@ import "../styles/createCollection.css";
 import CustomerServices from "../services/API/CustomerServices";
 import FormData from "form-data";
 import Loader from "../components/ui/Loader/Loader";
+import { uploadFileToIPFS } from "../pinata";
 
 function CreateCollection() {
   const [loader, setLoader] = useState(false);
-  const [base64_img, setBase64Img] = useState();
+  const [collectionIcon, setCollectionIcon] = useState(null);
   const [collectionName, setCollectionName] = useState("");
   const [collectionDescription, setCollectionDescription] = useState("");
-  const [NFTcount, setCollectionNFTcount] = useState("");
+  // const [NFTcount, setCollectionNFTcount] = useState("");
+  const [userWallet, setuserWallet] = useState();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+    setuserWallet(walletAddress.address);
+  }, []);
 
-  // Validate uploaded image file
-  const fileValidation = () => {
-    var fileInput = document.getElementById("logoImg");
-    // console.log("In the file validation", fileInput);
-    // console.log("In the file files", fileInput.files);
-
-    // Image preview
-    if (fileInput.files && fileInput.files[0]) {
-      // console.log("In the if");
-      // var filesSelected = fileInput[0];
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        const a = reader.result.replace("data:", "").replace(/^.+,/, "");
-        console.log("In the reader", a);
-        setBase64Img(a);
-        // console.log("In the BASE 64", base64_img);
-        // console.log("BASE 64 is", base64_img);
-      };
-
-      reader.readAsDataURL(fileInput.files[0]);
+  async function OnChangeFile(e) {
+    var file = e.target.files[0];
+    try {
+      //upload the file to IPFS
+      const response = await uploadFileToIPFS(file);
+      // console.log("response is: ", response);
+      if (response.success === true) {
+        console.log("Uploaded image to Pinata: ", response.pinataURL);
+        setCollectionIcon(response.pinataURL);
+      }
+    } catch (e) {
+      console.log("Error during file upload", e);
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      
+
       setLoader(true);
       const formData = new FormData();
+      // console.log("walletAddress: ", userWallet);
+      formData.append("userid", userWallet);
       formData.append("collectionName", collectionName);
       formData.append("collectionDescription", collectionDescription);
-      formData.append("logoImg", base64_img);
-      formData.append("NFTcount",NFTcount);
-      formData.append("floorprize","0.01");
-      formData.append("totalprize","25.0");
-      console.log("In the form data", formData);
+      formData.append("logoImg", collectionIcon);
+      formData.append("ownersCount", 1);
+      // console.log("In the form data", formData);
       const response = await CustomerServices.createCollection(formData);
       console.log("In the response", response);
       if (response.status === 202) {
@@ -84,7 +82,7 @@ function CreateCollection() {
                       id="logoImg"
                       type="file"
                       className="upload-input"
-                      onChange={fileValidation}
+                      onChange={OnChangeFile}
                     />
                   </div>
 
@@ -110,7 +108,7 @@ function CreateCollection() {
                     ></textarea>
                   </div>
 
-                  <div className="form-input mt-4">
+                  {/* <div className="form-input mt-4">
                     <label htmlFor="NFTcount">Total NFTs*</label>
                     <input
                       name="NFTcount"
@@ -118,7 +116,7 @@ function CreateCollection() {
                       placeholder="Enter total NFT count for this collection"
                       onChange={(e) => setCollectionNFTcount(e.target.value)}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="d-flex align-items-center gap-4 mt-5 mb-5">
                     <button
