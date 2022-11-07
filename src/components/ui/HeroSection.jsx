@@ -26,10 +26,12 @@ function HeroSection() {
             </div>
 
             <div className="hero_buttons d-flex align-items-center gap-4 mb-5">
+
               <button
                 data-testid="explore_btn"
                 className="btn explore_button  d-flex align-items-center gap-2"
               >
+
                 <i className="ri-rocket-line"></i>
                 <Link to="/explore">Explore</Link>
               </button>
@@ -47,7 +49,9 @@ function HeroSection() {
                   className="btn  create_button d-flex align-items-center gap-2"
                 >
                   <i className="ri-ball-pen-line"></i>
+
                   <b>Create</b>
+
                 </button>
               )}
             </div>

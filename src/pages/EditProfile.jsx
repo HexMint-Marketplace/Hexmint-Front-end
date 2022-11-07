@@ -6,39 +6,32 @@ import "../styles/editProfile.css";
 import FormData from "form-data";
 import CustomerServices from "../services/API/CustomerServices";
 import Loader from "../components/ui/Loader/Loader";
+import { uploadFileToIPFS } from "../pinata";
 
 function EditProfile(props) {
   const { walletaddress, setissubmit } = props;
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
-  const [base64_img, setBase64Img] = useState("");
+  const [propic, setPropic] = useState("");
   const [name, setname] = useState("");
   const [username, setusername] = useState("");
   const navigate = useNavigate();
 
-  // Validate uploaded image file
-  const fileValidation = () => {
-    var fileInput = document.getElementById("propic");
-    console.log("In the file validation", fileInput);
-    console.log("In the file files", fileInput.files);
-
-    // Image preview
-    if (fileInput.files && fileInput.files[0]) {
-      console.log("In the if");
-      // var filesSelected = fileInput[0];
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        const a = reader.result.replace("data:", "").replace(/^.+,/, "");
-        console.log("In the reader", a);
-        setBase64Img(a);
-        // console.log("In the BASE 64", base64_img);
-        console.log("BASE 64 is", base64_img);
-      };
-
-      reader.readAsDataURL(fileInput.files[0]);
+  async function OnChangeFile(e) {
+    var file = e.target.files[0];
+    try {
+      //upload the file to IPFS
+      const response = await uploadFileToIPFS(file);
+      // console.log("response is: ", response);
+      if (response.success === true) {
+        console.log("Uploaded image to Pinata: ", response.pinataURL);
+        setPropic(response.pinataURL);
+      }
+    } catch (e) {
+      console.log("Error during file upload", e);
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
     try {
@@ -48,7 +41,7 @@ function EditProfile(props) {
       formData.append("walletaddress", walletaddress);
       formData.append("username", username);
       formData.append("name", name);
-      formData.append("propic", base64_img);
+      formData.append("propic", propic);
       console.log("In the form data", formData);
       const response = await CustomerServices.updateUserDetails(formData);
       console.log("In the response", response);
@@ -85,7 +78,7 @@ function EditProfile(props) {
                       className="upload-input"
                       id="propic"
                       name="propic"
-                      onChange={fileValidation}
+                      onChange={OnChangeFile}
                     />
                   </div>
 

@@ -182,7 +182,7 @@ function Header() {
                       <span className="px-1">
                         <AccountCircleIcon fontSize="large" />
                       </span>
-                      <span style={{ "font-size": "1rem" }}>
+                      <span style={{ "fontSize": "1rem" }}>
                         {(ensName ?? address).substring(0, 8)}.....
                       </span>
                     </b>

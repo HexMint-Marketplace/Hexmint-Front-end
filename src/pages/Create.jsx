@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import { Link } from "react-router-dom";
 import Marketplace from "../Marketplace.json";
@@ -30,6 +29,13 @@ function Create() {
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
 
+  let tokenid = '';
+  const [contractAddress, setContractAddress] = useState();
+  const [price, setPrice] = useState();
+  const [currentlyListed, serCurrentlyListed] = useState();
+  // const stateRef = useRef(tokenid);
+  
+
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
@@ -56,16 +62,6 @@ function Create() {
   async function uploadMetadataToIPFS() {
     const { title, description, collectionId } = formParams;
     //Make sure that none of the fields are empty
-    // console.log(
-    //   "title: ",
-    //   title,
-    //   " description: ",
-    //   description,
-    //   " collectionId: ",
-    //   collectionId,
-    //   " fileURL: ",
-    //   fileURL
-    // );
     if (!title || !description || !collectionId || !fileURL) return;
 
     const nftJSON = {
@@ -138,6 +134,7 @@ function Create() {
       // console.log("before create token method called");
       let transac = await contract.createToken(metadataURL.toString());
       // console.log("after create token method called");
+
       await transac.wait();
       setTransaction(transac);
       console.log("await for transaction", transaction);
@@ -145,6 +142,7 @@ function Create() {
       const transactionTime = new Date();
       // // update the user activity(mint) in the database for the user
       // //Activity type, from wallet address, prize, transaction hash,
+
 
       alert("Successfully minted your NFT!");
 
