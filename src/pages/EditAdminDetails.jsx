@@ -6,6 +6,8 @@ import "../styles/editProfile.css"
 import FormData from "form-data";
 import AdminServices from "../services/API/AdminServices";
 import Loader from "../components/ui/Loader/Loader";
+import { uploadFileToIPFS } from "../pinata"
+import { toast } from "react-toastify";
 
 function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
@@ -13,33 +15,48 @@ function EditAdminDetails(props) {
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
-  const [base64_img, setBase64Img] = useState("");
+  // const [base64_img, setBase64Img] = useState("");
   const [email, setemail] = useState("");
   const [mobilenumber, setmobilenumber] = useState("");
   const navigate = useNavigate();
 
   // Validate uploaded image file
-  const fileValidation = () => {
-    var fileInput = document.getElementById("propic");
-    console.log("In the file validation", fileInput);
-    console.log("In the file files", fileInput.files);
+  // const fileValidation = () => {
+  //   var fileInput = document.getElementById("propic");
+  //   console.log("In the file validation", fileInput);
+  //   console.log("In the file files", fileInput.files);
 
-    // Image preview
-    if (fileInput.files && fileInput.files[0]) {
-      console.log("In the if");
-      // var filesSelected = fileInput[0];
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        const a = reader.result.replace("data:", "").replace(/^.+,/, "");
-        console.log("In the reader", a);
-        setBase64Img(a);
-        // console.log("In the BASE 64", base64_img);
-        console.log("BASE 64 is", base64_img);
-      };
+  //   // Image preview
+  //   if (fileInput.files && fileInput.files[0]) {
+  //     console.log("In the if");
+  //     // var filesSelected = fileInput[0];
+  //     var reader = new FileReader();
+  //     reader.onload = function (e) {
+  //       const a = reader.result.replace("data:", "").replace(/^.+,/, "");
+  //       console.log("In the reader", a);
+  //       setBase64Img(a);
+  //       // console.log("In the BASE 64", base64_img);
+  //       console.log("BASE 64 is", base64_img);
+  //     };
 
-      reader.readAsDataURL(fileInput.files[0]);
+  //     reader.readAsDataURL(fileInput.files[0]);
+  //   }
+  // };
+
+  async function OnChangeFile(e) {
+    var file = e.target.files[0];
+    try {
+      //upload the file to IPFS
+      const response = await uploadFileToIPFS(file);
+      // console.log("response is: ", response);
+      if (response.success === true) {
+        console.log("Uploaded image to Pinata: ", response.pinataURL);
+        setprofilePic(response.pinataURL);
+      }
+    } catch (e) {
+      console.log("Error during file upload", e);
     }
-  };
+  }
 
   //Update user details
   const handleSubmit = async (e) => {
@@ -52,7 +69,7 @@ function EditAdminDetails(props) {
       formData.append("walletaddress", walletaddress);
       formData.append("email", email);
       formData.append("mobilenumber", mobilenumber);
-      formData.append("proiic", base64_img);
+      formData.append("propic", profilePic);
       console.log("In the form data", formData);
       //Update user details API call
       const response = await AdminServices.updateAdminDetails(formData);
@@ -64,6 +81,7 @@ function EditAdminDetails(props) {
           console.log("loader false calling")
           setLoader(false)
         },1500 )
+        toast.success("Profile Edit request submitted successfully");
         // setissubmit(true);
         // navigate(`/seller-profile/${walletaddress}`);
         console.log("In the if and updated admin details succesfully");
@@ -72,6 +90,8 @@ function EditAdminDetails(props) {
       console.log("error", error);
     }
   };
+
+
 
   return (
     <div>
@@ -90,7 +110,7 @@ function EditAdminDetails(props) {
                       className="upload-input"
                       id="propic"
                       name="propic"
-                      onChange={fileValidation}
+                      onChange={OnChangeFile}
                     />
                   </div>
 
