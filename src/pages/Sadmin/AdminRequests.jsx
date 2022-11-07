@@ -32,10 +32,12 @@ function AdminRequests() {
       </div>
       <CommonHeader title={"Admin Details Change Requests"} />
       <div>
+
         <div>
           <AdminReqPop open={open} handleClose={handleClose} />
         </div>
         <TableContainer className="table" component={Paper}>
+
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>

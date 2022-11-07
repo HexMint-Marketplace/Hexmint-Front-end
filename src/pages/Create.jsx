@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import { Link } from "react-router-dom";
 import Marketplace from "../Marketplace.json";
@@ -11,6 +10,8 @@ import CustomerServices from "../services/API/CustomerServices";
 import { toast } from "react-toastify";
 
 function Create() {
+  const [tokenIDValue, settokenIDValue] = useState("");
+  const [transaction, setTransaction] = useState(0);
   const [formParams, updateFormParams] = useState({
     title: "",
     description: "",
@@ -19,10 +20,22 @@ function Create() {
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
   const [message, updateMessage] = useState("");
-  const location = useLocation();
+  // let tokenID = "";
+
+  //getting user wallet address
+  // const location = useLocation();
+  // // const walletAddress = location.userAddress;
+
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
+
+  let tokenid = '';
+  const [contractAddress, setContractAddress] = useState();
+  const [price, setPrice] = useState();
+  const [currentlyListed, serCurrentlyListed] = useState();
+  // const stateRef = useRef(tokenid);
   
+
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
@@ -49,16 +62,6 @@ function Create() {
   async function uploadMetadataToIPFS() {
     const { title, description, collectionId } = formParams;
     //Make sure that none of the fields are empty
-    // console.log(
-    //   "title: ",
-    //   title,
-    //   " description: ",
-    //   description,
-    //   " collectionId: ",
-    //   collectionId,
-    //   " fileURL: ",
-    //   fileURL
-    // );
     if (!title || !description || !collectionId || !fileURL) return;
 
     const nftJSON = {
@@ -101,6 +104,25 @@ function Create() {
         signer
       );
 
+      contract.on(
+        "TokenStatusUpdatedSuccess",
+        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+          let info = {
+            tokenId: tokenId,
+            contractAddress: contractAddress,
+            seller: seller,
+            price: price,
+            currentlyListed: currentlyListed,
+            data: event,
+          };
+          console.log("info: ", info);
+
+          const tokenID = tokenId.toString();
+          settokenIDValue(tokenId.toString());
+          console.log("tokenID: ", tokenID);
+        }
+      );
+
       //massage the params to be sent to the create NFT request
       // console.log("before price");
       // const price = ethers.utils.parseUnits(formParams.price, "ether");
@@ -110,23 +132,49 @@ function Create() {
 
       //actually create the NFT
       // console.log("before create token method called");
-      let transaction = await contract.createToken(metadataURL.toString());
+      let transac = await contract.createToken(metadataURL.toString());
       // console.log("after create token method called");
-      await transaction.wait();
-      // console.log("await for transaction");
+
+      await transac.wait();
+      setTransaction(transac);
+      console.log("await for transaction", transaction);
+
+      const transactionTime = new Date();
+      // // update the user activity(mint) in the database for the user
+      // //Activity type, from wallet address, prize, transaction hash,
+
 
       alert("Successfully minted your NFT!");
+
+      console.log("Successfully minted your NFT!");
+
+      // saveUserActivity("minted", transaction, tokenID, transactionTime);
+      console.log("after save user activity");
+
+      // const transactionTime = new Date();
+      // // update the user activity(mint) in the database for the user
+      // //Activity type, from wallet address, prize, transaction hash,
+      // saveUserActivity("minted", transaction, transactionTime);
+
       updateMessage("");
       updateFormParams({
         title: "",
         description: "",
         collectionId: "",
       });
-      window.location.replace("/");
+      console.log("after update form params");
+      // window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
   }
+
+  useEffect(() => {
+    if (tokenIDValue && transaction) {
+      saveUserActivity("minted", transaction, tokenIDValue, new Date());
+      settokenIDValue("");
+    }
+  }, [tokenIDValue]);
 
   // console.log("Working", process.env);
 
@@ -152,6 +200,30 @@ function Create() {
     setTimeout(() => {
       setLoader(false);
     }, 200);
+  };
+
+  const saveUserActivity = async (
+    activityType,
+    transaction,
+    contractInfo,
+    transactionTime
+  ) => {
+    try {
+      const response = await CustomerServices.saveUserActivity(
+        activityType,
+        transaction,
+        contractInfo,
+        transactionTime
+      );
+      if (response.status === 200) {
+        console.log("User activity saved successfully");
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+    }
   };
 
   return (

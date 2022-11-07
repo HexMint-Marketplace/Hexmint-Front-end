@@ -1,50 +1,72 @@
-import React from 'react'
-import { Container, Row, Col } from 'reactstrap';
+import React from "react";
+import { Container, Row, Col } from "reactstrap";
 import "./singleCollectionHead.css";
 
 const SingleCollectionHead = (props) => {
-  const{contractAddress, collectionName, description, collectionIcon} = props.collectionData[0];
-  console.log(props.collectionData)
+  const {
+    _v,
+    _id,
+    contractAddress,
+    collectionDescription,
+    collectionName,
+    createdAt,
+    logoImg,
+    numberofNfts,
+    ownersCount,
+    totalPrice,
+    floorPrize,
+    updatedAt,
+    userid,
+  } = props.collectionData;
+  //   console.log(props.collectionData);
+  // if (listedNFTcount > 0);
   return (
     <section>
-    <Container>
+      <Container>
         <Row>
-        <Row>
+          <Row>
             <Col lg="3" md="3" sm="12">
-                <div className='px-4'>
-                    <img src={collectionIcon} alt="" className='w-100 rounded-circle rounded-0 border border-5 img-fluid float-start'/>
-                </div>
+              <div className="px-4">
+                <img
+                  src={logoImg}
+                  alt=""
+                  className="w-100 rounded-circle rounded-0 border border-5 img-fluid float-start"
+                />
+              </div>
             </Col>
-        </Row>
+          </Row>
 
-        <Row>
+          <Row>
             <Col lg="8" md="3" sm="12">
-                <div className='h2 px-4 mt-3 collection-name'>
-                    {collectionName}
-                </div>
+              <div className="h2 px-4 mt-3 collection-name">
+                {collectionName}
+              </div>
 
-                <div className='px-4 mt-3 collection-description'>
-                    {description}
-                </div>
+              <div className="px-4 mt-3 collection-description">
+                {collectionDescription}
+              </div>
             </Col>
 
             <Col lg="4" md="3" sm="12">
-                <div className='d-flex'>
-                <div className='NFT-count p-2 mt-4 mx-5'>
-                    127 NFTs
+              <div className="d-flex">
+                <div className="NFT-count p-2 mt-4 mx-5">
+                  {numberofNfts + " total NFTs"}
                 </div>
 
-                <div className='owners-count p-2 mt-4'>
-                    32 Owners
+                <div className="owners-count p-2 mt-4">
+                  {ownersCount + " Owner(s)"}
                 </div>
+                <div className="NFT-count p-2 mt-4 mx-5">
+                  {"Floor Prize: " + floorPrize}
                 </div>
+              </div>
             </Col>
+          </Row>
+          <hr class="hr-primary mt-4" />
         </Row>
-        <hr class="hr-primary mt-4" />
-        </Row>
-    </Container>
+      </Container>
     </section>
-  )
-}
+  );
+};
 
-export default SingleCollectionHead
+export default SingleCollectionHead;

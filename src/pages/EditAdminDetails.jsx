@@ -119,6 +119,7 @@ function EditAdminDetails(props) {
                       className="btn edit-profile-button d-flex align-items-center gap-2"
                       type="submit"
                       onClick={handleSubmit}
+                      data-setid = "submit"
                     >
                       <Link to="/seller-profile">Save</Link>
                     </button>
