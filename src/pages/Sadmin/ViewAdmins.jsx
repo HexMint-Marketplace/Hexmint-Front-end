@@ -89,7 +89,7 @@ function ViewAdmins() {
   };
 
   if (loader) {
-    return <Loader />;
+    return <Loader isLoading={loader} />;
   } else {
     return (
       <div data-testid="admins_table">
@@ -148,7 +148,7 @@ function ViewAdmins() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
-                    <TableCell>User Name</TableCell>
+                    <TableCell>Admin Name</TableCell>
                     <TableCell>Wallet Address</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>DoB</TableCell>
@@ -160,6 +160,7 @@ function ViewAdmins() {
                   {allAdmins.map((row) => (
                     <TableRow
                       key={row.userid}
+                      hover
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
