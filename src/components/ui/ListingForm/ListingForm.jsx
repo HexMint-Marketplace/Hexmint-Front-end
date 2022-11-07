@@ -14,8 +14,8 @@ const ListingForm = () => {
   const [Duration, setDuration] = useState();
   const ethers = require("ethers");
   const { NFTData } = location.state;
-  // let {img} = useParams();
-  // console.log(useParams());
+
+  console.log("NFTData: ",NFTData);
   async function handleSubmit(e) {
     e.preventDefault();
     try {

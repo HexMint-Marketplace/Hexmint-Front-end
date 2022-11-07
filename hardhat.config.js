@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require('@openzeppelin/hardhat-upgrades');
 require('dotenv').config();
 const fs = require("fs");
 // const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
@@ -23,5 +24,8 @@ module.exports = {
       url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
     },
+  },
+  mocha: {
+    timeout: 100000000
   },
 };
