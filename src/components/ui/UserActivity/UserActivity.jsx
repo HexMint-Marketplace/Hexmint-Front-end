@@ -98,7 +98,7 @@ export default function UserActivity(props) {
         }}
         aria-label="simple table"
       >
-        <TableHead>
+        <TableHead data-testid="table_head" >
           <TableRow sx={{ "&:hover": { color: "white" } }}>
             <TableCell>Activity</TableCell>
             <TableCell align="right">Item</TableCell>

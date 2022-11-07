@@ -4,7 +4,7 @@ import { WagmiConfig } from 'wagmi';
 
 import { configureChains, chain, createClient } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import Footer from '../Footer/Footer'
+import ViewReports from '../Nadmin/ViewReports'
 
 const { chains, provider, webSocketProvider } = configureChains(
     [chain.mainnet, chain.polygon],
@@ -17,18 +17,17 @@ const { chains, provider, webSocketProvider } = configureChains(
     webSocketProvider,
   });
 
-describe('Test the Footer component', () => {
-  test('Description text in footer renders', () => {
-    render(
-    <BrowserRouter>
-    <WagmiConfig client={client}>
-        <Footer/>
-    </WagmiConfig>
-    </BrowserRouter>
-    );
-    const linkElement = screen.getByTestId('footer_txt')
-    expect(linkElement).toBeInTheDocument();
-})
+  describe('Test the View reports page', () => {
+    test('View reports page renders with view reports table', () => {
+        render(
+        <BrowserRouter>
+        <WagmiConfig client={client}>
+            <ViewReports/>
+        </WagmiConfig>
+        </BrowserRouter>
+        );
+        const reportsTable  = screen.getByTestId("reports_table")
+        expect(reportsTable).toBeInTheDocument();
+    });
 
 });
-

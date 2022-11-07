@@ -13,7 +13,7 @@ export default function SuperAdminNav() {
   };
 
   return (
-    <div className={open ? styles.sidenav : styles.sidenavClosed}>
+    <div data-testid = "admin_sidebar" className={open ? styles.sidenav : styles.sidenavClosed}>
       <button className={styles.menuBtn} onClick={toggleOpen}>
         {open ? (
           <KeyboardDoubleArrowLeftIcon />

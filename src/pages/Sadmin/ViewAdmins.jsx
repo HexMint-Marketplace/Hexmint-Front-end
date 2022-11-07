@@ -92,7 +92,7 @@ function ViewAdmins() {
     return <Loader />;
   } else {
     return (
-      <div>
+      <div data-testid="admins_table">
         <div className="side-bar">
           <SuperAdminNav />
         </div>

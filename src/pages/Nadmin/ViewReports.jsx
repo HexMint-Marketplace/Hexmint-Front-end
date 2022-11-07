@@ -21,7 +21,11 @@ function ViewReports() {
       </div>
       <CommonHeader title={"View User Reports"} />
       <div>
-        <TableContainer className="table" component={Paper}>
+        <TableContainer
+          data-testid="reports_table"
+          className="table"
+          component={Paper}
+        >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>

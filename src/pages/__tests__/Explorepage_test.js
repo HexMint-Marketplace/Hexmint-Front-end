@@ -1,10 +1,9 @@
 import {render, screen} from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { WagmiConfig } from 'wagmi';
-
+import ExploreList from '../../components/ui/ExploreList/ExploreList';
 import { configureChains, chain, createClient } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import ExploreList from '../ui/ExploreList/ExploreList';
 
 const { chains, provider, webSocketProvider } = configureChains(
     [chain.mainnet, chain.polygon],
