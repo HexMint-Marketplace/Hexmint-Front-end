@@ -21,7 +21,11 @@ function AdminRequests() {
       </div>
       <CommonHeader title={"Admin Details Change Requests"} />
       <div>
-        <TableContainer className="table" component={Paper}>
+        <TableContainer
+          className="table"
+          component={Paper}
+          data-testid="adminRequests_table"
+        >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>

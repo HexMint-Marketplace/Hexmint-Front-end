@@ -10,6 +10,7 @@ import EditProfile from "../../../pages/EditProfile";
 import { useNavigate } from "react-router-dom";
 import EditAdminDetails from "../../../pages/EditAdminDetails";
 import UserNFTList from "../../ui/UserNFTList/UserNFTList";
+import UserActivity from "../../ui/UserActivity/UserActivity";
 
 const NAV_LINKS = [
   {
@@ -28,16 +29,20 @@ const NAV_LINKS = [
 const ProfileHead = (props) => {
   const [isShown, setisShown] = useState(false);
 
-  const { contractAddress, collectionName, description, collectionIcon } =props.collectionData[0];
-  const { userWallet, userType, name, userName, propic, data } = props;
+
+  const { collectionIcon } = props.collectionData[0];
+  const { userWallet, userType, name, userName, proPic, data } = props;
+
   const { email, DOB, mobile } = props;
 
   // console.log("Pro pic is", propic);
 
   const { walletaddress } = props;
+
   // console.log("In profile head to find user type", userType);
   // console.log(props.collectionData);
   // console.log("props: ",props);
+
 
   const showAddress = userWallet?.address
     ? userWallet.address.substring(0, 4) +
@@ -57,6 +62,7 @@ const ProfileHead = (props) => {
           <Row>
             <Col lg="12" md="3" sm="12">
               <div className="px-4 text-center">
+
                 {propic == null ? (
                 <img
                   src={collectionIcon}
@@ -68,6 +74,7 @@ const ProfileHead = (props) => {
                 ) : (
                 <img
                     src={propic}
+
                     alt=""
                     className="rounded-circle rounded border border-5 img-fluid"
                     height="200"
@@ -158,7 +165,8 @@ const ProfileHead = (props) => {
                         <UserNFTList data={data} />
                       </Tab>
                       <Tab eventKey="ACTIVITY" title="ACTIVITY">
-                        {/* <Sonnet /> */} <div>"Have to build</div>
+                        {/* <Sonnet /> <div>"Have to build</div> */}
+                        <UserActivity walletaddress={userWallet.address} />
                       </Tab>
                       <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                         <EditProfile

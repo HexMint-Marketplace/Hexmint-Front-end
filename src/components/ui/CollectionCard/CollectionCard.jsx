@@ -31,8 +31,10 @@ const CollectionCard = (props) => {
   return (
     <div className="single_collection_card">
       <div className="collection_img">
+
       <Link to={`/explore/collection/${_id}`} state={{collectionData: props.item}}>
-        <img src={logoImg} alt="" className="w-100" />
+        <img data-testid = 'collection_image' src={logoImg} alt="" className="w-100" />
+
       </Link>
       </div>
 
