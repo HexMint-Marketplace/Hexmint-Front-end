@@ -89,7 +89,7 @@ function ViewAdmins() {
   };
 
   if (loader) {
-    return <Loader />;
+    return <Loader isLoading={loader} />;
   } else {
     return (
       <div data-testid="admins_table">
