@@ -1,7 +1,6 @@
 import config from "../../config.json";
 import axios from "axios";
 
-
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/customer";
 
@@ -12,13 +11,19 @@ const getCustomers = async () => {
   });
 };
 
+const getBlockedCustomers = async () => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-all-blocked-users",
+  });
+};
+
 const updateUserDetails = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
     url: APIEndpoint + "/update-details",
     data: formData,
-
   });
 };
 
@@ -28,7 +33,20 @@ const createCollection = async (formData) => {
     method: "post",
     url: APIEndpoint + "/create-collection",
     data: formData,
+  });
+};
 
+const unBlockUser = async (id) => {
+  return axios({
+    method: "delete",
+    url: APIEndpoint + `/unblock-user/${id}`,
+  });
+};
+
+const blockUser = async (id) => {
+  return axios({
+    method: "post",
+    url: APIEndpoint + `/block-user/${id}`,
   });
 };
 
@@ -39,19 +57,26 @@ const getAllCollections = async () => {
   });
 };
 
-const saveUserActivity = async (activityType, transaction,tokenID, transactionTime) => {
-  console.log(`in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`);
+const saveUserActivity = async (
+  activityType,
+  transaction,
+  tokenID,
+  transactionTime
+) => {
+  console.log(
+    `in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`
+  );
   return axios({
     method: "post",
     url: APIEndpoint + "/save-user-activity",
     data: {
       activityType: activityType,
       transaction: transaction,
-      tokenID : tokenID,
+      tokenID: tokenID,
       transactionTime: transactionTime,
     },
   });
-}
+};
 
 const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
@@ -64,12 +89,14 @@ const getUserActivityDetails = async (walletAddress) => {
   });
 };
 
-
 export default {
   updateUserDetails,
   getCustomers,
   createCollection,
   getAllCollections,
   getUserActivityDetails,
-  saveUserActivity
+  saveUserActivity,
+  blockUser,
+  getBlockedCustomers,
+  unBlockUser,
 };

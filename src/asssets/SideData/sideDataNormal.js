@@ -21,7 +21,7 @@ export const SideDataNormal = [
   {
     id: 2,
     icon: <FaExpeditedssl />,
-    text: "Block Users",
+    text: "Blocked Users",
     link: "/nadmin-blockusers",
   },
   {

@@ -1,63 +1,131 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
+import React, { useState, useEffect } from "react";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
-import "../../styles/create.css";
+import { Link } from "react-router-dom";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import "../../styles/viewUsers.css";
 import "../../styles/superAdmin.css";
 import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
+import CustomerServices from "../../services/API/CustomerServices";
+import { toast } from "react-toastify";
+import Loader from "../../components/ui/Loader/Loader";
 
-function ViewReports() {
-  return (
-    <div>
-      <div className="side-bar">
-        <NormalAdminNav />
-      </div>
-      <CommonHeader title={"Block an User"} />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <div className="blk_user">
-                <form>
-                  <div className="form__input">
-                    <label htmlFor="">User</label>
-                    <select
-                      class="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option selected>Open this select menu</option>
-                      <option value="1">User 1</option>
-                      <option value="2">User 2</option>
-                      <option value="3">User 3</option>
-                    </select>
-                  </div>
+function ViewUsers() {
+  const [blkCustormers, setBlkCustomers] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const [runUseEffect, setRunUseEffect] = useState(false);
 
-                  <div className="form__input">
-                    <label htmlFor="">Reason</label>
-                    <textarea
-                      name=""
-                      id=""
-                      rows="7"
-                      placeholder="Enter Reason"
-                      className="w-100"
-                    ></textarea>
-                  </div>
+  const unBlockUser = async (id) => {
+    setLoader(true);
+    try {
+      const response = await CustomerServices.unBlockUser(id);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setRunUseEffect(!runUseEffect);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
 
-                  <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button className="btn mint_button d-flex align-items-center gap-2">
-                      <Link to="">Block</Link>
-                    </button>
-                  </div>
-                </form>
+  const getBlockedCustomers = async () => {
+    setLoader(true);
+
+    try {
+      const response = await CustomerServices.getBlockedCustomers();
+      console.log("response", response.data.data);
+      if (response.status === 200) {
+        console.log("hi new data........", response);
+        setBlkCustomers(response.data.data);
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
+
+  useEffect(() => {
+    getBlockedCustomers();
+  }, [runUseEffect]);
+
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <div>
+        <div className="side-bar">
+          <NormalAdminNav />
+        </div>
+        <CommonHeader title={"Blocked Customers Details"} />
+        <div className="section">
+          <TableContainer className="table" component={Paper}>
+            {blkCustormers.length === 0 && (
+              <div>
+                <h5
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    margin: "10px",
+                  }}
+                >
+                  No Customers to display
+                </h5>
               </div>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
-  );
+            )}
+            {blkCustormers.length !== 0 && (
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>User Name</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Wallet Address</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {blkCustormers.map((row) => (
+                    <TableRow
+                      key={row.name}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell>{row.username}</TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell>{row.walletaddress}</TableCell>
+                      <TableCell>
+                        <button
+                          className="act-button btn btn-danger"
+                          onClick={() => unBlockUser(row._id)}
+                        >
+                          <Link to="">Unblock</Link>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </TableContainer>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default ViewReports;
+export default ViewUsers;

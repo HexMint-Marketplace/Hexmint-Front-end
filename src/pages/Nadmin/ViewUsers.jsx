@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
+import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,17 +18,36 @@ import Loader from "../../components/ui/Loader/Loader";
 function ViewUsers() {
   const [allCustomers, setAllCustomers] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [runUseEffect, setRunUseEffect] = useState(false);
 
   useEffect(() => {
     getCustomers();
-  }, []);
+  }, [runUseEffect]);
+
+  const blockUser = async (id) => {
+    setLoader(true);
+    try {
+      const response = await CustomerServices.blockUser(id);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setRunUseEffect(!runUseEffect);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
 
   const getCustomers = async () => {
     setLoader(true);
 
     try {
       const response = await CustomerServices.getCustomers();
-
+      console.log("response", response.data.data);
       if (response.status === 200) {
         console.log("hi new data........", response);
         setAllCustomers(response.data.data);
@@ -50,6 +71,7 @@ function ViewUsers() {
         <div className="side-bar">
           <NormalAdminNav />
         </div>
+        <CommonHeader title={"Customer Details & Management"} />
         <div className="section">
           <TableContainer className="table" component={Paper}>
             {allCustomers.length === 0 && (
@@ -72,6 +94,7 @@ function ViewUsers() {
                     <TableCell>User Name</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Wallet Address</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -85,6 +108,16 @@ function ViewUsers() {
                         {row.name}
                       </TableCell>
                       <TableCell>{row.walletaddress}</TableCell>
+                      <TableCell>
+                        <button
+                          className="act-button btn btn-danger"
+                          onClick={() => {
+                            blockUser(row._id);
+                          }}
+                        >
+                          <Link to="">Block</Link>
+                        </button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
