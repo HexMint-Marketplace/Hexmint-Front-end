@@ -30,6 +30,7 @@ function AdminRequests() {
   const [data, setData] = useState({});
   const [userid, setUserid] = useState();
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [runUseEffect, setRunUseEffect] = useState(false);
 
   const handleClickOpenConfirm = (id) => {
     setUserid(id);
@@ -49,7 +50,7 @@ function AdminRequests() {
 
   useEffect(() => {
     getAdminRequests();
-  }, []);
+  }, [runUseEffect]);
 
   const getAdminRequests = async () => {
     setLoader(true);
@@ -75,7 +76,7 @@ function AdminRequests() {
       const approve = await AdminServices.approveRequest(id);
       if (approve.status === 200) {
         toast.success(approve.data.message);
-        getAdminRequests();
+        setRunUseEffect(!runUseEffect);
       } else {
         toast.error("Error Occured!");
       }
@@ -94,7 +95,7 @@ function AdminRequests() {
       const approve = await AdminServices.declineRequest(id);
       if (approve.status === 200) {
         toast.success(approve.data.message);
-        getAdminRequests();
+        setRunUseEffect(!runUseEffect);
       } else {
         toast.error("Error Occured!");
       }

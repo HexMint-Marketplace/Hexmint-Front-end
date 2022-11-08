@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
-import "../styles/editProfile.css"
+import "../styles/editProfile.css";
 import FormData from "form-data";
 import AdminServices from "../services/API/AdminServices";
 import Loader from "../components/ui/Loader/Loader";
-import { uploadFileToIPFS } from "../pinata"
+import { uploadFileToIPFS } from "../pinata";
 import { toast } from "react-toastify";
 
 function EditAdminDetails(props) {
@@ -60,12 +60,19 @@ function EditAdminDetails(props) {
 
   //Update user details
   const handleSubmit = async (e) => {
+    setLoader(true);
     try {
       e.preventDefault();
-      setLoader(true);
+
       const formData = new FormData();
-      console.log("In the form data and wallet address is", walletaddress,
-        "email is", email, "mobile number is", mobilenumber);
+      console.log(
+        "In the form data and wallet address is",
+        walletaddress,
+        "email is",
+        email,
+        "mobile number is",
+        mobilenumber
+      );
       formData.append("walletaddress", walletaddress);
       formData.append("email", email);
       formData.append("mobilenumber", mobilenumber);
@@ -75,84 +82,88 @@ function EditAdminDetails(props) {
       const response = await AdminServices.updateAdminDetails(formData);
       console.log("In the response", response);
       if (response.status === 200) {
-  
         setissubmit(true);
-        setTimeout(()=>{
-          console.log("loader false calling")
-          setLoader(false)
-        },1500 )
+
         toast.success("Profile Edit request submitted successfully");
         // setissubmit(true);
         // navigate(`/seller-profile/${walletaddress}`);
         console.log("In the if and updated admin details succesfully");
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
-      console.log("error", error);
+      toast.error("Something went wrong");
     }
+    setTimeout(() => {
+      console.log("loader false calling");
+      setLoader(false);
+    }, 1500);
   };
 
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <div>
+        <h2>Edit Profile</h2>
+        <section>
+          <Container>
+            <Row>
+              <Col lg="2"></Col>
+              <Col lg="8" md="8" sm="6">
+                <div className="edit-profile">
+                  <form>
+                    <div className="form-input">
+                      <label htmlFor="">Profile Picture</label>
+                      <input
+                        type="file"
+                        className="upload-input"
+                        id="propic"
+                        name="propic"
+                        onChange={OnChangeFile}
+                      />
+                    </div>
 
+                    <div className="form-input mt-4">
+                      <label htmlFor="">Email</label>
+                      <input
+                        type="email"
+                        placeholder="Enter Your Email Address"
+                        name="email"
+                        onChange={(e) => setemail(e.target.value)}
+                      />
+                    </div>
 
-  return (
-    <div>
-      <h2>Edit Profile</h2>
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <div className="edit-profile">
-                <form>
-                  <div className="form-input">
-                    <label htmlFor="">Profile Picture</label>
-                    <input
-                      type="file"
-                      className="upload-input"
-                      id="propic"
-                      name="propic"
-                      onChange={OnChangeFile}
-                    />
-                  </div>
+                    <div className="form-input mt-4">
+                      <label htmlFor="">Mobile Number</label>
+                      <input
+                        type="text"
+                        placeholder="Enter Your Mobile Number"
+                        name="mobilenumber"
+                        onChange={(e) => setmobilenumber(e.target.value)}
+                      />
+                    </div>
 
-                  <div className="form-input mt-4">
-                    <label htmlFor="">Email</label>
-                    <input
-                      type="email"
-                      placeholder="Enter Your Email Address"
-                      name="email"
-                      onChange={(e) => setemail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-input mt-4">
-                    <label htmlFor="">Mobile Number</label>
-                    <input
-                      type="text"
-                      placeholder="Enter Your Mobile Number"
-                      name="mobilenumber"
-                      onChange={(e) => setmobilenumber(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button
-                      className="btn edit-profile-button d-flex align-items-center gap-2"
-                      type="submit"
-                      onClick={handleSubmit}
-                      data-setid = "submit"
-                    >
-                      <Link to="/seller-profile">Save</Link>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
-  );
+                    <div className="d-flex align-items-center gap-4 mt-5 mb-5">
+                      <button
+                        className="btn edit-profile-button d-flex align-items-center gap-2"
+                        type="submit"
+                        onClick={handleSubmit}
+                        data-setid="submit"
+                      >
+                        <Link to="/seller-profile">Save</Link>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </Col>
+              <Col lg="2"></Col>
+            </Row>
+          </Container>
+        </section>
+      </div>
+    );
+  }
 }
 
 export default EditAdminDetails;
