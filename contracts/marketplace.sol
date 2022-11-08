@@ -30,7 +30,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
     //the event emitted when a token is successfully updated
     event TokenStatusUpdatedSuccess(
         uint256 indexed tokenId,
-        address _owner,
+        address contractAddress,
         address seller,
         uint256 price,
         bool currentlyListed
@@ -67,6 +67,10 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
 
     function getCurrentToken() public view returns (uint256) {
         return _tokenIds.current();
+    }
+
+    function getTokenOwner(uint256 tokenId) public view returns (address) {
+        return ownerOf(tokenId);
     }
 
     //The first time a token is created, it is listed here
@@ -124,14 +128,14 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         _transfer(msg.sender, address(this), tokenId);
         //Transfer the listing fee to the marketplace creator
         payable(_owner).transfer(_listPrice);
-        //Emit the event for successful transfer. The frontend parses this message and updates the end user
-        // emit TokenStatusUpdatedSuccess(
-        //     tokenId,
-        //     address(this),
-        //     address(this),
-        //     price,
-        //     true
-        // );
+        // Emit the event for listing. The frontend parses this message and updates the end user
+        emit TokenStatusUpdatedSuccess(
+            tokenId,
+            address(this),
+            address(this),
+            price,
+            true
+        );
     }
 
     //This will return all the NFTs currently listed to be sold on the marketplace
@@ -195,7 +199,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
 
     function transferNFT(uint256 tokenId, address receiver) public payable {
         address seller = idToToken[tokenId].seller;
-
+        require(seller == msg.sender, "Only Seller can transfer the NFT");
         require(
             _listPrice < msg.sender.balance,
             "Not sufficient funds for execute sale"
@@ -215,18 +219,22 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         //approve the marketplace to transfer NFT
         // approve(seller, tokenId);
         // uint256 price = 0;
-        // emit TokenStatusUpdatedSuccess(
-        //     tokenId,
-        //     address(this),
-        //     msg.sender,
-        //     price,
-        //     false
-        // );
+        emit TokenStatusUpdatedSuccess(
+            tokenId,
+            address(this),
+            idToToken[tokenId].seller,
+            idToToken[tokenId].price,
+            false
+        );
     }
 
     function executeSale(uint256 tokenId) public payable {
         uint256 price = idToToken[tokenId].price;
         address seller = idToToken[tokenId].seller;
+        require(
+            idToToken[tokenId].currentlyListed == true,
+            "tokenId is not listed"
+        );
         require(
             price + _listPrice < msg.sender.balance,
             "Not sufficient funds for execute sale"
@@ -247,9 +255,17 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         approve(address(this), tokenId);
 
         //Transfer the listing fee to the marketplace creator
-        payable(_owner).transfer(_listPrice);
+        payable(address(this)).transfer(_listPrice);
         //Transfer the proceeds from the sale to the seller of the NFT
         payable(seller).transfer(msg.value);
+
+        emit TokenStatusUpdatedSuccess(
+            tokenId,
+            address(this),
+            idToToken[tokenId].seller,
+            idToToken[tokenId].price,
+            false
+        );
     }
 
     function withdraw() public onlyOwner {

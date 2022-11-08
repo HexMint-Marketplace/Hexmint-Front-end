@@ -18,7 +18,7 @@ describe("Hexmint NFT Marketplace", function () {
   describe("update list price", function () {
     it("it should be contract address calling", async function () {
       const _newListPrice = ethers.utils.parseUnits("0.001", "ether");
-      expect(
+      await expect(
         contract.connect(addr1).updateListPrice(_newListPrice)
       ).to.be.revertedWith("Ownable: caller is not the owner");
     });
@@ -45,18 +45,30 @@ describe("Hexmint NFT Marketplace", function () {
   });
 
   describe("get sold item count", function () {
-    it("should get sold items count", async function () {
+    it.only("should get sold items count", async function () {
       const prev_count = await contract.getSoldItemCount();
       const response = await contract
         .connect(owner)
         .createToken("metadata url");
       await response.wait();
       //implement
+      const price = ethers.utils.parseEther("0.01");
+      const value = ethers.utils.parseEther("0.01");
+      const response1 = await contract
+        .connect(owner)
+        .ListToken(newTokenId, price, {
+          value: value,
+        });
+      const response2 = contract
+        .connect(addr1)
+        .executeSale(newTokenId, { value: providedValue });
+      await response2.wait();
+      expect("").to.equal(parseInt(prev_count) + 1);
     });
   });
 
   describe("get token object for tokenId", function () {
-    it("return token view", async function () {
+    it("return token", async function () {
       //change owner to other signer(signers getting undefined for now)
       const prev_tokenId = await contract.getCurrentToken();
       const response1 = await contract
@@ -71,19 +83,15 @@ describe("Hexmint NFT Marketplace", function () {
   });
 
   describe("get current token", function () {
-    it("return tokenid view", async function () {
-      // const prev_tokenId = await contract.getCurrentToken();
-      // expect(
-      //   response2.tokenId
-      // ).to.be.is.
-      // const response1 = await contract
-      //   .connect(owner)
-      //   .createToken("metadata url");
-      // await response1.wait();
-      // const response2 = await contract.getTokenForId(parseInt(prev_tokenId)+1);
-      // expect(
-      //   response2.tokenId
-      // ).to.equal(parseInt(prev_tokenId) + 1);
+    it("return tokenid", async function () {
+      const prev_tokenId = await contract.getCurrentToken();
+      const response1 = await contract
+        .connect(owner)
+        .createToken("metadata url");
+      await response1.wait();
+      const response2 = await contract.getCurrentToken();
+      await response2.wait();
+      expect(response2).to.equal(parseInt(prev_tokenId) + 1);
     });
   });
 
@@ -128,148 +136,281 @@ describe("Hexmint NFT Marketplace", function () {
     });
   });
 
-  describe("list minted token", function () {
+  describe("list minted token", async function () {
+    const newTokenId = await contract
+      .connect(owner)
+      .callStatic.createToken("metadata url");
+    console.log("new token: ", newTokenId);
+
     it("should listing cost would be same", async function () {
-      const tokenId = 1;
+      // const tokenId = 1;
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       expect(
-        contract.ListToken(tokenId, price, { value: value.toString() })
+        contract.ListToken(newTokenId, price, { value: value.toString() })
       ).to.be.revertedWith("Hopefully sending the correct price");
     });
+
     it("price should be positive", async function () {
-      const tokenId = 1;
+      // const tokenId = 1;
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       expect(
-        contract.ListToken(tokenId, price, { value: value.toString() })
+        contract.ListToken(newTokenId, price, { value: value.toString() })
       ).to.be.revertedWith("Make sure the price isn't negative");
     });
     it.only("price get updated", async function () {
-      const newTokenId = await contract
+      // const newTokenId = await contract
+      //   .connect(owner).callStatic
+      //   .createToken("metadata url");
+      // console.log("new token: ", newTokenId);
+      const price = ethers.utils.parseEther("0.01");
+      const value = ethers.utils.parseEther("0.01");
+      const response = await contract
         .connect(owner)
-        .callStatic.createToken("metadata url");
-        console.log("new token: ", newTokenId);
+        .ListToken(newTokenId, price, {
+          value: value,
+        });
+      await response.wait();
+      const response1 = await getTokenForId(newTokenId);
+      await response1.wait();
+      expect(response1.price).to.equal(price);
+      // expect("").to.equal("");
+    });
+
+    it("token get listed", async function () {
+      // const tokenId = 1;
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       const response = await contract.ListToken(newTokenId, price, {
         value: value.toString(),
       });
       await response.wait();
-      const response1 = await getTokenForId(tokenId);
-      await response1.wait();
-      expect(response1.price).to.equal(price);
-    });
-
-    it("token get listed", async function () {
-      const tokenId = 1;
-      const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
-      const response = await contract.ListToken(tokenId, price, {
-        value: value.toString(),
-      });
-      await response.wait();
-      const response1 = await getTokenForId(tokenId);
+      const response1 = await getTokenForId(newTokenId);
       await response1.wait();
       expect(response1.currentlyListed).to.equal(true);
     });
 
     it("ownership of token should be changed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const response = await contract
+        .connect(owner)
+        .ListToken(newTokenId, price, {
+          value: value,
+        });
+      await response.wait();
+      const response2 = await contract.getTokenOwner(newTokenId);
+      await response2.wait();
+      expect(response2).to.equal(contract.address);
     });
   });
 
   describe("get all nfts", function () {
     it("listed token count match the length of array", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
+      const prevArray = await contract.getAllNFTs();
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const response = await contract
+        .connect(owner)
+        .ListToken(newTokenId, price, {
+          value: value,
+        });
+      await response.wait();
+      const newArray = await contract.getAllNFTs();
+      expect(newArray.length).to.equal(prevArray.length + 1);
     });
   });
 
   describe("get my nfts", function () {
     it("listed token count by one address match the length of array", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-  });
-
-  describe("transfer nft", function () {
-    it("token get unlisted if it was listed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("only seller can transfer", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("owner get changed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("seller get changed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-  });
-
-  describe("execute sale", function () {
-    it("passed value equal to the price", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("token get unlisted", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("seller get changed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("owner get changed", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-    it("sold count get incremented", async function () {
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
-      );
-    });
-  });
-  describe("withdraw money", function () {
-    it("owners' balance get updated", async function () {
-      console.log("CA: ", await ethers.provider.getBalance(contract.address));
-      // console.log("CA: ", await contract.getContractAddress());
-      newTokenId = await contract
-        .connect(owner)
-        .callStatic.createToken("metadata url");
-      console.log("tokenid: ", newTokenId);
-      const response2 = await contract.getTokenForId(newTokenId);
-      console.log("owner: ", response2.seller);
+      const prevArray = await contract.connect(owner).getAllNFTs();
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
       const response = await contract
         .connect(owner)
-        .transferNFT(newTokenId, addr1);
+        .ListToken(newTokenId, price, {
+          value: value,
+        });
       await response.wait();
-      const response3 = await contract.getTokenForId(newTokenId);
-      console.log("owner: ", response3.seller);
-      console.log(
-        "new balance: ",
-        await ethers.provider.getBalance(contract.address)
+      const newArray = await contract.connect(owner).getMyNFTs();
+      expect(newArray.length).to.equal(prevArray.length + 1);
+    });
+  });
+
+  describe("transfer nft", async function () {
+    const newTokenId = await contract
+      .connect(owner)
+      .callStatic.createToken("metadata url");
+    console.log("new token: ", newTokenId);
+
+    it("only seller can transfer", async function () {
+      await expect(
+        contract.connect(addr1).transferNFT(newTokenId, addr2.address)
+      ).to.be.revertedWith("Only Seller can transfer the NFT");
+    });
+
+    it("customer should have enough funds", async function () {
+      // const newTokenId = await contract.callStatic.createToken("metadata url");
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      //signer with no money required
+      await expect(
+        contract.transferNFT(newTokenId, addr1.address)
+      ).to.be.revertedWith("Not sufficient funds for execute sale");
+    });
+    it("token state changes to unlisted", async function () {
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      const response1 = await contract
+        .connect(owner)
+        .transferNFT(newTokenId, addr1.address);
+      await response1.wait();
+      const response2 = await contract.getTokenForId(newTokenId);
+      await response2.wait();
+      expect(response2.currentlyListed).to.equal(false);
+    });
+
+    it("owner get changed", async function () {
+      const response1 = await contract
+        .connect(owner)
+        .transferNFT(newTokenId, addr1.address);
+      await response1.wait();
+      const response2 = await contract.getTokenForId(newTokenId);
+      await response2.wait();
+      expect(response2.seller).to.equal(addr1.address);
+    });
+  });
+
+  describe("execute sale", async function () {
+    const newTokenId = await contract
+      .connect(owner)
+      .callStatic.createToken("metadata url");
+    it("tokenID should be listed", async function () {
+      // const newTokenId = await contract
+      //   .connect(owner)
+      //   .callStatic.createToken("metadata url");
+      await expect(contract.executeSale(newTokenId)).to.be.revertedWith(
+        "tokenId is not listed"
       );
-      expect("function should be implemented").to.equal(
-        "function should be implemented"
+    });
+
+    it("customer should have enough funds", async function () {
+      // const newTokenId = await contract.callStatic.createToken("metadata url");
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      //signer with no money required
+      expect(contract.executeSale(newTokenId)).to.be.revertedWith(
+        "Not sufficient funds for execute sale"
       );
+    });
+    it("passed value equal to the price", async function () {
+      // const newTokenId = await contract.callStatic.createToken("metadata url");
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const providedValue = ethers.utils.parseEther("0.005");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      await expect(
+        contract.executeSale(newTokenId, { value: providedValue })
+      ).to.be.revertedWith(
+        "Please submit the asking price in order to complete the purchase"
+      );
+    });
+
+    it("token get unlisted", async function () {
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const providedValue = ethers.utils.parseEther("0.001");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      const response1 = contract
+        .connect(addr1)
+        .executeSale(newTokenId, { value: providedValue });
+      await response1.wait();
+      const response2 = await contract.getTokenForId(newTokenId);
+      await response2.wait();
+      expect(response2.currentlyListed).to.equal(false);
+    });
+    it("seller get changed", async function () {
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const providedValue = ethers.utils.parseEther("0.001");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      const response1 = contract
+        .connect(addr1)
+        .executeSale(newTokenId, { value: providedValue });
+      await response1.wait();
+      const response2 = await contract.getTokenForId(newTokenId);
+      await response2.wait();
+      expect(response2.seller).to.equal(addr1.address);
+    });
+
+    it("sold count get incremented", async function () {
+      const prevSoldCount = await contract.getSoldItemCount();
+      await prevSoldCount.wait();
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+      const providedValue = ethers.utils.parseEther("0.001");
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      const response1 = contract
+        .connect(addr1)
+        .executeSale(newTokenId, { value: providedValue });
+      await response1.wait();
+      const response2 = await contract.getSoldItemCount();
+      await response2.wait();
+      expect(response2).to.equal(parseInt(prevSoldCount) + 1);
+    });
+  });
+
+  describe("withdraw money", function () {
+    it("Only owner can withdraw money", async function () {
+      await expect(contract.connect(addr1).withdraw()).to.be.revertedWith(
+        "Ownable: caller is not the owner"
+      );
+    });
+
+    it("owners' balance get updated", async function () {
+      const newTokenId = await contract
+        .connect(owner)
+        .callStatic.createToken("metadata url");
+      const price = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther("0.01");
+
+      const response = await contract.ListToken(newTokenId, price, {
+        value: value.toString(),
+      });
+      await response.wait();
+      const accountBalanceBeforeWithdraw = ethers.utils.formatEther(
+        await contract.provider.getBalance(owner.address)
+      );
+
+      await contract.connect(owner).withdraw();
+      const accountBalanceAfterWithdraw = ethers.utils.formatEther(
+        await contract.provider.getBalance(owner.address)
+      );
+
+      expect(
+        parseInt(accountBalanceAfterWithdraw) >
+          parseInt(accountBalanceBeforeWithdraw)
+      ).to.be.true;
     });
   });
 });

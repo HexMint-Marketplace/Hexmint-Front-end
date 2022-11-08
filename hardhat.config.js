@@ -23,6 +23,8 @@ module.exports = {
     goerli: {
       url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
+      // gas: 2100000,
+      // gasPrice: 8000000000,
     },
   },
   mocha: {
