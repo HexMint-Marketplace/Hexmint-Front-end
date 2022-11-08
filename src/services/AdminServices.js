@@ -11,6 +11,20 @@ const deleteAdmin = async (id) => {
   });
 };
 
+const approveRequest = async (id) => {
+  return axios({
+    method: "post",
+    url: APIEndpoint + `/approve-request/${id}`,
+  });
+};
+
+const declineRequest = async (id) => {
+  return axios({
+    method: "delete",
+    url: APIEndpoint + `/decline-request/${id}`,
+  });
+};
+
 const addAdmin = async (data) => {
   return axios({
     method: "post",
@@ -33,10 +47,18 @@ const getAdmins = async () => {
   });
 };
 
-export default {
+const getAdminRequests = async () => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-admin-requests",
+  });
+};
 
+export default {
   addAdmin,
   getAdmins,
   deleteAdmin,
-
+  getAdminRequests,
+  approveRequest,
+  declineRequest,
 };

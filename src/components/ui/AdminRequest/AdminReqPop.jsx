@@ -12,15 +12,31 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Draggable from "react-draggable";
+
+function PaperComponent(props) {
+  return (
+    <Draggable
+      handle="#draggable-dialog-title"
+      cancel={'[class*="MuiDialogContent-root"]'}
+    >
+      <Paper {...props} />
+    </Draggable>
+  );
+}
 
 function AdminReqPop(props) {
   return (
     <Dialog
+      sx={{ pt: 10 }}
       open={props.open}
-      aria-labelledby="alert-dialog-title"
+      aria-labelledby="draggable-dialog-title"
       aria-describedby="alert-dialog-description"
+      PaperComponent={PaperComponent}
     >
-      <DialogTitle id="alert-dialog-title">{"Changes"}</DialogTitle>
+      <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
+        {"Changes"}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <TableContainer component={Paper}>
@@ -32,8 +48,8 @@ function AdminReqPop(props) {
               <TableHead>
                 <TableRow>
                   <TableCell>Field</TableCell>
-                  <TableCell align="right">Old</TableCell>
-                  <TableCell align="right">New</TableCell>
+                  <TableCell align="left">Old</TableCell>
+                  <TableCell align="left">New</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -43,10 +59,14 @@ function AdminReqPop(props) {
                   }}
                 >
                   <TableCell component="th" scope="row">
-                    Name
+                    Profile Picture
                   </TableCell>
-                  <TableCell align="right">old_name</TableCell>
-                  <TableCell align="right">new_name</TableCell>
+                  <TableCell align="left">
+                    {props.data.exist.propic ? props.data.exist.propic : "Null"}
+                  </TableCell>
+                  <TableCell align="left">
+                    {props.data.new.propic ? props.data.new.propic : "Null"}
+                  </TableCell>
                 </TableRow>
                 <TableRow
                   sx={{
@@ -56,8 +76,12 @@ function AdminReqPop(props) {
                   <TableCell component="th" scope="row">
                     Email
                   </TableCell>
-                  <TableCell align="right">old_email</TableCell>
-                  <TableCell align="right">new_email</TableCell>
+                  <TableCell align="left">
+                    {props.data.exist.email ? props.data.exist.email : "Null"}
+                  </TableCell>
+                  <TableCell align="left">
+                    {props.data.new.email ? props.data.new.email : "Null"}
+                  </TableCell>
                 </TableRow>
                 <TableRow
                   sx={{
@@ -67,8 +91,16 @@ function AdminReqPop(props) {
                   <TableCell component="th" scope="row">
                     Number
                   </TableCell>
-                  <TableCell align="right">old_number</TableCell>
-                  <TableCell align="right">new_number</TableCell>
+                  <TableCell align="left">
+                    {props.data.exist.mobilenumber
+                      ? props.data.exist.mobilenumber
+                      : "Null"}
+                  </TableCell>
+                  <TableCell align="left">
+                    {props.data.new.mobilenumber
+                      ? props.data.new.mobilenumber
+                      : "Null"}
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -76,7 +108,7 @@ function AdminReqPop(props) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose} autoFocus>
+        <Button autoFocus onClick={props.handleClose}>
           Close
         </Button>
       </DialogActions>
