@@ -8,15 +8,22 @@ import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/create.css";
 import CustomerServices from "../services/API/CustomerServices";
 import { toast } from "react-toastify";
+import Loader from "../components/ui/Loader/Loader";
 
 function Create() {
-  const [tokenIDValue, settokenIDValue] = useState("");
-  const [transaction, setTransaction] = useState(0);
+  // const [tokenIDValue, settokenIDValue] = useState("");
+  // const [transaction, setTransaction] = useState(0);
   const [formParams, updateFormParams] = useState({
     title: "",
     description: "",
     collectionId: "",
   });
+  // let transactionObj;
+  // let tokenid = "";
+
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState("");
+
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
   const [message, updateMessage] = useState("");
@@ -29,12 +36,10 @@ function Create() {
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
 
-  let tokenid = '';
   const [contractAddress, setContractAddress] = useState();
   const [price, setPrice] = useState();
   const [currentlyListed, serCurrentlyListed] = useState();
   // const stateRef = useRef(tokenid);
-  
 
   const { PINATA_API_KEY } = process.env;
 
@@ -46,6 +51,7 @@ function Create() {
     console.log("process: ", PINATA_API_KEY);
     //check for file extension
     try {
+      console.log("In the try block on changeFile");
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
       // console.log("response is: ", response);
@@ -84,6 +90,8 @@ function Create() {
   }
 
   async function mintNFT(e) {
+    setLoader(true);
+    toast.info("Please wait while we mint your NFT");
     e.preventDefault();
     // console.log("e from mintNFT function: ",e.target.files[0]);
     //Upload data to IPFS
@@ -116,10 +124,10 @@ function Create() {
             data: event,
           };
           console.log("info: ", info);
-
-          const tokenID = tokenId.toString();
-          settokenIDValue(tokenId.toString());
-          console.log("tokenID: ", tokenID);
+          console.log("tokenId: ", tokenId);
+          settokenid(tokenId.toString());
+          // settokenIDValue(tokenId.toString());
+          console.log("tokenID: in use state ", tokenid);
         }
       );
 
@@ -136,15 +144,23 @@ function Create() {
       // console.log("after create token method called");
 
       await transac.wait();
-      setTransaction(transac);
-      console.log("await for transaction", transaction);
+
+      // setLoader(true);
+      console.log("await for transaction", transac);
+      settransactionObj(transac);
+      console.log("transactionObj: in use state ", transactionObj);
+      // setTransaction(transac);
+
+      // setTimeout(() => {
+      //   console.log("lader is calling");
+      //   setLoader(false);
+      // }, 5000);
 
       const transactionTime = new Date();
       // // update the user activity(mint) in the database for the user
       // //Activity type, from wallet address, prize, transaction hash,
 
-
-      alert("Successfully minted your NFT!");
+      // alert("Successfully minted your NFT!");
 
       console.log("Successfully minted your NFT!");
 
@@ -169,12 +185,43 @@ function Create() {
     }
   }
 
-  useEffect(() => {
-    if (tokenIDValue && transaction) {
-      saveUserActivity("minted", transaction, tokenIDValue, new Date());
-      settokenIDValue("");
+  const saveUserActivity = async (
+    activityType,
+    transaction,
+    contractInfo,
+    transactionTime
+  ) => {
+    try {
+      const response = await CustomerServices.saveUserActivity(
+        activityType,
+        transaction,
+        contractInfo,
+        transactionTime
+      );
+      if (response.status === 200) {
+        console.log("User activity saved successfully");
+        toast.success("Successfully minted your NFT!");
+        window.location.replace("/");
+        setLoader(false);
+
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
     }
-  }, [tokenIDValue]);
+  };
+
+  useEffect(() => {
+    console.log("use effect called -------------------------------");
+    if (tokenid && transactionObj) {
+      console.log("In the saveuseractivity use effect function");
+      saveUserActivity("minted", transactionObj, tokenid, new Date());
+
+      // settokenIDValue("");
+    }
+  }, [tokenid, transactionObj]);
 
   // console.log("Working", process.env);
 
@@ -202,119 +249,105 @@ function Create() {
     }, 200);
   };
 
-  const saveUserActivity = async (
-    activityType,
-    transaction,
-    contractInfo,
-    transactionTime
-  ) => {
-    try {
-      const response = await CustomerServices.saveUserActivity(
-        activityType,
-        transaction,
-        contractInfo,
-        transactionTime
-      );
-      if (response.status === 200) {
-        console.log("User activity saved successfully");
-      } else {
-        toast.error("Error Occured!");
-      }
-    } catch (error) {
-      console.log("Error occur", error);
-      toast.error("Error Occured!");
-    }
-  };
-
   return (
     <div>
-      <CommonHeader title={"Create New Item"} />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <div className="create__item">
-                <form>
-                  <div className="form__input">
-                    <label htmlFor="image">Upload File</label>
-                    <input
-                      type={"file"}
-                      onChange={OnChangeFile}
-                      className="upload__input"
-                      required
-                    />
-                  </div>
+      {loader ? (
+        <div>
+          <Loader isLoading={loader} />
+        </div>
+      ) : (
+        <div>
+          <CommonHeader title={"Create New Item"} />
+          <section>
+            <Container>
+              <Row>
+                <Col lg="2"></Col>
+                <Col lg="8" md="8" sm="6">
+                  <div className="create__item">
+                    <form>
+                      <div className="form__input">
+                        <label htmlFor="image">Upload File</label>
+                        <input
+                          type={"file"}
+                          onChange={OnChangeFile}
+                          className="upload__input"
+                          required
+                        />
+                      </div>
 
-                  <div className="form__input">
-                    <label htmlFor="title">Title</label>
-                    <input
-                      id="title"
-                      type="text"
-                      onChange={(e) =>
-                        updateFormParams({
-                          ...formParams,
-                          title: e.target.value,
-                        })
-                      }
-                      placeholder="Enter title"
-                      required
-                    ></input>
-                  </div>
+                      <div className="form__input">
+                        <label htmlFor="title">Title</label>
+                        <input
+                          id="title"
+                          type="text"
+                          onChange={(e) =>
+                            updateFormParams({
+                              ...formParams,
+                              title: e.target.value,
+                            })
+                          }
+                          placeholder="Enter title"
+                          required
+                        ></input>
+                      </div>
 
-                  <div className="form__input">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                      name=""
-                      id="description"
-                      rows="7"
-                      placeholder="Enter description"
-                      className="w-100"
-                      onChange={(e) =>
-                        updateFormParams({
-                          ...formParams,
-                          description: e.target.value,
-                        })
-                      }
-                      required
-                    ></textarea>
-                  </div>
+                      <div className="form__input">
+                        <label htmlFor="description">Description</label>
+                        <textarea
+                          name=""
+                          id="description"
+                          rows="7"
+                          placeholder="Enter description"
+                          className="w-100"
+                          onChange={(e) =>
+                            updateFormParams({
+                              ...formParams,
+                              description: e.target.value,
+                            })
+                          }
+                          required
+                        ></textarea>
+                      </div>
 
-                  <div className="form__input">
-                    <label htmlFor="collection">Collection</label>
-                    <select
-                      class="form-select"
-                      aria-label="Default select example"
-                      onChange={(e) =>
-                        updateFormParams({
-                          ...formParams,
-                          collectionId: e.target.value,
-                        })
-                      }
-                    >
-                      <option selected>Open this select menu</option>
-                      {allCollections.map((row) => (
-                        <option value={row._id}>{row.collectionName}</option>
-                      ))}
-                      required
-                    </select>
-                  </div>
+                      <div className="form__input">
+                        <label htmlFor="collection">Collection</label>
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          onChange={(e) =>
+                            updateFormParams({
+                              ...formParams,
+                              collectionId: e.target.value,
+                            })
+                          }
+                        >
+                          <option selected>Open this select menu</option>
+                          {allCollections.map((row) => (
+                            <option value={row._id}>
+                              {row.collectionName}
+                            </option>
+                          ))}
+                          required
+                        </select>
+                      </div>
 
-                  <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button
-                      onClick={mintNFT}
-                      className="btn mint_button d-flex align-items-center gap-2"
-                    >
-                      <Link to="/explore">Create</Link>
-                    </button>
+                      <div className="d-flex align-items-center gap-4 mt-5 mb-5">
+                        <button
+                          onClick={mintNFT}
+                          className="btn mint_button d-flex align-items-center gap-2"
+                        >
+                          Create
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </form>
-              </div>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
+                </Col>
+                <Col lg="2"></Col>
+              </Row>
+            </Container>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
