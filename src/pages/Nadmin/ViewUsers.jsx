@@ -14,7 +14,8 @@ import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav"
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
-import SearchBar from "material-ui-search-bar";
+// import SearchBar from "material-ui-search-bar";
+//check this link for search bar
 
 function ViewUsers() {
   const [allCustomers, setAllCustomers] = useState([]);
@@ -88,11 +89,11 @@ function ViewUsers() {
         <CommonHeader title={"Customer Details & Management"} />
         <div className="section">
           <Paper>
-            <SearchBar
+            {/* <SearchBar
               value={searched}
               onChange={(searchVal) => requestSearch(searchVal)}
               onCancelSearch={() => cancelSearch()}
-            />
+            /> */}
             <TableContainer className="table" component={Paper}>
               {rows.length === 0 && (
                 <div>
