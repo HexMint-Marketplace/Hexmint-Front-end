@@ -14,11 +14,25 @@ import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav"
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
+import SearchBar from "material-ui-search-bar";
 
 function ViewUsers() {
   const [allCustomers, setAllCustomers] = useState([]);
   const [loader, setLoader] = useState(false);
   const [runUseEffect, setRunUseEffect] = useState(false);
+
+  const [searched, setSearched] = useState("");
+  const [rows, setRows] = useState(allCustomers);
+  const requestSearch = (searchedVal) => {
+    const filteredRows = allCustomers.filter((row) => {
+      return row.name.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    setRows(filteredRows);
+  };
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
 
   useEffect(() => {
     getCustomers();
@@ -73,57 +87,66 @@ function ViewUsers() {
         </div>
         <CommonHeader title={"Customer Details & Management"} />
         <div className="section">
-          <TableContainer className="table" component={Paper}>
-            {allCustomers.length === 0 && (
-              <div>
-                <h5
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    margin: "10px",
-                  }}
-                >
-                  No Customers to display
-                </h5>
-              </div>
-            )}
-            {allCustomers.length !== 0 && (
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>User Name</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Wallet Address</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allCustomers.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row.username}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell>{row.walletaddress}</TableCell>
-                      <TableCell>
-                        <button
-                          className="act-button btn btn-danger"
-                          onClick={() => {
-                            blockUser(row._id);
-                          }}
-                        >
-                          <Link to="">Block</Link>
-                        </button>
-                      </TableCell>
+          <Paper>
+            <SearchBar
+              value={searched}
+              onChange={(searchVal) => requestSearch(searchVal)}
+              onCancelSearch={() => cancelSearch()}
+            />
+            <TableContainer className="table" component={Paper}>
+              {rows.length === 0 && (
+                <div>
+                  <h5
+                    style={{
+                      color: "black",
+                      textAlign: "center",
+                      margin: "10px",
+                    }}
+                  >
+                    No Customers to display
+                  </h5>
+                </div>
+              )}
+              {rows.length !== 0 && (
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>User Name</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Wallet Address</TableCell>
+                      <TableCell>Actions</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell>{row.username}</TableCell>
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell>{row.walletaddress}</TableCell>
+                        <TableCell>
+                          <button
+                            className="act-button btn btn-danger"
+                            onClick={() => {
+                              blockUser(row._id);
+                            }}
+                          >
+                            <Link to="">Block</Link>
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </TableContainer>
+          </Paper>
         </div>
       </div>
     );
