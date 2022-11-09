@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require('@openzeppelin/hardhat-upgrades');
 require('dotenv').config();
 const fs = require("fs");
 // const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
@@ -22,6 +23,11 @@ module.exports = {
     goerli: {
       url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
+      // gas: 2100000,
+      // gasPrice: 8000000000,
     },
+  },
+  mocha: {
+    timeout: 100000000
   },
 };
