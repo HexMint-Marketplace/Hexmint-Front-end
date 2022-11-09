@@ -47,27 +47,31 @@ function AdminReqPop(props) {
               <TableHead>
                 <TableRow>
                   <TableCell>Reported Customer Wallet Address</TableCell>
-                  <TableCell align="left">543873834753534853437</TableCell>
+                  <TableCell align="left">
+                    {props.data.to.walletaddress
+                      ? props.data.to.walletaddress
+                      : "N/A"}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableHead>
                 <TableRow>
                   <TableCell>Reporter Wallet Address</TableCell>
-                  <TableCell align="left">5438738565464534853437</TableCell>
+                  <TableCell align="left">
+                    {props.data.from.walletaddress
+                      ? props.data.from.walletaddress
+                      : "N/A"}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableHead>
                 <TableRow>
                   <TableCell>Reason for Report</TableCell>
                   <TableCell align="left">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Veniam adipisci cupiditate officia
+                    {props.data.reason ? props.data.reason : "N/A"}
                   </TableCell>
                 </TableRow>
               </TableHead>
-              {/* {props.data.new.mobilenumber
-                      ? props.data.new.mobilenumber
-                      : "Null"} */}
             </Table>
           </TableContainer>
         </DialogContentText>

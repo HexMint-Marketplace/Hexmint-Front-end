@@ -18,6 +18,20 @@ const getBlockedCustomers = async () => {
   });
 };
 
+const getReports = async () => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-reports",
+  });
+};
+
+const deleteReport = async (id) => {
+  return axios({
+    method: "delete",
+    url: APIEndpoint + `/delete-report/${id}`,
+  });
+};
+
 const updateUserDetails = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
@@ -99,4 +113,6 @@ export default {
   blockUser,
   getBlockedCustomers,
   unBlockUser,
+  getReports,
+  deleteReport,
 };

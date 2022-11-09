@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
 import { Link } from "react-router-dom";
-import { REPORT__DATA } from "../../asssets/data/data";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,14 +12,14 @@ import "../../styles/viewAdmins.css";
 import "../../styles/superAdmin.css";
 import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
 import ViewReport from "../../components/ui/ReportView/ReportView";
-import AdminServices from "../../services/AdminServices";
+import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
 
 function ViewReports() {
   const [open, setOpen] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [requests, setRequests] = useState([]);
+  const [reports, setReports] = useState([]);
   const [data, setData] = useState({});
   const [runUseEffect, setRunUseEffect] = useState(false);
 
@@ -29,15 +28,15 @@ function ViewReports() {
   };
 
   useEffect(() => {
-    getAdminRequests();
+    getReports();
   }, [runUseEffect]);
 
-  const getAdminRequests = async () => {
+  const getReports = async () => {
     setLoader(true);
     try {
-      const response = await AdminServices.getAdminRequests();
+      const response = await CustomerServices.getReports();
       if (response.status === 200) {
-        setRequests(response.data.data);
+        setReports(response.data.data);
         console.log(response.data.data);
       } else {
         toast.error("Error Occured!");
@@ -50,8 +49,49 @@ function ViewReports() {
     }, 200);
   };
 
+  const blockUser = async (id) => {
+    setLoader(true);
+    try {
+      const response = await CustomerServices.blockUser(id);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setRunUseEffect(!runUseEffect);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
+
+  const deleteReport = async (id) => {
+    setLoader(true);
+    try {
+      const response = await CustomerServices.deleteReport(id);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setRunUseEffect(!runUseEffect);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
+
+  const handleClickBlock = (userid, reportid) => {
+    blockUser(userid);
+    deleteReport(reportid);
+  };
+
   const handleClickOpen = (id) => {
-    const object = requests.find((obj) => obj.userid === id);
+    const object = reports.find((obj) => obj._id === id);
     setData(object);
     setOpen(true);
   };
@@ -76,43 +116,65 @@ function ViewReports() {
             className="table"
             component={Paper}
           >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Reported Customer</TableCell>
-                  <TableCell>Reporter</TableCell>
+            {reports.length === 0 && (
+              <div>
+                <h5
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    margin: "10px",
+                  }}
+                >
+                  No Customers to display
+                </h5>
+              </div>
+            )}
+            {reports.length !== 0 && (
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Reported Customer</TableCell>
+                    <TableCell>Reporter</TableCell>
 
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {REPORT__DATA.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.user}
-                    </TableCell>
-                    <TableCell>{row.reporter}</TableCell>
-                    <TableCell>
-                      <button
-                        className="act-button btn btn-primary"
-                        onClick={() => handleClickOpen()}
-                      >
-                        <Link to="">View</Link>
-                      </button>
-                      <button className="act-button btn btn-primary">
-                        <Link to="">Block</Link>
-                      </button>
-                      <button className="act-button btn btn-danger">
-                        <Link to="">Delete</Link>
-                      </button>
-                    </TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {reports.map((row) => (
+                    <TableRow
+                      key={row.name}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.to.name}
+                      </TableCell>
+                      <TableCell>{row.from.name}</TableCell>
+                      <TableCell>
+                        <button
+                          className="act-button btn btn-primary"
+                          onClick={() => handleClickOpen(row._id)}
+                        >
+                          <Link to="">View</Link>
+                        </button>
+                        <button
+                          className="act-button btn btn-primary"
+                          onClick={() => handleClickBlock(row.to._id, row._id)}
+                        >
+                          <Link to="">Block</Link>
+                        </button>
+                        <button
+                          className="act-button btn btn-danger"
+                          onClick={() => deleteReport(row._id)}
+                        >
+                          <Link to="">Delete</Link>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+            ;
           </TableContainer>
         </div>
       </div>
