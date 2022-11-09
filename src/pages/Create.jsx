@@ -201,15 +201,19 @@ function Create() {
       if (response.status === 200) {
         console.log("User activity saved successfully");
         toast.success("Successfully minted your NFT!");
-        window.location.replace("/");
-        setLoader(false);
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 2500);
+
 
       } else {
         toast.error("Error Occured!");
+        setLoader(false);
       }
     } catch (error) {
       console.log("Error occur", error);
       toast.error("Error Occured!");
+      setLoader(false);
     }
   };
 
