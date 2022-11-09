@@ -9,7 +9,7 @@ function BestBuyers() {
         <Row>
             <Col lg='12' className='mb-5'>
                 <div className="buyer_section_title mt-5">
-                    <h3>Top Buyers</h3>
+                    <h3 data-testid="topbuyers_txt">Top Buyers</h3>
                 </div>
             </Col>
 

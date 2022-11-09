@@ -154,7 +154,7 @@ function SellerProfile() {
     <section>
       {loader ? (
         <div>
-          <Loader />
+          <Loader isLoading = {loader} />
         </div>
       ) : (
         <div>

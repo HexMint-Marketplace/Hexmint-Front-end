@@ -43,7 +43,7 @@ function ViewUsers() {
   };
 
   if (loader) {
-    return <Loader />;
+    return <Loader isLoading={loader} />;
   } else {
     return (
       <div>

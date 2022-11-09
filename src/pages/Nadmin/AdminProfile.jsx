@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
-import ProfileHead from "../../components/ui/ProfileHead/ProfileHead"
-import Loader from "../../components/ui/Loader/Loader"
+import ProfileHead from "../../components/ui/ProfileHead/ProfileHead";
+import Loader from "../../components/ui/Loader/Loader";
 import AdminServices from "../../services/AdminServices";
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +11,9 @@ function AdminProfile() {
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
   const [proPic, setProPic] = useState("");
-  const [email, setemail] = useState('')
-  const [DOB, setDOB] = useState('')
-  const [mobile, setmobile] = useState('')
+  const [email, setemail] = useState("");
+  const [DOB, setDOB] = useState("");
+  const [mobile, setmobile] = useState("");
   // const [showAddress,setShowAddress] = useState([]);
 
   const [issubmit, setissubmit] = useState(false);
@@ -22,7 +22,7 @@ function AdminProfile() {
     setLoader(true);
     const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
 
-    console.log("Should display",walletAddress);
+    console.log("Should display", walletAddress);
 
     // call the backend and get details
     getAdmindetails(walletAddress.address);
@@ -49,7 +49,7 @@ function AdminProfile() {
       const userType = details.data.usertype;
       setUserType(userType);
 
-      const email= details.data.email;
+      const email = details.data.email;
       setemail(email);
 
       const DOB = details.data.DOB;
@@ -60,7 +60,6 @@ function AdminProfile() {
 
       const proPic = details.data.propic;
       setProPic(proPic);
-
     } catch (err) {
       console.log(err);
     }
@@ -70,7 +69,7 @@ function AdminProfile() {
     <section>
       {loader ? (
         <div>
-          <Loader />
+          <Loader isLoading={loader} />
         </div>
       ) : (
         <div>

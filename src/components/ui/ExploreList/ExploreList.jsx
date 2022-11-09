@@ -34,7 +34,7 @@ function ExploreList() {
   };
 
   return (
-    <section>
+    <section data-testid = 'collection_section'>
     <Container>
       <Row>
 
