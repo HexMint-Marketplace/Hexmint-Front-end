@@ -215,7 +215,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
             _transfer(seller, receiver, tokenId);
         }
         //Transfer the listing fee to the marketplace creator
-        payable(_owner).transfer(_listPrice);
+        // payable(_owner).transfer(_listPrice);
         //approve the marketplace to transfer NFT
         // approve(seller, tokenId);
         // uint256 price = 0;
@@ -250,20 +250,20 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         _itemsSold.increment();
 
         //Actually transfer the token to the new owner
-        _transfer(address(this), msg.sender, tokenId);
+        _transfer(address(this), payable(msg.sender), tokenId);
         //approve the marketplace to sell NFTs on your behalf
         approve(address(this), tokenId);
 
         //Transfer the listing fee to the marketplace creator
-        payable(address(this)).transfer(_listPrice);
+        // payable(address(this)).transfer(_listPrice);
         //Transfer the proceeds from the sale to the seller of the NFT
-        payable(seller).transfer(msg.value);
+        // payable(seller).transfer(msg.value);
 
         emit TokenStatusUpdatedSuccess(
             tokenId,
             address(this),
             seller,
-            idToToken[tokenId].price,
+            price,
             false
         );
     }

@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
 import AuthServices from "../../services/AuthServices";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DehazeIcon from "@mui/icons-material/Dehaze";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ConnectWallet from "../ui/ConnectWallet/ConnectWallet";
@@ -30,6 +30,8 @@ const NAV_LINKS = [
 ];
 
 function Header() {
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
 
   //Wagmi Hooks
@@ -81,7 +83,17 @@ function Header() {
     }
   }, [address]);
 
+  useEffect(() => {
+    const changeWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
 
+    window.addEventListener("resize", changeWidth);
+
+    return () => {
+      window.removeEventListener("resize", changeWidth);
+    };
+  }, [screenWidth]);
 
   return (
     <>
@@ -101,78 +113,105 @@ function Header() {
           </div>
 
           <div className="nav_menu ">
-            <ul className="nav_list d-flex align-items-center">
-              <li className="nav_item">
-                {(userType === "Customer" || !isConnected) && (
+            {(toggleMenu || screenWidth > 1000) && (
+              <ul className="nav_list d-flex align-items-center">
+                <li className="nav_item">
+                  {(userType === "Customer" || !isConnected) && (
+                    <NavLink
+                      to={"/home"}
+                      className={(navClass) =>
+                        navClass.isActive ? "active" : ""
+                      }
+                      onClick={() => {
+                        setToggleMenu(!toggleMenu);
+                      }}
+                    >
+                      {"Home"}
+                    </NavLink>
+                  )}
+
+                  {userType === "Super Admin" && isConnected && (
+                    <NavLink
+                      to={"/sadmin-dashboard"}
+                      className={(navClass) =>
+                        navClass.isActive ? "active" : ""
+                      }
+                    >
+                      {"Dashboard"}
+                    </NavLink>
+                  )}
+
+                  {userType === "Admin" && isConnected && (
+                    <NavLink
+                      to={"/nadmin-dashboard"}
+                      className={(navClass) =>
+                        navClass.isActive ? "active" : ""
+                      }
+                    >
+                      {"Dashboard"}
+                    </NavLink>
+                  )}
+                </li>
+
+                <li className="nav_item">
                   <NavLink
-                    to={"/home"}
+                    to={"/explore"}
                     className={(navClass) =>
                       navClass.isActive ? "active" : ""
                     }
+                    onClick={() => {
+                      setToggleMenu(!toggleMenu);
+                    }}
                   >
-                    {"Home"}
+                    {"Explore"}
                   </NavLink>
-                )}
+                </li>
 
-                {userType === "Super Admin" && isConnected && (
-                  <NavLink
-                    to={"/sadmin-dashboard"}
-                    className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                  >
-                    {"Dashboard"}
-                  </NavLink>
-                )}
+                <li className="nav_item">
+                  {userType !== "Super Admin" && isConnected && (
+                    <NavLink
+                      to={`/seller-profile/${address}`}
+                      className={(navClass) =>
+                        navClass.isActive ? "active" : ""
+                      }
+                      onClick={() => {
+                        setToggleMenu(!toggleMenu);
+                      }}
+                    >
+                      {"Profile"}
+                    </NavLink>
+                  )}
+                </li>
 
-                {userType === "Admin" && isConnected && (
-                  <NavLink
-                    to={"/nadmin-dashboard"}
-                    className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                  >
-                    {"Dashboard"}
-                  </NavLink>
-                )}
-              </li>
+                <li className="nav_item">
+                  {isConnected && userType === "Customer" && (
+                    <NavLink
+                      to={"/create"}
+                      state={{ walletAddress: userAddress }}
+                      className={(navClass) =>
+                        navClass.isActive ? "active" : ""
+                      }
+                      onClick={() => {
+                        setToggleMenu(!toggleMenu);
+                      }}
+                    >
+                      {"Create"}
+                    </NavLink>
+                  )}
+                </li>
+              </ul>
+            )}
 
-              <li className="nav_item">
-                <NavLink
-                  to={"/explore"}
-                  className={(navClass) => (navClass.isActive ? "active" : "")}
-                >
-                  {"Explore"}
-                </NavLink>
-              </li>
-
-              <li className="nav_item">
-                {userType !== "Super Admin" && isConnected && (
-                  <NavLink
-                    to={`/seller-profile/${address}`}
-                    className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                  >
-                    {"Profile"}
-                  </NavLink>
-                )}
-              </li>
-
-              <li className="nav_item">
-                {isConnected && userType === "Customer" && (
-                  <NavLink
-                    to={"/create"}
-                    state={{ walletAddress: userAddress }}
-                    className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                  >
-                    {"Create"}
-                  </NavLink>
-                )}
-              </li>
-            </ul>
+            <div
+              className="nav_btn"
+              onClick={() => {
+                setToggleMenu(!toggleMenu);
+              }}
+            >
+              <span className="px-1">
+                <DehazeIcon fontSize="large" />
+              </span>
+            </div>
           </div>
 
           <div className="nav_right d-flex align-items-center gap-5">
@@ -182,14 +221,18 @@ function Header() {
                 to={`/seller-profile/${address}`}
                 className="text-decoration-none to-user"
               >
-                <button className="btn d-flex gap-1 align-items-center custom-width ">
+                <button className="btn d-flex gap-1 align-items-center custom-style ">
                   <span className="overflow-hidden wallet-address">
                     <b>
                       <span className="px-1">
-                        <AccountCircleIcon fontSize="large" />
+                        <AccountCircleIcon
+                          fontSize={screenWidth > 1000 ? "large" : "small"}
+                        />
                       </span>
-                      <span style={{ "fontSize": "1rem" }}>
-                        {(ensName ?? address).substring(0, 8)}.....
+                      <span style={{ fontSize: "1rem" }}>
+                        {screenWidth > 1000
+                          ? (ensName ?? address).substring(0, 8) + "....."
+                          : (ensName ?? address).substring(0, 3) + ".."}
                       </span>
                     </b>
                   </span>
