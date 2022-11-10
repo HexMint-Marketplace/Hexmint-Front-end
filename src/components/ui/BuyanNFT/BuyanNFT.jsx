@@ -6,6 +6,7 @@ import MarketplaceJSON from "../../../Marketplace.json";
 
 const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
+  const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
   const {
     _v,
@@ -37,9 +38,30 @@ const BuyanNFT = (props) => {
         let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer);
         const salePrice = ethers.utils.parseUnits(price, 'ether')
         updateMessage("Buying the NFT... Please Wait (Upto 5 mins)")
+        console.log("update message");
         //run the executeSale function
         let transaction = await contract.executeSale(tokenId, {value:salePrice});
         await transaction.wait();
+        console.log("transaction: ",transaction);
+        contract.on(
+          "TokenStatusUpdatedSuccess",
+          (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+            // let info = {
+            //   tokenId: tokenId,
+            //   contractAddress: contractAddress,
+            //   seller: seller,
+            //   price: price,
+            //   currentlyListed: currentlyListed,
+            //   data: event,
+            // };
+            // console.log("info: ", info);
+            console.log("tokenId: ", tokenId);
+            console.log("seller: ", seller);
+            settokenid(tokenId.toString());
+            // settokenIDValue(tokenId.toString());
+            console.log("tokenID: in use state ", tokenid);
+          }
+        );
 
         alert('You successfully bought the NFT!');
         updateMessage("");
