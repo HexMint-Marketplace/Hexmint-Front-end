@@ -13,7 +13,7 @@ const BuyanNFT = (props) => {
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
 
   const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState({});
+  // const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
 
   const {
