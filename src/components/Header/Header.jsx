@@ -8,6 +8,7 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ConnectWallet from "../ui/ConnectWallet/ConnectWallet";
 
 const NAV_LINKS = [
   {
@@ -41,6 +42,7 @@ function Header() {
   //Set user type and useraddress
   const [userType, setuserType] = useState();
   const [userAddress, setuserAddress] = useState("");
+  const [showConnectWallet, setshowConnectWallet] = useState(false)
 
   useEffect(() => {
     //set the user wallet address to local storage
@@ -71,6 +73,7 @@ function Header() {
     };
 
     if (isConnected) {
+      setshowConnectWallet(false)
       //call handleconncect wallet function if the user is connected
       handleConnectWallet();
     } else {
@@ -78,7 +81,10 @@ function Header() {
     }
   }, [address]);
 
+
+
   return (
+    <>
     <header className="header w-100">
       <Container>
         <div className="navigation d-flex  align-items-center justify-content-between ">
@@ -192,7 +198,10 @@ function Header() {
             ) : (
               <button
                 onClick={() => {
-                  connect();
+                  setshowConnectWallet(true)
+                  // connect();
+                  // <Link to="/connect-wallet" />;
+                  // <ConnectWallet/>
                 }}
                 className="btn d-flex gap-2 align-items-center"
               >
@@ -210,6 +219,8 @@ function Header() {
         </div>
       </Container>
     </header>
+    {showConnectWallet && <ConnectWallet setshowConnectWallet={setshowConnectWallet} />}
+    </>
   );
 }
 

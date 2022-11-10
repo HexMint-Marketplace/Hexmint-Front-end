@@ -1,12 +1,20 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import "./buyanNFT.css";
 import { Link } from "react-router-dom";
 import MarketplaceJSON from "../../../Marketplace.json";
+import Loader from "../Loader/Loader"
+import CustomerServices from "../../../services/API/CustomerServices";
+import { toast } from "react-toastify";
 
 const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
+
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState({});
+  const [loader, setLoader] = useState(false);
+
   const {
     _v,
     _id,
@@ -27,6 +35,8 @@ const BuyanNFT = (props) => {
     props.NFTData;
 
   async function buyNFT(tokenId) {
+    setLoader(true);
+    toast.info("Please wait while we countinue the transaction");
     try {
         const ethers = require("ethers");
         //After adding your Hardhat network to your metamask, this code will get providers and signers
@@ -37,11 +47,34 @@ const BuyanNFT = (props) => {
         let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer);
         const salePrice = ethers.utils.parseUnits(price, 'ether')
         updateMessage("Buying the NFT... Please Wait (Upto 5 mins)")
+        
+        contract.on(
+          "TokenStatusUpdatedSuccess",
+          (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+            let info = {
+              tokenId: tokenId,
+              contractAddress: contractAddress,
+              seller: seller,
+              price: price,
+              currentlyListed: currentlyListed,
+              data: event,
+            };
+            console.log("info: ", info);
+            console.log("tokenId: ", tokenId);
+            settokenid(info);
+            // settokenIDValue(tokenId.toString());
+            console.log("tokenID: in use state ", tokenid);
+          }
+        );
+
         //run the executeSale function
         let transaction = await contract.executeSale(tokenId, {value:salePrice});
         await transaction.wait();
 
-        alert('You successfully bought the NFT!');
+        console.log("transaction: ", transaction);
+        settransactionObj(transaction);
+        console.log("transactionObj: in use state ", transactionObj);
+
         updateMessage("");
     }
     catch(e) {
@@ -49,7 +82,55 @@ const BuyanNFT = (props) => {
     }
 }
 
+const saveUserActivity = async (
+  activityType,
+  transaction,
+  contractInfo,
+  transactionTime
+) => {
+  try {
+    const response = await CustomerServices.saveUserActivity(
+      activityType,
+      transaction,
+      contractInfo,
+      transactionTime
+    );
+    if (response.status === 200) {
+      console.log("User activity saved successfully");
+      toast.success("Successfully minted your NFT!");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 3000);
+
+
+    } else {
+      toast.error("Error Occured!");
+      setLoader(false);
+    }
+  } catch (error) {
+    console.log("Error occur", error);
+    toast.error("Error Occured!");
+    setLoader(false);
+  }
+};
+
+useEffect(() => {
+  console.log("use effect called -------------------------------");
+  if (tokenid && transactionObj) {
+    console.log("In the saveuseractivity use effect function");
+    saveUserActivity("bought", transactionObj, tokenid, new Date());
+
+    // settokenIDValue("");
+  }
+}, [tokenid, transactionObj]);
+
   return (
+    <div>
+    {loader ? (
+      <div>
+        <Loader isLoading={loader} />
+      </div>
+    ) : (
     <Container>
       <Row className="">
         <Col lg="1"></Col>
@@ -115,6 +196,8 @@ const BuyanNFT = (props) => {
         <Col lg="1"></Col>
       </Row>
     </Container>
+    )}
+    </div>
   );
 };
 
