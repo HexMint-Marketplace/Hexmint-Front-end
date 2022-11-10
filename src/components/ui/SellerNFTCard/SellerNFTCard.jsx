@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "../CollectionCard/CollectionCard.css";
 
 const SellerNFTCard = (props) => {
+  console.log("Seller NFT Card", props);
   const { tokenId, seller, contractAddress, image, NFTname, description, collectionId } = props.item;
   // console.log("props.item ",props.item);
   return (
@@ -18,7 +19,9 @@ const SellerNFTCard = (props) => {
         <div className="collection_content">
           <h5 className="collection_title mb-0">
             <Link to={`/seller-profile/seller-collection/NFT/${tokenId}`} state={{ item: props.item }}>
-              {collectionId+" - "+NFTname}
+              <div>{tokenId}</div>
+              <div>{NFTname}</div>
+              <div>{}</div>{collectionId+" - "+NFTname}
             </Link>
           </h5>
         </div>

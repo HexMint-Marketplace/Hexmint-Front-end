@@ -1,10 +1,14 @@
 import React from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Marketplace from "../../../Marketplace.json";
+import Loader from "../Loader/Loader"
+import { toast } from "react-toastify";
+import CustomerServices from "../../../services/API/CustomerServices";
 
 function TransferForm() {
+
   const [receiverWalletAddress, setReceiverWalletAddress] = useState();
   const location = useLocation();
   const ethers = require("ethers");
@@ -12,7 +16,12 @@ function TransferForm() {
   const { NFTData } = location.state;
   const [loader, setLoader] = useState(false);
 
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState("");
+
   async function handleSubmit(e) {
+    setLoader(true);
+    toast.info("Please wait while we transfer your NFT");
     e.preventDefault();
     try {
       //get providers and signers
@@ -27,22 +36,89 @@ function TransferForm() {
         Marketplace.abi,
         signer
       );
+
+      contract.on(
+        "TokenStatusUpdatedSuccess",
+        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+          let info = {
+            tokenId: tokenId,
+            contractAddress: contractAddress,
+            seller: seller,
+            price: price,
+            currentlyListed: currentlyListed,
+            data: event,
+          };
+          console.log("info: ", info);
+          console.log("tokenId: ", tokenId);
+          settokenid(tokenId.toString());
+          // settokenIDValue(tokenId.toString());
+          console.log("tokenID: in use state ", tokenid);
+        }
+      );
+
       //transfer the NFT
       let transaction = await contract.transferNFT(NFTData.tokenId,receiverWalletAddress);
       console.log("after create token method called");
       await transaction.wait();
-      // console.log("await for transaction");
+      console.log("await for transaction", transaction);
+      settransactionObj(transaction);
 
-      alert("Successfully minted your NFT!");
       updateMessage("");
       setReceiverWalletAddress("");
-      window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
   }
+
+  const saveUserActivity = async (
+    activityType,
+    transaction,
+    contractInfo,
+    transactionTime
+  ) => {
+    try {
+      const response = await CustomerServices.saveUserActivity(
+        activityType,
+        transaction,
+        contractInfo,
+        transactionTime
+      );
+      if (response.status === 200) {
+        console.log("User activity saved successfully");
+        toast.success("Successfully minted your NFT!");
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 3000);
+
+
+      } else {
+        toast.error("Error Occured!");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+      setLoader(false);
+    }
+  };
+
+    useEffect(() => {
+      console.log("use effect called -------------------------------");
+      if (tokenid && transactionObj) {
+        console.log("In the saveuseractivity use effect function");
+        saveUserActivity("transferred", transactionObj, tokenid, new Date());
+  
+        // settokenIDValue("");
+      }
+    }, [tokenid, transactionObj]);
+
   return (
     <div>
+    {loader ? (
+      <div>
+        <Loader isLoading={loader} />
+      </div>
+    ) : (
       <section>
         <Container>
           <Row>
@@ -97,6 +173,7 @@ function TransferForm() {
           </Row>
         </Container>
       </section>
+    )}
     </div>
   );
 }

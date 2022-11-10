@@ -203,7 +203,7 @@ function Create() {
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
-        }, 2500);
+        }, 3000);
 
 
       } else {

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import img01 from "../../../asssets/collectionImages/Apes.jpg";
 import { Link } from "react-router-dom";
 import Marketplace from "../../../Marketplace.json";
+import Loader from "../Loader/Loader";
+import CustomerServices from "../../../services/API/CustomerServices";
+import { toast } from "react-toastify";
 
 // console.log(img01);
 const ListingForm = () => {
@@ -15,8 +18,14 @@ const ListingForm = () => {
   const ethers = require("ethers");
   const { NFTData } = location.state;
 
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState("");
+  const [loader, setLoader] = useState(false);
+
   console.log("NFTData: ",NFTData);
   async function handleSubmit(e) {
+    setLoader(true);
+    toast.info("Please wait while we list your NFT");
     e.preventDefault();
     try {
       //get providers and signers
@@ -31,6 +40,26 @@ const ListingForm = () => {
         Marketplace.abi,
         signer
       );
+
+      contract.on(
+        "TokenStatusUpdatedSuccess",
+        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+          let info = {
+            tokenId: tokenId,
+            contractAddress: contractAddress,
+            seller: seller,
+            price: price,
+            currentlyListed: currentlyListed,
+            data: event,
+          };
+          console.log("info: ", info);
+          console.log("tokenId: ", tokenId);
+          settokenid(info.seller);
+          // settokenIDValue(tokenId.toString());
+          console.log("tokenID: in use state ", tokenid);
+        }
+      );
+
       //transfer the NFT'
       const price = ethers.utils.parseUnits(listingPrize, "ether");
       let listingPrice = await contract.getListPrice();
@@ -43,14 +72,67 @@ const ListingForm = () => {
       await transaction.wait();
       // console.log("await for transaction");
 
-      alert("Successfully minted your NFT!");
+      console.log("await for transaction", transaction);
+      settransactionObj(transaction);
+      console.log("transactionObj: in use state ", transactionObj);
+
+
       updateMessage("");
-      window.location.replace("/");
+
     } catch (e) {
       alert("Upload error" + e);
     }
   }
+
+  const saveUserActivity = async (
+    activityType,
+    transaction,
+    contractInfo,
+    transactionTime
+  ) => {
+    try {
+      const response = await CustomerServices.saveUserActivity(
+        activityType,
+        transaction,
+        contractInfo,
+        transactionTime
+      );
+      if (response.status === 200) {
+        console.log("User activity saved successfully");
+        toast.success("Successfully minted your NFT!");
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 3000);
+
+
+      } else {
+        toast.error("Error Occured!");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log("use effect called -------------------------------");
+    if (tokenid && transactionObj) {
+      console.log("In the saveuseractivity use effect function");
+      saveUserActivity("listed", transactionObj, tokenid, new Date());
+
+      // settokenIDValue("");
+    }
+  }, [tokenid, transactionObj]);
+
   return (
+    <div>
+    {loader ? (
+      <div>
+        <Loader isLoading={loader} />
+      </div>
+    ) : (
     <div>
       <section>
         <Container>
@@ -172,6 +254,8 @@ const ListingForm = () => {
           </Row>
         </Container>
       </section>
+    </div>
+    )}
     </div>
   );
 };
