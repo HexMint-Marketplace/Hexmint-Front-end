@@ -103,6 +103,18 @@ const getUserActivityDetails = async (walletAddress) => {
   });
 };
 
+const getCollectionName = async (collectionID) => {
+  console.log(`in customer services ${collectionID}`);
+  return axios({
+    method: "post",
+    url: APIEndpoint + "/get-collection-name",
+    data: {
+      collectionID: collectionID,
+    },
+  });
+};
+
+
 export default {
   updateUserDetails,
   getCustomers,
@@ -115,4 +127,5 @@ export default {
   unBlockUser,
   getReports,
   deleteReport,
+  getCollectionName
 };

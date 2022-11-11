@@ -11,12 +11,14 @@ function ConnectWallet(props) {
       <div className="overlay"></div>
       <div className="connect-wallet-wrap text-center">
         <Container>
+          <Row className="text-end">
           <button
-            className="button-close btn mb-5 "
+            className="button-close mb-3 "
             onClick={() => props.setshowConnectWallet(false)}
           >
             Close
           </button>
+          </Row>
           {connectors.map((connector) => (
             <Row>
               <button
