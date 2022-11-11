@@ -28,6 +28,7 @@
     "ethers": "^5.7.1",
     "font-awesome": "^4.7.0",
     "form-data": "^4.0.0",
+    "formik": "^2.2.9",
     "material-ui-popup-state": "^4.1.0",
     "moment": "^2.29.4",
     "moralis": "^2.5.7",
