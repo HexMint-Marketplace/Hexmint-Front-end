@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState, useEffect} from 'react'
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -25,8 +26,8 @@ const rows = [
 ];
 
 export default function UserActivity(props) {
-  const { walletAddress } = props;
-
+  const { walletaddress } = props;
+  const [userActivityDetails, setuserActivityDetails] = useState([])
   // useEffect(() => {
   //   setLoader(true);
   //   getActivitydetails(walletAddress);
@@ -41,6 +42,26 @@ export default function UserActivity(props) {
   //   setissubmit(!issubmit);
   // };
 
+  useEffect(() => {
+    getActivitydetails(walletaddress);
+
+
+  }, []);
+
+  const getActivitydetails = async (walletaddress) => {
+    try {
+      //Get user activity details by passing the user's wallet address
+      const details = await CustomerServices.getUserActivityDetails(walletaddress);
+      setuserActivityDetails(details.data.userActivity);
+      console.log("In get user activity details", details);
+      console.log("In get user activity details and user activities are", details.data.userActivity);
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+    
   // const getActivitydetails = async (walletAddress) => {
   //   try {
   //     //Get user Activity details by passing the user's wallet address
@@ -88,6 +109,7 @@ export default function UserActivity(props) {
   //   }
   // };
   return (
+    
     <TableContainer
       component={Paper}
       sx={{ backgroundColor: "white", mt: "100px" }}

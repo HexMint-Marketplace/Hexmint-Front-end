@@ -96,7 +96,7 @@ const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
   return axios({
     method: "get",
-    url: APIEndpoint + "/get-user-activity-details",
+    url: APIEndpoint + `/get-user-activity-details/${walletAddress}`,
     params: {
       walletAddress: walletAddress,
     },
