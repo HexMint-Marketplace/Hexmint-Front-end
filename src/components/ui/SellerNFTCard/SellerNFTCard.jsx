@@ -1,12 +1,34 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import CustomerServices from "../../../services/API/CustomerServices";
 
 import "../CollectionCard/CollectionCard.css";
 
-const SellerNFTCard = (props) => {
+function SellerNFTCard(props){
   console.log("Seller NFT Card", props);
   const { tokenId, seller, contractAddress, image, NFTname, description, collectionId } = props.item;
   // console.log("props.item ",props.item);
+  const [collectionName, setcollectionName] = useState('')
+
+  useEffect(() => {
+
+    console.log("Seller NFT Card", props);
+    getCollectionName(collectionId);
+    
+  },[]);
+
+  const getCollectionName = async (collectionId) => {
+    try{
+      const response = await CustomerServices.getCollectionName(collectionId);
+      console.log("response",response);
+      setcollectionName(response.data.collectionName);
+    }
+    catch(e){
+      toast.error("Error in getting collection name");
+      console.log("error",e);
+    }
+  }
   return (
     <div className="single_collection_card">
       <div className="collection_img">
@@ -20,8 +42,9 @@ const SellerNFTCard = (props) => {
           <h5 className="collection_title mb-0">
             <Link to={`/seller-profile/seller-collection/NFT/${tokenId}`} state={{ item: props.item }}>
               <div>{tokenId}</div>
-              <div>{NFTname}</div>
-              <div>{}</div>{collectionId+" - "+NFTname}
+              <div>{NFTname} - {collectionName}</div>
+              {/* <div></div> */}
+              {/* <div>{}</div>{collectionId+" - "+NFTname} */}
             </Link>
           </h5>
         </div>
@@ -29,5 +52,5 @@ const SellerNFTCard = (props) => {
     </div>
   );
 };
-
-export default SellerNFTCard;
+  
+export default SellerNFTCard

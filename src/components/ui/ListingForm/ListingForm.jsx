@@ -19,7 +19,8 @@ const ListingForm = () => {
   const { NFTData } = location.state;
 
   const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState("");
+  // const [tokenid, settokenid] = useState("");
+  const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
 
   console.log("NFTData: ",NFTData);
@@ -54,7 +55,7 @@ const ListingForm = () => {
           };
           console.log("info: ", info);
           console.log("tokenId: ", tokenId);
-          settokenid(info.seller);
+          settokenid(info);
           // settokenIDValue(tokenId.toString());
           console.log("tokenID: in use state ", tokenid);
         }
@@ -102,7 +103,7 @@ const ListingForm = () => {
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
-        }, 3000);
+        }, 4000);
 
 
       } else {
@@ -118,10 +119,13 @@ const ListingForm = () => {
 
   useEffect(() => {
     console.log("use effect called -------------------------------");
-    if (tokenid && transactionObj) {
+    // if (tokenid && transactionObj) {
+    if (Object.keys(tokenid).length !== 0  && Object.keys(transactionObj).length !== 0) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("listed", transactionObj, tokenid, new Date());
 
+      settokenid({});
+      settransactionObj({});
       // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);

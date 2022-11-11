@@ -9,11 +9,11 @@ import { toast } from "react-toastify";
 
 const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
-  const [tokenid, settokenid] = useState("");
+  // const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
 
   const [transactionObj, settransactionObj] = useState({});
-  // const [tokenid, settokenid] = useState({});
+  const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
 
   const {
@@ -51,29 +51,31 @@ const BuyanNFT = (props) => {
 
         console.log("update message");
 
-        //run the executeSale function
-        let transaction = await contract.executeSale(tokenId, {value:salePrice});
-        await transaction.wait();
-        console.log("transaction: ",transaction);
         contract.on(
           "TokenStatusUpdatedSuccess",
           (tokenId, contractAddress, seller, price, currentlyListed, event) => {
-            // let info = {
-            //   tokenId: tokenId,
-            //   contractAddress: contractAddress,
-            //   seller: seller,
-            //   price: price,
-            //   currentlyListed: currentlyListed,
-            //   data: event,
-            // };
-            // console.log("info: ", info);
+            let info = {
+              tokenId: tokenId,
+              contractAddress: contractAddress,
+              seller: seller,
+              price: price,
+              currentlyListed: currentlyListed,
+              data: event,
+            };
+            console.log("info: ", info);
             console.log("tokenId: ", tokenId);
             console.log("seller: ", seller);
-            settokenid(tokenId.toString());
+            settokenid(info);
             // settokenIDValue(tokenId.toString());
             console.log("tokenID: in use state ", tokenid);
           }
         );
+
+        //run the executeSale function
+        let transaction = await contract.executeSale(tokenId, {value:salePrice});
+        await transaction.wait();
+        console.log("transaction: ",transaction);
+
 
         console.log("transaction: ", transaction);
         settransactionObj(transaction);
@@ -104,7 +106,7 @@ const saveUserActivity = async (
       toast.success("Successfully minted your NFT!");
       setTimeout(() => {
         window.location.replace("/");
-      }, 3000);
+      }, 4000);
 
 
     } else {
@@ -120,10 +122,12 @@ const saveUserActivity = async (
 
 useEffect(() => {
   console.log("use effect called -------------------------------");
-  if (tokenid && transactionObj) {
+  if (Object.keys(tokenid).length !== 0  && Object.keys(transactionObj).length !== 0) {
     console.log("In the saveuseractivity use effect function");
     saveUserActivity("bought", transactionObj, tokenid, new Date());
 
+    settokenid({});
+    settransactionObj({});
     // settokenIDValue("");
   }
 }, [tokenid, transactionObj]);

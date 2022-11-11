@@ -17,7 +17,7 @@ function TransferForm() {
   const [loader, setLoader] = useState(false);
 
   const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState("");
+  const [tokenid, settokenid] = useState({});
 
   async function handleSubmit(e) {
     setLoader(true);
@@ -50,7 +50,7 @@ function TransferForm() {
           };
           console.log("info: ", info);
           console.log("tokenId: ", tokenId);
-          settokenid(tokenId.toString());
+          settokenid(info);
           // settokenIDValue(tokenId.toString());
           console.log("tokenID: in use state ", tokenid);
         }
@@ -88,7 +88,7 @@ function TransferForm() {
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
-        }, 3000);
+        }, 4000);
 
 
       } else {
@@ -104,10 +104,12 @@ function TransferForm() {
 
     useEffect(() => {
       console.log("use effect called -------------------------------");
-      if (tokenid && transactionObj) {
+      if (Object.keys(tokenid).length !== 0 && Object.keys(transactionObj).length !== 0) {
         console.log("In the saveuseractivity use effect function");
         saveUserActivity("transferred", transactionObj, tokenid, new Date());
-  
+        
+        settokenid({});
+        settransactionObj({});
         // settokenIDValue("");
       }
     }, [tokenid, transactionObj]);

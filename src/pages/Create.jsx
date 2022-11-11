@@ -22,7 +22,7 @@ function Create() {
   // let tokenid = "";
 
   const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState("");
+  const [tokenid, settokenid] = useState({});
 
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
@@ -125,7 +125,7 @@ function Create() {
           };
           console.log("info: ", info);
           console.log("tokenId: ", tokenId);
-          settokenid(tokenId.toString());
+          settokenid(info);
           // settokenIDValue(tokenId.toString());
           console.log("tokenID: in use state ", tokenid);
         }
@@ -203,7 +203,7 @@ function Create() {
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
-        }, 3000);
+        }, 4000);
 
 
       } else {
@@ -219,9 +219,12 @@ function Create() {
 
   useEffect(() => {
     console.log("use effect called -------------------------------");
-    if (tokenid && transactionObj) {
+    if (Object.keys(tokenid).length !== 0  && Object.keys(transactionObj).length !== 0) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("minted", transactionObj, tokenid, new Date());
+
+      settokenid({});
+      settransactionObj({});
 
       // settokenIDValue("");
     }
