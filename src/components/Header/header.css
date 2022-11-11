@@ -151,4 +151,8 @@
     max-width: 100px !important;
     padding: 10px !important;
   }
+  .nav_right .btn {
+    max-width: 100px !important;
+    padding: 10px !important;
+  }
 }

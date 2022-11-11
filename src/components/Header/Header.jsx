@@ -251,7 +251,7 @@ function Header() {
                 <span>
                   <i className="ri-wallet-line"></i>
                 </span>
-                Connect Wallet
+                {screenWidth > 1000 ? "Connect Wallet" : "Connect"}
               </button>
             )}
 
