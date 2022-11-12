@@ -68,7 +68,7 @@ const ProfileHead = (props) => {
         </div>
 
         <div className="text-center px-4 collection-name">@{userName}</div>
-
+        <HeightBox height="20px" />
         {userType === "Customer" ? (
           <div className="d-flex justify-content-end">
             <Link to={"/create-collection"}>
@@ -116,29 +116,27 @@ const ProfileHead = (props) => {
       </div>
 
       {userType === "Customer" && (
-        <Row>
-          <Col lg="12" md="3" sm="12">
-            <Tabs
-              defaultActiveKey="COLLECTIONS"
-              id="uncontrolled-tab-example"
-              className="mb-3 mt-5 justify-content-center"
-            >
-              <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
-                <UserNFTList data={data} />
-              </Tab>
-              <Tab eventKey="ACTIVITY" title="ACTIVITY">
-                {/* <Sonnet /> <div>"Have to build</div> */}
-                <UserActivity walletaddress={userWallet.address} />
-              </Tab>
-              <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
-                <EditProfile
-                  walletaddress={userWallet.address}
-                  setissubmit={props.setissubmit}
-                />
-              </Tab>
-            </Tabs>
-          </Col>
-        </Row>
+        <Container>
+          <Tabs
+            defaultActiveKey="COLLECTIONS"
+            id="uncontrolled-tab-example"
+            className="mb-3 mt-5 justify-content-center"
+          >
+            <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
+              <UserNFTList data={data} />
+            </Tab>
+            <Tab eventKey="ACTIVITY" title="ACTIVITY">
+              {/* <Sonnet /> <div>"Have to build</div> */}
+              <UserActivity walletaddress={userWallet.address} />
+            </Tab>
+            <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
+              <EditProfile
+                walletaddress={userWallet.address}
+                setissubmit={props.setissubmit}
+              />
+            </Tab>
+          </Tabs>
+        </Container>
       )}
     </Container>
   );

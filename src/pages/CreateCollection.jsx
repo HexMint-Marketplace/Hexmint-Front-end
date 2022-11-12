@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/createCollection.css";
 import CustomerServices from "../services/API/CustomerServices";
 import FormData from "form-data";
 import Loader from "../components/ui/Loader/Loader";
 import { uploadFileToIPFS } from "../pinata";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import HeightBox from "../components/HeightBox/HeightBox";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 function CreateCollection() {
+  const Navigate = useNavigate();
+  const initialValues = {
+    logo: "",
+    collectionName: "",
+    collectionDescription: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    logo: Yup.string().required("Required"),
+    collectionName: Yup.string()
+      .required("Collection Name is required")
+      .label("Name"),
+    collectionDescription: Yup.string()
+      .required("Description is required")
+      .label("Description"),
+  });
+
   const [loader, setLoader] = useState(false);
   const [collectionIcon, setCollectionIcon] = useState(null);
-  const [collectionName, setCollectionName] = useState("");
-  const [collectionDescription, setCollectionDescription] = useState("");
-  // const [NFTcount, setCollectionNFTcount] = useState("");
   const [userWallet, setuserWallet] = useState();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
@@ -27,7 +46,7 @@ function CreateCollection() {
     try {
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
-      // console.log("response is: ", response);
+      console.log("response is: ", response);
       if (response.success === true) {
         console.log("Uploaded image to Pinata: ", response.pinataURL);
         setCollectionIcon(response.pinataURL);
@@ -37,105 +56,125 @@ function CreateCollection() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
+  const handleSubmit = async (values) => {
+    setLoader(true);
 
-      setLoader(true);
-      const formData = new FormData();
-      // console.log("walletAddress: ", userWallet);
-      formData.append("userid", userWallet);
-      formData.append("collectionName", collectionName);
-      formData.append("collectionDescription", collectionDescription);
-      formData.append("logoImg", collectionIcon);
-      formData.append("ownersCount", 1);
-      // console.log("In the form data", formData);
+    try {
+      const formData = values;
+
+      formData["userid"] = userWallet;
+      formData["logoImg"] = collectionIcon;
+      formData["ownersCount"] = 1;
+
       const response = await CustomerServices.createCollection(formData);
       console.log("In the response", response);
       if (response.status === 202) {
-        setTimeout(() => {
-          console.log("loader false calling");
-          setLoader(false);
-        }, 1500);
-        // navigate(`/seller-profile/${walletaddress}`);
         console.log("In the if and updated user details succesfully");
+        Navigate("/explore");
       }
     } catch (error) {
       console.log("error", error);
     }
+    setTimeout(() => {
+      console.log("loader false calling");
+      setLoader(false);
+    }, 1500);
   };
 
-  return (
-    <div>
-      <CommonHeader title={"Create New Collection"} />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <div className="create-collection">
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <Container>
+        <CommonHeader title={"Create New Collection"} />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {(formikProps) => {
+            const { values, handleChange, handleSubmit, errors, touched } =
+              formikProps;
+
+            return (
+              <Box
+                sx={{
+                  boxShadow: 12,
+                  width: "100%",
+                  padding: 3,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                }}
+              >
                 <form>
-                  <div className="form-input">
-                    <label htmlFor="logoImg">Collection Logo Image*</label>
-                    <input
-                      name="logoImg"
-                      id="logoImg"
-                      type="file"
-                      className="upload-input"
-                      onChange={OnChangeFile}
-                    />
-                  </div>
-
-                  <div className="form-input mt-4">
-                    <label htmlFor="collectionName">Collection Name*</label>
-                    <input
-                      name="collectionName"
-                      type="text"
-                      placeholder="Enter the Collection Name"
-                      onChange={(e) => setCollectionName(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-input mt-4">
-                    <label htmlFor="collectionDescription">Description*</label>
-                    <textarea
-                      name="collectionDescription"
-                      id=""
-                      rows="7"
-                      placeholder="Enter description"
-                      className="w-100"
-                      onChange={(e) => setCollectionDescription(e.target.value)}
-                    ></textarea>
-                  </div>
-
-                  {/* <div className="form-input mt-4">
-                    <label htmlFor="NFTcount">Total NFTs*</label>
-                    <input
-                      name="NFTcount"
-                      type="text"
-                      placeholder="Enter total NFT count for this collection"
-                      onChange={(e) => setCollectionNFTcount(e.target.value)}
-                    />
-                  </div> */}
-
-                  <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button
-                      className="btn create-collection-button d-flex align-items-center gap-2"
-                      type="submit"
-                      onClick={handleSubmit}
-                    >
-                      <Link to="/explore">Create</Link>
-                    </button>
-                  </div>
+                  <HeightBox height={20} />
+                  <TextField
+                    type="file"
+                    name="logo"
+                    value={values.logo}
+                    onChange={(e) => {
+                      OnChangeFile(e);
+                      handleChange(e);
+                    }}
+                    helperText={touched.logo && errors.logo ? errors.logo : ""}
+                    error={errors.logo}
+                    fullWidth
+                    variant="outlined"
+                  />
+                  <HeightBox height={20} />
+                  <TextField
+                    type="text"
+                    name="collectionName"
+                    value={values.collectionName}
+                    onChange={handleChange("collectionName")}
+                    helperText={
+                      touched.collectionName && errors.collectionName
+                        ? errors.collectionName
+                        : ""
+                    }
+                    error={errors.collectionName}
+                    fullWidth
+                    variant="outlined"
+                    label="Collection Name"
+                    placeholder="Collection Name"
+                  />
+                  <HeightBox height={20} />
+                  <TextField
+                    type="text"
+                    name="collectionDescription"
+                    value={values.collectionDescription}
+                    onChange={handleChange("collectionDescription")}
+                    helperText={
+                      touched.collectionDescription &&
+                      errors.collectionDescription
+                        ? errors.collectionDescription
+                        : ""
+                    }
+                    error={errors.collectionDescription}
+                    fullWidth
+                    variant="outlined"
+                    label="Description"
+                    placeholder="Description"
+                  />
+                  <HeightBox height={20} />
+                  <Button
+                    className="btn btn-primary"
+                    type="submit"
+                    onClick={handleSubmit}
+                    fullWidth
+                  >
+                    Create
+                  </Button>
+                  <HeightBox height={20} />
                 </form>
-              </div>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
-  );
+              </Box>
+            );
+          }}
+        </Formik>
+        <HeightBox height={50} />
+      </Container>
+    );
+  }
 }
 
 export default CreateCollection;

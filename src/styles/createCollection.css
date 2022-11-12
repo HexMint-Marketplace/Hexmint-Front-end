@@ -21,14 +21,11 @@
   margin-bottom: 10px;
 }
 
-select option{
-
-    
-    margin: 40px;
-    background:black;
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
-    
+select option {
+  margin: 40px;
+  background: black;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .form-input .upload-input {
@@ -40,28 +37,31 @@ select option{
   cursor: pointer;
 }
 
-.create-collection-button{
-
-    padding: 13px 40px !important;
-    border-radius: 50px !important;
-
-    
+.create-collection-button {
+  padding: 13px 40px !important;
+  border-radius: 50px !important;
 }
 
-.create-collection-button{
-    background: linear-gradient(to right, #59f9b7, #66feea);
+.create-collection-button {
+  background: linear-gradient(to right, #59f9b7, #66feea);
 }
 
-.create-collection-button a{
-
-    text-decoration: none;
-    color: black !important;
-    font-weight: 650;
-    font-size: 1rem;
-    
+.create-collection-button a {
+  text-decoration: none;
+  color: black !important;
+  font-weight: 650;
+  font-size: 1rem;
 }
 
-.create-collection-button a:hover{
-    color:rgb(103, 38, 38);
-    text-shadow: black 2px 2px 20px;
+.create-collection-button a:hover {
+  color: rgb(103, 38, 38);
+  text-shadow: black 2px 2px 20px;
+}
+
+.btn {
+  color: black !important;
+}
+
+.btn:hover {
+  color: white !important;
 }

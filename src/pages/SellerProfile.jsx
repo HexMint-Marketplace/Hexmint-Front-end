@@ -1,11 +1,15 @@
 import { React, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { COLLECTION_DATA } from "../asssets/data/data.js";
+import NFTList from "../components/ui/NFTList/NFTList.jsx";
 import ProfileHead from "../components/ui/ProfileHead/ProfileHead";
 import Loader from "../components/ui/Loader/Loader.jsx";
 import UserServices from "../services/API/UserServices";
+import AdminServices from "../services/API/AdminServices";
+import { useNavigate } from "react-router-dom";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
+import NFTs from "./NFTs";
 import { Container } from "reactstrap";
 import HeightBox from "./../components/HeightBox/HeightBox";
 
@@ -25,13 +29,12 @@ function SellerProfile() {
   const [dataFetched, updateFetched] = useState(false);
   const [address, updateAddress] = useState("0x");
   const [totalPrice, updateTotalPrice] = useState("0");
-  const [userActivityDetails, setuserActivityDetails] = useState([]);
 
   useEffect(() => {
     setLoader(true);
     const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
     setuserWallet(walletAddress);
-    console.log("Wallet address is ttttttttttttttt", walletAddress);
+
     getuserdetails(walletAddress.address);
 
     setTimeout(() => {
@@ -147,13 +150,6 @@ function SellerProfile() {
     updateTotalPrice(sumPrice.toPrecision(3));
   }
 
-  // useEffect(() => {
-  //   // setLoader(true);
-  //   const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-  //   console.log("useEffect calling for new things");
-  //   getActivitydetails(walletAddress.address);
-  // }, []);
-
   const params = useParams();
   const tokenId = params.tokenId;
   if (!dataFetched) getNFTData(tokenId);
@@ -177,7 +173,6 @@ function SellerProfile() {
           collectionData={COLLECTION_DATA}
           data={data}
           setissubmit={toggleisSubmit}
-          userActivityDetails={userActivityDetails}
         />
       )}
       <HeightBox height="50px" />
