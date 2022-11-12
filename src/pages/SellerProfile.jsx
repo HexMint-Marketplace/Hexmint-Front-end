@@ -12,6 +12,7 @@ import axios from "axios";
 import NFTs from "./NFTs";
 import { Container } from "reactstrap";
 import HeightBox from "./../components/HeightBox/HeightBox";
+import CustomerServices from "../services/API/CustomerServices";
 
 function SellerProfile() {
   const [userWallet, setuserWallet] = useState({});
@@ -29,12 +30,13 @@ function SellerProfile() {
   const [dataFetched, updateFetched] = useState(false);
   const [address, updateAddress] = useState("0x");
   const [totalPrice, updateTotalPrice] = useState("0");
+  const [userActivityDetails, setuserActivityDetails] = useState([]);
 
   useEffect(() => {
     setLoader(true);
     const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
     setuserWallet(walletAddress);
-
+    console.log("Wallet address is ttttttttttttttt", walletAddress);
     getuserdetails(walletAddress.address);
 
     setTimeout(() => {
@@ -94,6 +96,30 @@ function SellerProfile() {
     }
   };
 
+  const getActivitydetails = async (walletaddress) => {
+    console.log("getActivitydetails calling");
+    try {
+      //Get user activity details by passing the user's wallet address
+      const details = await CustomerServices.getUserActivityDetails(
+        walletaddress
+      );
+      // temp = details.data.userActivity;
+      setuserActivityDetails(details.data.userActivity);
+      console.log("In get user activity details", details);
+      console.log(
+        "In get user activity details and user activities are",
+        details.data.userActivity
+      );
+
+      setTimeout(() => {
+        console.log("loader false calling");
+        setLoader(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function getNFTData() {
     const ethers = require("ethers");
     let sumPrice = 0;
@@ -150,6 +176,13 @@ function SellerProfile() {
     updateTotalPrice(sumPrice.toPrecision(3));
   }
 
+  useEffect(() => {
+    // setLoader(true);
+    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+    console.log("useEffect calling for new things");
+    getActivitydetails(walletAddress.address);
+  }, []);
+
   const params = useParams();
   const tokenId = params.tokenId;
   if (!dataFetched) getNFTData(tokenId);
@@ -173,6 +206,7 @@ function SellerProfile() {
           collectionData={COLLECTION_DATA}
           data={data}
           setissubmit={toggleisSubmit}
+          userActivityDetails={userActivityDetails}
         />
       )}
       <HeightBox height="50px" />

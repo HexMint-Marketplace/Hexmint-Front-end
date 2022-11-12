@@ -13,12 +13,14 @@ import PaidIcon from "@mui/icons-material/Paid";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import CustomerServices from "../../../services/API/CustomerServices";
 import Loader from "../Loader/Loader";
+import UserActivities from "./../../../pages/UserActivities";
 
 export default function UserActivity(props) {
-  const { walletaddress } = props;
-  const [userActivityDetails, setuserActivityDetails] = useState([]);
+  // const { walletaddress } = props;
+  // const [userActivityDetails, setuserActivityDetails] = useState([]);
   const [loader, setLoader] = useState(false);
-  var temp = [];
+  const userActivityDetails = props.userActivityDetails;
+  // var temp = [];
   // useEffect(() => {
   //   setLoader(true);
   //   getActivitydetails(walletAddress);
@@ -43,50 +45,52 @@ export default function UserActivity(props) {
   // createData("transfered", 305, 3.7, 67, 4.3, 100),
   // createData("minted", 356, 16.0, 49, 3.9, 100),
 
-  useEffect(() => {
-    setLoader(true);
-    getActivitydetails(walletaddress);
-  }, []);
+  // useEffect(() => {
+  //   // setLoader(true);
+  //   console.log("useEffect calling");
+  //   getActivitydetails(walletaddress);
+  // }, []);
 
-  const getActivitydetails = async (walletaddress) => {
-    try {
-      //Get user activity details by passing the user's wallet address
-      const details = await CustomerServices.getUserActivityDetails(
-        walletaddress
-      );
-      // temp = details.data.userActivity;
-      setuserActivityDetails(details.data.userActivity);
-      console.log("In get user activity details", details);
-      console.log(
-        "In get user activity details and user activities are",
-        details.data.userActivity
-      );
+  // const getActivitydetails = async (walletaddress) => {
+  //   console.log("getActivitydetails calling");
+  //   try {
+  //     //Get user activity details by passing the user's wallet address
+  //     const details = await CustomerServices.getUserActivityDetails(
+  //       walletaddress
+  //     );
+  //     // temp = details.data.userActivity;
+  //     setuserActivityDetails(details.data.userActivity);
+  //     console.log("In get user activity details", details);
+  //     console.log(
+  //       "In get user activity details and user activities are",
+  //       details.data.userActivity
+  //     );
 
-      setTimeout(() => {
-        console.log("loader false calling");
-        setLoader(false);
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setTimeout(() => {
+  //       console.log("loader false calling");
+  //       setLoader(false);
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  function createData(Activity, Item, Prize, From, To, Time) {
-    return { Activity, Item, Prize, From, To, Time };
-  }
+  // function createData(Activity, Item, Prize, From, To, Time) {
+  //   return { Activity, Item, Prize, From, To, Time };
+  // }
 
-  const rows = [
-    userActivityDetails.map((item) => {
-      return createData(
-        item.activitytype,
-        item.NFTid,
-        item.price,
-        item.fromwalletaddress,
-        item.towalletaddress,
-        item.time
-      );
-    }),
-  ];
+  // const rows = [
+  //   userActivityDetails.map((item) => {
+  //     return createData(
+  //       item.activitytype,
+  //       item.NFTid,
+  //       item.price,
+  //       item.fromwalletaddress,
+  //       item.towalletaddress,
+  //       item.time
+  //     );
+  //   }),
+  // ];
 
   return (
     <>
@@ -95,18 +99,10 @@ export default function UserActivity(props) {
           <Loader isLoading={loader} />
         </div>
       ) : (
-        <TableContainer
-          component={Paper}
-          sx={{ backgroundColor: "white", mt: "100px" }}
-        >
-          <Table
-            sx={{
-              minWidth: 650,
-            }}
-            aria-label="simple table"
-          >
-            <TableHead data-testid="table_head">
-              <TableRow sx={{ "&:hover": { color: "white" } }}>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
                 <TableCell>Activity</TableCell>
                 <TableCell align="right">Item</TableCell>
                 <TableCell align="right">Prize</TableCell>
@@ -116,45 +112,45 @@ export default function UserActivity(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {userActivityDetails.map((row) => (
                 <TableRow
                   hover
-                  key={row.Activity}
+                  key={row.NFTid}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {row.Activity === "minted" && (
+                  {row.activitytype === "minted" && (
                     <TableCell component="th" scope="row">
                       <CreateIcon />
                       &nbsp;Minted
                     </TableCell>
                   )}
 
-                  {row.Activity === "listed" && (
+                  {row.activitytype === "listed" && (
                     <TableCell component="th" scope="row">
                       <SellIcon />
                       &nbsp;Listed
                     </TableCell>
                   )}
 
-                  {row.Activity === "buyed" && (
+                  {row.activitytype === "buyed" && (
                     <TableCell component="th" scope="row">
                       <PaidIcon />
                       &nbsp;Buyed
                     </TableCell>
                   )}
 
-                  {row.Activity === "transfered" && (
+                  {row.activitytype === "transferred" && (
                     <TableCell component="th" scope="row">
                       <MoveUpIcon />
-                      &nbsp;Transfered
+                      &nbsp;Transferred
                     </TableCell>
                   )}
 
-                  <TableCell align="right">{row.Item}</TableCell>
-                  <TableCell align="right">{row.Prize}</TableCell>
-                  <TableCell align="right">{row.From}</TableCell>
-                  <TableCell align="right">{row.To}</TableCell>
-                  <TableCell align="right">{row.Time}</TableCell>
+                  <TableCell align="right">{row.NFTid}</TableCell>
+                  <TableCell align="right">{row.price}</TableCell>
+                  <TableCell align="right">{row.fromwalletaddress}</TableCell>
+                  <TableCell align="right">{row.towalletaddress}</TableCell>
+                  <TableCell align="right">{row.time}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

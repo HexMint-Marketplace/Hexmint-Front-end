@@ -38,6 +38,7 @@ const ProfileHead = (props) => {
   console.log("Pro pic is", propic);
 
   const { walletaddress } = props;
+  const userActivityDetails = props.userActivityDetails;
 
   // console.log("In profile head to find user type", userType);
   // console.log(props.collectionData);
@@ -150,7 +151,7 @@ const ProfileHead = (props) => {
               </Tab>
               <Tab eventKey="ACTIVITY" title="ACTIVITY">
                 {/* <Sonnet /> <div>"Have to build</div> */}
-                <UserActivity walletaddress={userWallet.address} />
+                <UserActivity userActivityDetails={userActivityDetails} />
               </Tab>
               <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                 <EditProfile
