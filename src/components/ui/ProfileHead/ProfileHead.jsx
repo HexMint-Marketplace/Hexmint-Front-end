@@ -3,7 +3,6 @@ import { Container, Row, Col } from "reactstrap";
 import "../../ui/SingleCollectionHead/singleCollectionHead.css";
 import "../ProfileHead/profileHead.css";
 import { Link } from "react-router-dom";
-import Loader from "../Loader/Loader";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import EditProfile from "../../../pages/EditProfile";
@@ -13,20 +12,6 @@ import UserActivity from "../../ui/UserActivity/UserActivity";
 import HeightBox from "../../HeightBox/HeightBox";
 import Card from "@mui/material/Card";
 
-const NAV_LINKS = [
-  {
-    display: "COLLECTIONS",
-    url: "/home",
-  },
-  {
-    display: "ACTIVITY",
-    url: "/explore",
-  },
-  {
-    display: "EDIT PROFILE",
-    url: "/edit-profile",
-  },
-];
 const ProfileHead = (props) => {
   const [isShown, setisShown] = useState(false);
 
@@ -36,13 +21,6 @@ const ProfileHead = (props) => {
   const { email, DOB, mobile } = props;
 
   console.log("Pro pic is", propic);
-
-  const { walletaddress } = props;
-  const userActivityDetails = props.userActivityDetails;
-
-  // console.log("In profile head to find user type", userType);
-  // console.log(props.collectionData);
-  // console.log("props: ",props);
 
   const showAddress = userWallet?.address
     ? userWallet.address.substring(0, 4) +
@@ -80,7 +58,6 @@ const ProfileHead = (props) => {
 
       <div className="">
         <div className="text-center h2 px-4 mt-3 collection-name">
-          {/* {showAddress} */}
           {userType === "Customer"
             ? name === "Customer"
               ? showAddress
@@ -151,7 +128,7 @@ const ProfileHead = (props) => {
               </Tab>
               <Tab eventKey="ACTIVITY" title="ACTIVITY">
                 {/* <Sonnet /> <div>"Have to build</div> */}
-                <UserActivity userActivityDetails={userActivityDetails} />
+                <UserActivity walletaddress={userWallet.address} />
               </Tab>
               <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
                 <EditProfile
