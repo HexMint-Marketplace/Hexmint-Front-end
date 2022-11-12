@@ -1,18 +1,13 @@
 import { React, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { COLLECTION_DATA } from "../asssets/data/data.js";
-import NFTList from "../components/ui/NFTList/NFTList.jsx";
 import ProfileHead from "../components/ui/ProfileHead/ProfileHead";
 import Loader from "../components/ui/Loader/Loader.jsx";
 import UserServices from "../services/API/UserServices";
-import AdminServices from "../services/API/AdminServices";
-import { useNavigate } from "react-router-dom";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
-import NFTs from "./NFTs";
 import { Container } from "reactstrap";
 import HeightBox from "./../components/HeightBox/HeightBox";
-import CustomerServices from "../services/API/CustomerServices";
 
 function SellerProfile() {
   const [userWallet, setuserWallet] = useState({});
@@ -96,30 +91,6 @@ function SellerProfile() {
     }
   };
 
-  const getActivitydetails = async (walletaddress) => {
-    console.log("getActivitydetails calling");
-    try {
-      //Get user activity details by passing the user's wallet address
-      const details = await CustomerServices.getUserActivityDetails(
-        walletaddress
-      );
-      // temp = details.data.userActivity;
-      setuserActivityDetails(details.data.userActivity);
-      console.log("In get user activity details", details);
-      console.log(
-        "In get user activity details and user activities are",
-        details.data.userActivity
-      );
-
-      setTimeout(() => {
-        console.log("loader false calling");
-        setLoader(false);
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   async function getNFTData() {
     const ethers = require("ethers");
     let sumPrice = 0;
@@ -176,12 +147,12 @@ function SellerProfile() {
     updateTotalPrice(sumPrice.toPrecision(3));
   }
 
-  useEffect(() => {
-    // setLoader(true);
-    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    console.log("useEffect calling for new things");
-    getActivitydetails(walletAddress.address);
-  }, []);
+  // useEffect(() => {
+  //   // setLoader(true);
+  //   const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+  //   console.log("useEffect calling for new things");
+  //   getActivitydetails(walletAddress.address);
+  // }, []);
 
   const params = useParams();
   const tokenId = params.tokenId;

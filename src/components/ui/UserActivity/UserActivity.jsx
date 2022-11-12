@@ -13,84 +13,42 @@ import PaidIcon from "@mui/icons-material/Paid";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import CustomerServices from "../../../services/API/CustomerServices";
 import Loader from "../Loader/Loader";
-import UserActivities from "./../../../pages/UserActivities";
 
 export default function UserActivity(props) {
-  // const { walletaddress } = props;
-  // const [userActivityDetails, setuserActivityDetails] = useState([]);
+  const walletaddress = props.walletaddress;
+  const [userActivityDetails, setuserActivityDetails] = useState([]);
   const [loader, setLoader] = useState(false);
-  const userActivityDetails = props.userActivityDetails;
-  // var temp = [];
-  // useEffect(() => {
-  //   setLoader(true);
-  //   getActivitydetails(walletAddress);
 
-  //   setTimeout(() => {
-  //     console.log("loader false calling");
-  //     setLoader(false);
-  //   }, 2000);
-  // }, [issubmit]);
+  useEffect(() => {
+    console.log(
+      ".................THIS IS FOR CHECK COMPONENT USE EFFECT...................."
+    );
+    getActivitydetails(walletaddress);
+  }, []);
 
-  // const toggleisSubmit = () => {
-  //   setissubmit(!issubmit);
-  // };
+  const getActivitydetails = async (walletaddress) => {
+    console.log("getActivitydetails calling");
+    try {
+      //Get user activity details by passing the user's wallet address
+      const details = await CustomerServices.getUserActivityDetails(
+        walletaddress
+      );
+      // temp = details.data.userActivity;
+      setuserActivityDetails(details.data.userActivity);
+      console.log("In get user activity details", details);
+      console.log(
+        "In get user activity details and user activities are",
+        details.data.userActivity
+      );
 
-  // function createData(Activity, Item, Prize, From, To, Time) {
-  //   return { Activity, Item, Prize, From, To, Time };
-  // }
-
-  // createData("minted", 159, 6.0, 24, 4.0, 100),
-  // createData("listed", 237, 9.0, 37, 4.3, 100),
-  // createData("buyed", 262, 16.0, 24, 6.0, 100),
-  // createData("transfered", 305, 3.7, 67, 4.3, 100),
-  // createData("minted", 356, 16.0, 49, 3.9, 100),
-
-  // useEffect(() => {
-  //   // setLoader(true);
-  //   console.log("useEffect calling");
-  //   getActivitydetails(walletaddress);
-  // }, []);
-
-  // const getActivitydetails = async (walletaddress) => {
-  //   console.log("getActivitydetails calling");
-  //   try {
-  //     //Get user activity details by passing the user's wallet address
-  //     const details = await CustomerServices.getUserActivityDetails(
-  //       walletaddress
-  //     );
-  //     // temp = details.data.userActivity;
-  //     setuserActivityDetails(details.data.userActivity);
-  //     console.log("In get user activity details", details);
-  //     console.log(
-  //       "In get user activity details and user activities are",
-  //       details.data.userActivity
-  //     );
-
-  //     setTimeout(() => {
-  //       console.log("loader false calling");
-  //       setLoader(false);
-  //     }, 2000);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // function createData(Activity, Item, Prize, From, To, Time) {
-  //   return { Activity, Item, Prize, From, To, Time };
-  // }
-
-  // const rows = [
-  //   userActivityDetails.map((item) => {
-  //     return createData(
-  //       item.activitytype,
-  //       item.NFTid,
-  //       item.price,
-  //       item.fromwalletaddress,
-  //       item.towalletaddress,
-  //       item.time
-  //     );
-  //   }),
-  // ];
+      setTimeout(() => {
+        console.log("loader false calling");
+        setLoader(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
