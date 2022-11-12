@@ -20,7 +20,7 @@
 }
 
 .form-input .upload-input {
-  padding: 40px 25px;
+  padding: 10px 25px;
 }
 
 ::-webkit-calendar-picker-indicator {
@@ -29,7 +29,7 @@
 }
 
 .edit-profile-button {
-  padding: 13px 40px !important;
+  padding: 13px 10px !important;
   border-radius: 50px !important;
 }
 

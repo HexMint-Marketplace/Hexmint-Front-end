@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
-import "../../styles/create.css";
-import "../../styles/superAdmin.css";
+import { Container } from "reactstrap";
 import AdminServices from "../../services/AdminServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
@@ -37,18 +35,7 @@ function AddAdmin() {
 
   const navigate = useNavigate();
 
-  // var [state, setState] = useState(formValues);
   const [loader, setLoader] = useState(false);
-  // const navigate = useNavigate();
-
-  // const handleChange = (event) => {
-  //   console.log("in handle change");
-  //   setState({
-  //     ...state,
-  //     [event.target.name]: event.target.value,
-  //   });
-  //   console.log(state);
-  // };
 
   const handleSubmit = async (values) => {
     setLoader(true);
@@ -76,143 +63,128 @@ function AddAdmin() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
+      <Container>
+        <HeightBox height="20px" />
         <CommonHeader title={"Add an Admin"} />
-        <section>
-          <Container>
-            <Row>
-              <Col lg="2" md="2" sm="2"></Col>
-              <Col lg="8" md="8" sm="8">
-                <Formik
-                  initialValues={formValues}
-                  validationSchema={validationSchema}
-                  onSubmit={handleSubmit}
-                >
-                  {(formikProps) => {
-                    const {
-                      values,
-                      handleChange,
-                      handleSubmit,
-                      errors,
-                      touched,
-                    } = formikProps;
+        <HeightBox height="20px" />
+        <Container>
+          <Formik
+            initialValues={formValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {(formikProps) => {
+              const { values, handleChange, handleSubmit, errors, touched } =
+                formikProps;
 
-                    return (
-                      <Box
-                        sx={{
-                          boxShadow: 12,
-                          width: "100%",
-                          padding: 3,
-                          borderRadius: 2,
-                          marginBottom: 5,
-                        }}
-                      >
-                        <form>
-                          <HeightBox height="20px" />
-                          <TextField
-                            type="text"
-                            name="name"
-                            value={values.name}
-                            onChange={handleChange("name")}
-                            helperText={
-                              touched.name && errors.name ? errors.name : ""
-                            }
-                            error={errors.name}
-                            fullWidth
-                            variant="outlined"
-                            label="Name"
-                            placeholder="Name"
-                          />
-                          <HeightBox height="20px" />
-                          <TextField
-                            type="text"
-                            name="walletaddress"
-                            value={values.walletaddress}
-                            onChange={handleChange("walletaddress")}
-                            helperText={
-                              touched.walletaddress && errors.walletaddress
-                                ? errors.walletaddress
-                                : ""
-                            }
-                            error={errors.walletaddress}
-                            fullWidth
-                            variant="outlined"
-                            label="Wallet Address"
-                            placeholder="Wallet Address"
-                          />
-                          <HeightBox height="20px" />
-                          <TextField
-                            type="emailS"
-                            name="email"
-                            value={values.email}
-                            onChange={handleChange("email")}
-                            helperText={
-                              touched.email && errors.email ? errors.email : ""
-                            }
-                            error={errors.email}
-                            fullWidth
-                            variant="outlined"
-                            label="Email"
-                            placeholder="Email"
-                          />
-                          <HeightBox height="20px" />
-                          <TextField
-                            type="text"
-                            name="mobilenumber"
-                            value={values.mobilenumber}
-                            onChange={handleChange("mobilenumber")}
-                            helperText={
-                              touched.mobilenumber && errors.mobilenumber
-                                ? errors.mobilenumber
-                                : ""
-                            }
-                            error={errors.mobilenumber}
-                            fullWidth
-                            variant="outlined"
-                            label="Mobile Number"
-                            placeholder="Mobile Number"
-                          />
-                          <HeightBox height="20px" />
-                          <TextField
-                            type="date"
-                            name="DOB"
-                            value={values.DOB}
-                            onChange={handleChange("DOB")}
-                            helperText={
-                              touched.DOB && errors.DOB ? errors.DOB : ""
-                            }
-                            error={errors.DOB}
-                            fullWidth
-                            variant="outlined"
-                            label="Date of Birth"
-                          />
-                          <HeightBox height="20px" />
-                          <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                            <Button
-                              color="primary"
-                              onClick={handleSubmit}
-                              fullWidth
-                              variant="contained"
-                              sx={{ mt: 2, mb: 2 }}
-                            >
-                              Add
-                            </Button>
-                          </div>
-                        </form>
-                      </Box>
-                    );
+              return (
+                <Box
+                  sx={{
+                    boxShadow: 12,
+                    width: "100%",
+                    padding: 3,
+                    borderRadius: 2,
+                    marginBottom: 5,
                   }}
-                </Formik>
-              </Col>
-              <Col lg="2" md="2" sm="2"></Col>
-            </Row>
-          </Container>
-        </section>
-      </div>
+                >
+                  <form>
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="name"
+                      value={values.name}
+                      onChange={handleChange("name")}
+                      helperText={
+                        touched.name && errors.name ? errors.name : ""
+                      }
+                      error={errors.name}
+                      fullWidth
+                      variant="outlined"
+                      label="Name"
+                      placeholder="Name"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="walletaddress"
+                      value={values.walletaddress}
+                      onChange={handleChange("walletaddress")}
+                      helperText={
+                        touched.walletaddress && errors.walletaddress
+                          ? errors.walletaddress
+                          : ""
+                      }
+                      error={errors.walletaddress}
+                      fullWidth
+                      variant="outlined"
+                      label="Wallet Address"
+                      placeholder="Wallet Address"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="emailS"
+                      name="email"
+                      value={values.email}
+                      onChange={handleChange("email")}
+                      helperText={
+                        touched.email && errors.email ? errors.email : ""
+                      }
+                      error={errors.email}
+                      fullWidth
+                      variant="outlined"
+                      label="Email"
+                      placeholder="Email"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="mobilenumber"
+                      value={values.mobilenumber}
+                      onChange={handleChange("mobilenumber")}
+                      helperText={
+                        touched.mobilenumber && errors.mobilenumber
+                          ? errors.mobilenumber
+                          : ""
+                      }
+                      error={errors.mobilenumber}
+                      fullWidth
+                      variant="outlined"
+                      label="Mobile Number"
+                      placeholder="Mobile Number"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="date"
+                      name="DOB"
+                      value={values.DOB}
+                      onChange={handleChange("DOB")}
+                      helperText={touched.DOB && errors.DOB ? errors.DOB : ""}
+                      error={errors.DOB}
+                      fullWidth
+                      variant="outlined"
+                      label="Date of Birth"
+                    />
+                    <HeightBox height="20px" />
+
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      className="btn btn-primary"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 2, mb: 2 }}
+                    >
+                      Add
+                    </Button>
+                  </form>
+                </Box>
+              );
+            }}
+          </Formik>
+        </Container>
+      </Container>
     );
   }
 }
 
 export default AddAdmin;
-
-// onClick={() => {connect();}}

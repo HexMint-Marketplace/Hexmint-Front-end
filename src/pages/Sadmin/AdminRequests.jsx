@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Container } from "reactstrap";
 import CommonHeader from "./../../components/ui/CommonHeader/CommonHeader";
 import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
@@ -20,6 +21,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import HeightBox from "./../../components/HeightBox/HeightBox";
 
 export const DataContext = React.createContext();
 function AdminRequests() {
@@ -121,102 +123,105 @@ function AdminRequests() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
+      <Container>
+        <HeightBox height="50px" />
         <CommonHeader title={"Admin Details Change Requests"} />
-        <div>
-          <div>
-            <Dialog
-              open={openConfirm}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+        <HeightBox height="30px" />
+
+        <Dialog
+          open={openConfirm}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to decline ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleYes(userid);
+              }}
             >
-              <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure you want to delete this admin ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    handleYes(userid);
-                  }}
-                >
-                  Yes
-                </Button>
-                <Button onClick={handleNo} autoFocus>
-                  No
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-          <div>
-            {open && (
-              <AdminReqPop open={open} handleClose={handleClose} data={data} />
-            )}
-          </div>
-          <TableContainer className="table" component={Paper}>
-            {requests.length === 0 && (
-              <div>
-                <h5
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    margin: "10px",
-                  }}
-                >
-                  No Requests to Display
-                </h5>
-              </div>
-            )}
-            {requests.length !== 0 && (
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Wallet Address</TableCell>
-                    <TableCell>Actions</TableCell>
+              Yes
+            </Button>
+            <Button onClick={handleNo} autoFocus>
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {open && (
+          <AdminReqPop open={open} handleClose={handleClose} data={data} />
+        )}
+
+        <TableContainer component={Paper}>
+          {requests.length === 0 && (
+            <div>
+              <h5
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  margin: "10px",
+                }}
+              >
+                No Requests to Display
+              </h5>
+            </div>
+          )}
+          {requests.length !== 0 && (
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Wallet Address</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {requests.map((row) => (
+                  <TableRow
+                    hover
+                    key={row.userid}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell>{row.walletaddress}</TableCell>
+                    <TableCell>
+                      <Button
+                        sx={{ ml: 2, mr: 2 }}
+                        className="btn btn-primary"
+                        onClick={() => handleClickOpen(row.userid)}
+                      >
+                        <Link to="">View</Link>
+                      </Button>
+                      <Button
+                        sx={{ ml: 2, mr: 2 }}
+                        className="btn btn-primary"
+                        onClick={() => approveRequest(row.userid)}
+                      >
+                        <Link to="">Approve</Link>
+                      </Button>
+                      <Button
+                        sx={{ ml: 2, mr: 2 }}
+                        className="btn btn-danger"
+                        onClick={() => handleClickOpenConfirm(row.userid)}
+                      >
+                        <Link to="">Decline</Link>
+                      </Button>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {requests.map((row) => (
-                    <TableRow
-                      hover
-                      key={row.userid}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell>{row.walletaddress}</TableCell>
-                      <TableCell>
-                        <button
-                          className="act-button btn btn-primary"
-                          onClick={() => handleClickOpen(row.userid)}
-                        >
-                          <Link to="">View</Link>
-                        </button>
-                        <button
-                          className="act-button btn btn-primary"
-                          onClick={() => approveRequest(row.userid)}
-                        >
-                          <Link to="">Approve</Link>
-                        </button>
-                        <button
-                          className="act-button btn btn-danger"
-                          onClick={() => handleClickOpenConfirm(row.userid)}
-                        >
-                          <Link to="">Decline</Link>
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+        <HeightBox height="100px" />
+      </Container>
     );
   }
 }
