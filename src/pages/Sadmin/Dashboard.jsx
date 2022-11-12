@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import BestCreators from "../../components/ui/BestCreators/BestCreators";
 import BestSellers from "../../components/ui/BestSellers/BestSellers";
 import BestBuyers from "../../components/ui/BestBuyers/BestBuyers";
-import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
 import "../../styles/superAdmin.css";
 import "../../styles/nAdminDashboard.css";
 import { Container } from "reactstrap";
@@ -42,9 +41,6 @@ function NormalAdminDashboard() {
   } else {
     return (
       <section>
-        <div className="side-bar">
-          <SuperAdminNav />
-        </div>
         <Container>
           <div className="row">
             <div className="heading col-8">

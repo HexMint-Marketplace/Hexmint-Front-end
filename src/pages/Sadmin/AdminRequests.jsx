@@ -9,7 +9,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../../styles/viewAdmins.css";
-import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
 import "../../styles/superAdmin.css";
 import AdminReqPop from "../../components/ui/AdminRequest/AdminReqPop";
 import AdminServices from "../../services/AdminServices";
@@ -123,9 +122,6 @@ function AdminRequests() {
   } else {
     return (
       <div>
-        <div className="side-bar">
-          <SuperAdminNav />
-        </div>
         <CommonHeader title={"Admin Details Change Requests"} />
         <div>
           <div>
