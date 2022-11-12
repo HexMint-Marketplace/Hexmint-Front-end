@@ -15,7 +15,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import "../../styles/viewAdmins.css";
-import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
 import "../../styles/superAdmin.css";
 import AdminServices from "../../services/AdminServices";
 import { toast } from "react-toastify";
@@ -93,9 +92,6 @@ function ViewAdmins() {
   } else {
     return (
       <div data-testid="admins_table">
-        <div className="side-bar">
-          <SuperAdminNav />
-        </div>
         <CommonHeader title={"Admin Details & Management"} />
         <div className="add-button">
           <button className="mint_button d-flex align-items-center gap-2">

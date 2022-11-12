@@ -44,7 +44,7 @@ function Header() {
   //Set user type and useraddress
   const [userType, setuserType] = useState();
   const [userAddress, setuserAddress] = useState("");
-  const [showConnectWallet, setshowConnectWallet] = useState(false)
+  const [showConnectWallet, setshowConnectWallet] = useState(false);
 
   useEffect(() => {
     //set the user wallet address to local storage
@@ -75,7 +75,7 @@ function Header() {
     };
 
     if (isConnected) {
-      setshowConnectWallet(false)
+      setshowConnectWallet(false);
       //call handleconncect wallet function if the user is connected
       handleConnectWallet();
     } else {
@@ -97,28 +97,71 @@ function Header() {
 
   return (
     <>
-    <header className="header w-100">
-      <Container>
-        <div className="navigation d-flex  align-items-center justify-content-between ">
-          <div className="logo">
-            <h2
-              data-testid="HeXmint_txt"
-              className="d-flex gap-2 align-items-center"
-            >
-              <span>
-                <i className="ri-zcool-fill"></i>
-              </span>
-              HeXmint
-            </h2>
-          </div>
+      <header className="header w-100">
+        <Container>
+          <div className="navigation d-flex  align-items-center justify-content-between ">
+            <div className="logo">
+              <h2
+                data-testid="HeXmint_txt"
+                className="d-flex gap-2 align-items-center"
+              >
+                <span>
+                  <i className="ri-zcool-fill"></i>
+                </span>
+                HeXmint
+              </h2>
+            </div>
 
-          <div className="nav_menu ">
-            {(toggleMenu || screenWidth > 1000) && (
-              <ul className="nav_list d-flex align-items-center">
-                <li className="nav_item">
-                  {(userType === "Customer" || !isConnected) && (
+            <div className="nav_menu ">
+              {(toggleMenu || screenWidth > 1200) && (
+                <ul className="nav_list d-flex align-items-center">
+                  <li className="nav_item">
+                    {(userType === "Customer" || !isConnected) && (
+                      <NavLink
+                        to={"/home"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Home"}
+                      </NavLink>
+                    )}
+
+                    {userType === "Super Admin" && isConnected && (
+                      <NavLink
+                        to={"/sadmin-dashboard"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Dashboard"}
+                      </NavLink>
+                    )}
+
+                    {userType === "Admin" && isConnected && (
+                      <NavLink
+                        to={"/nadmin-dashboard"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Dashboard"}
+                      </NavLink>
+                    )}
+                  </li>
+
+                  <li className="nav_item">
                     <NavLink
-                      to={"/home"}
+                      to={"/explore"}
                       className={(navClass) =>
                         navClass.isActive ? "active" : ""
                       }
@@ -126,143 +169,179 @@ function Header() {
                         setToggleMenu(!toggleMenu);
                       }}
                     >
-                      {"Home"}
+                      {"Explore"}
                     </NavLink>
-                  )}
+                  </li>
 
-                  {userType === "Super Admin" && isConnected && (
-                    <NavLink
-                      to={"/sadmin-dashboard"}
-                      className={(navClass) =>
-                        navClass.isActive ? "active" : ""
-                      }
-                    >
-                      {"Dashboard"}
-                    </NavLink>
-                  )}
+                  <li className="nav_item">
+                    {userType === "Super Admin" && isConnected && (
+                      <NavLink
+                        to={"/sadmin-viewadmins"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Admins"}
+                      </NavLink>
+                    )}
+                    {userType !== "Super Admin" && isConnected && (
+                      <NavLink
+                        to={`/seller-profile/${address}`}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Profile"}
+                      </NavLink>
+                    )}
+                  </li>
 
-                  {userType === "Admin" && isConnected && (
-                    <NavLink
-                      to={"/nadmin-dashboard"}
-                      className={(navClass) =>
-                        navClass.isActive ? "active" : ""
-                      }
-                    >
-                      {"Dashboard"}
-                    </NavLink>
-                  )}
-                </li>
+                  <li className="nav_item">
+                    {userType === "Admin" && isConnected && (
+                      <NavLink
+                        to={"/nadmin-viewreports"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Reports"}
+                      </NavLink>
+                    )}
+                    {userType === "Super Admin" && isConnected && (
+                      <NavLink
+                        to={"/sadmin-adminrequests"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Requests"}
+                      </NavLink>
+                    )}
+                    {isConnected && userType === "Customer" && (
+                      <NavLink
+                        to={"/create"}
+                        state={{ walletAddress: userAddress }}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Create"}
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="nav_item">
+                    {userType === "Admin" && isConnected && (
+                      <NavLink
+                        to={"/nadmin-viewusers"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Users"}
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="nav_item">
+                    {userType === "Admin" && isConnected && (
+                      <NavLink
+                        to={"/nadmin-blockusers"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Blocked"}
+                      </NavLink>
+                    )}
+                  </li>
+                </ul>
+              )}
 
-                <li className="nav_item">
-                  <NavLink
-                    to={"/explore"}
-                    className={(navClass) =>
-                      navClass.isActive ? "active" : ""
-                    }
-                    onClick={() => {
-                      setToggleMenu(!toggleMenu);
-                    }}
-                  >
-                    {"Explore"}
-                  </NavLink>
-                </li>
+              <div
+                className="nav_btn"
+                onClick={() => {
+                  setToggleMenu(!toggleMenu);
+                }}
+              >
+                <span className="px-1">
+                  <DehazeIcon fontSize="large" />
+                </span>
+              </div>
+            </div>
 
-                <li className="nav_item">
-                  {userType !== "Super Admin" && isConnected && (
-                    <NavLink
-                      to={`/seller-profile/${address}`}
-                      className={(navClass) =>
-                        navClass.isActive ? "active" : ""
-                      }
-                      onClick={() => {
-                        setToggleMenu(!toggleMenu);
-                      }}
-                    >
-                      {"Profile"}
-                    </NavLink>
-                  )}
-                </li>
+            <div className="nav_right d-flex align-items-center gap-5">
+              {/* Connect the user's wallet into the system after click or display the wallet address if the user already connect to the system */}
+              {isConnected ? (
+                <Link
+                  to={`/seller-profile/${address}`}
+                  className="text-decoration-none to-user"
+                >
+                  <button className="btn d-flex gap-1 align-items-center custom-style ">
+                    <span className="overflow-hidden wallet-address">
+                      <b>
+                        <span className="px-1">
+                          <AccountCircleIcon
+                            fontSize={screenWidth > 1200 ? "large" : "small"}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1rem" }}>
+                          {screenWidth > 700 &&
+                            (ensName ?? address).substring(0, 8) + "....."}
 
-                <li className="nav_item">
-                  {isConnected && userType === "Customer" && (
-                    <NavLink
-                      to={"/create"}
-                      state={{ walletAddress: userAddress }}
-                      className={(navClass) =>
-                        navClass.isActive ? "active" : ""
-                      }
-                      onClick={() => {
-                        setToggleMenu(!toggleMenu);
-                      }}
-                    >
-                      {"Create"}
-                    </NavLink>
-                  )}
-                </li>
-              </ul>
-            )}
+                          {screenWidth <= 700 &&
+                            (ensName ?? address).substring(0, 3) + ".."}
+                        </span>
+                      </b>
+                    </span>
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    setshowConnectWallet(true);
+                    // connect();
+                    // <Link to="/connect-wallet" />;
+                    // <ConnectWallet/>
+                  }}
+                  className="btn d-flex gap-2 align-items-center"
+                >
+                  <span>
+                    <i className="ri-wallet-line"></i>
+                  </span>
+                  {screenWidth > 1200 ? "Connect Wallet" : "Connect"}
+                </button>
+              )}
 
-            <div
-              className="nav_btn"
-              onClick={() => {
-                setToggleMenu(!toggleMenu);
-              }}
-            >
-              <span className="px-1">
-                <DehazeIcon fontSize="large" />
+              <span className="mobile_menu">
+                <i className="ri-menu-line"></i>
               </span>
             </div>
           </div>
-
-          <div className="nav_right d-flex align-items-center gap-5">
-            {/* Connect the user's wallet into the system after click or display the wallet address if the user already connect to the system */}
-            {isConnected ? (
-              <Link
-                to={`/seller-profile/${address}`}
-                className="text-decoration-none to-user"
-              >
-                <button className="btn d-flex gap-1 align-items-center custom-style ">
-                  <span className="overflow-hidden wallet-address">
-                    <b>
-                      <span className="px-1">
-                        <AccountCircleIcon
-                          fontSize={screenWidth > 1000 ? "large" : "small"}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1rem" }}>
-                        {screenWidth > 1000
-                          ? (ensName ?? address).substring(0, 8) + "....."
-                          : (ensName ?? address).substring(0, 3) + ".."}
-                      </span>
-                    </b>
-                  </span>
-                </button>
-              </Link>
-            ) : (
-              <button
-                onClick={() => {
-                  setshowConnectWallet(true)
-                  // connect();
-                  // <Link to="/connect-wallet" />;
-                  // <ConnectWallet/>
-                }}
-                className="btn d-flex gap-2 align-items-center"
-              >
-                <span>
-                  <i className="ri-wallet-line"></i>
-                </span>
-                {screenWidth > 1000 ? "Connect Wallet" : "Connect"}
-              </button>
-            )}
-
-            <span className="mobile_menu">
-              <i className="ri-menu-line"></i>
-            </span>
-          </div>
-        </div>
-      </Container>
-    </header>
-    {showConnectWallet && <ConnectWallet setshowConnectWallet={setshowConnectWallet} />}
+        </Container>
+      </header>
+      {showConnectWallet && (
+        <ConnectWallet setshowConnectWallet={setshowConnectWallet} />
+      )}
     </>
   );
 }

@@ -4,12 +4,12 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* z-index: 22222; */
+  z-index: 2222;
   background-color: #14141f !important;
 }
 
 .nav_list {
-  column-gap: 2.7rem;
+  column-gap: 2rem;
 }
 
 .active {
@@ -89,7 +89,7 @@
 /* } */
 
 .wallet-address:hover {
-  color: rgb(148, 72, 135);
+  color: rgb(255, 255, 255);
 }
 .custom-style:hover {
   transform: scale(1.1);
@@ -123,7 +123,7 @@
   z-index: 100000000000;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   .nav_list {
     flex-direction: column;
     height: auto;
@@ -152,7 +152,6 @@
     padding: 10px !important;
   }
   .nav_right .btn {
-    max-width: 100px !important;
     padding: 10px !important;
   }
 }

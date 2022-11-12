@@ -5,7 +5,6 @@ import BestSellers from "../../components/ui/BestSellers/BestSellers";
 import BestBuyers from "../../components/ui/BestBuyers/BestBuyers";
 import "../../styles/superAdmin.css";
 import "../../styles/nAdminDashboard.css";
-import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
@@ -42,9 +41,6 @@ function NormalAdminDashboard() {
   } else {
     return (
       <section>
-        <div className="side-bar">
-          <NormalAdminNav />
-        </div>
         <Container>
           <div className="row">
             <div className="heading col-8">

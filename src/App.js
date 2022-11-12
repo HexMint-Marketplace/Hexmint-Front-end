@@ -1,7 +1,8 @@
 import "./App.css";
 import Layout from "./components/Layout/Layout.jsx";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 // import { MoralisProvider } from "react-moralis";
 
 // import { configureChains, chain, WagmiConfig, createClient } from "wagmi";
@@ -23,23 +24,23 @@ import {
   createClient,
   defaultChains,
   configureChains,
-} from 'wagmi'
- 
-import { alchemyProvider } from 'wagmi/providers/alchemy'
-import { publicProvider } from 'wagmi/providers/public'
- 
+} from "wagmi";
+
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+
 // import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 // import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
- 
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
-  alchemyProvider({ apiKey: 'yourAlchemyApiKey' }),
+  alchemyProvider({ apiKey: "yourAlchemyApiKey" }),
   publicProvider(),
-])
- 
+]);
+
 // Set up client
 const client = createClient({
   autoConnect: true,
@@ -67,15 +68,24 @@ const client = createClient({
   ],
   provider,
   webSocketProvider,
-})
+});
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 function App() {
   return (
-    <WagmiConfig client={client}>
-      <Layout />
-    </WagmiConfig>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <WagmiConfig client={client}>
+        <Layout />
+      </WagmiConfig>
+    </ThemeProvider>
   );
 }
 

@@ -10,7 +10,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../../styles/viewUsers.css";
 import "../../styles/superAdmin.css";
-import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
@@ -68,9 +67,6 @@ function ViewUsers() {
   } else {
     return (
       <div>
-        <div className="side-bar">
-          <NormalAdminNav />
-        </div>
         <CommonHeader title={"Customer Details & Management"} />
         <div className="section">
           <TableContainer className="table" component={Paper}>
