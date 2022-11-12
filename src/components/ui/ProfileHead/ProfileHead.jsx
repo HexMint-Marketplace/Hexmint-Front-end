@@ -1,16 +1,17 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import "../../ui/SingleCollectionHead/singleCollectionHead.css";
 import "../ProfileHead/profileHead.css";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import EditProfile from "../../../pages/EditProfile";
-import { useNavigate } from "react-router-dom";
 import EditAdminDetails from "../../../pages/EditAdminDetails";
 import UserNFTList from "../../ui/UserNFTList/UserNFTList";
 import UserActivity from "../../ui/UserActivity/UserActivity";
+import HeightBox from "../../HeightBox/HeightBox";
+import Card from "@mui/material/Card";
 
 const NAV_LINKS = [
   {
@@ -54,132 +55,114 @@ const ProfileHead = (props) => {
   };
 
   return (
-    <section>
-      <Container>
+    <Container>
+      <HeightBox height="70px" />
+      <div className="px-4 text-center">
+        {propic == null ? (
+          <img
+            src={collectionIcon}
+            alt=""
+            className="rounded-circle rounded border border-5 img-fluid"
+            height="200"
+            width="200"
+          />
+        ) : (
+          <img
+            src={propic}
+            alt=""
+            className="rounded-circle rounded border border-5 img-fluid custom-rounded"
+            height="200"
+            width="200"
+          />
+        )}
+      </div>
+
+      <div className="">
+        <div className="text-center h2 px-4 mt-3 collection-name">
+          {/* {showAddress} */}
+          {userType === "Customer"
+            ? name === "Customer"
+              ? showAddress
+              : name
+            : name === "Admin"
+            ? showAddress + "(Admin)"
+            : name}
+        </div>
+
+        <div className="text-center px-4 collection-name">@{userName}</div>
+
+        {userType === "Customer" ? (
+          <div className="d-flex justify-content-end">
+            <Link to={"/create-collection"}>
+              <button className="btn gap-2 align-items-center ">
+                <b>Create a Collection</b>
+              </button>
+            </Link>
+          </div>
+        ) : (
+          (userType === "Admin" || userType === "Super Admin") && (
+            <>
+              <hr class="hr-primary mt-3" />
+              <Row>
+                <Col lg="3" md="3" sm="0"></Col>
+                <Col lg="6" md="6" sm="12">
+                  <Card variant="outlined" sx={{ p: 5, textAlign: "center" }}>
+                    <h5>Name : {name}</h5>
+                    <h5>Email : {email}</h5>
+                    <h5>DOB : {DOB.substring(0, 10)}</h5>
+                    <h5>Mobie : {mobile}</h5>
+                  </Card>
+                </Col>
+                <Col lg="3" md="3" sm="0"></Col>
+              </Row>
+              <div className="d-flex justify-content-center py-4">
+                <button
+                  onClick={handleClick}
+                  className="btn gap-2 align-items-center "
+                >
+                  <b>Edit Profile</b>
+                </button>
+              </div>
+
+              <div>
+                {isShown && (
+                  <EditAdminDetails
+                    walletaddress={userWallet.address}
+                    setissubmit={props.setissubmit}
+                  />
+                )}
+              </div>
+            </>
+          )
+        )}
+      </div>
+
+      {userType === "Customer" && (
         <Row>
-          <Row>
-            <Col lg="12" md="3" sm="12">
-              <div className="px-4 text-center">
-                {propic == null ? (
-                  <img
-                    src={collectionIcon}
-                    alt=""
-                    className="rounded-circle rounded border border-5 img-fluid"
-                    height="200"
-                    width="200"
-                  />
-                ) : (
-                  <img
-                    src={propic}
-                    alt=""
-                    className="rounded-circle rounded border border-5 img-fluid"
-                    height="200"
-                    width="200"
-                  />
-                )}
-              </div>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg="12" md="3" sm="12">
-              <div className="">
-                <div className="text-center h2 px-4 mt-3 collection-name">
-                  {/* {showAddress} */}
-                  {userType === "Customer"
-                    ? name === "Customer"
-                      ? showAddress
-                      : name
-                    : name === "Admin"
-                    ? showAddress + "(Admin)"
-                    : name}
-                </div>
-
-                <div className="text-center px-4 collection-name">
-                  @{userName}
-                </div>
-
-                {userType === "Customer" ? (
-                  <div className="d-flex justify-content-end">
-                    <Link to={"/create-collection"}>
-                      <button className="btn gap-2 align-items-center ">
-                        <b>Create a Collection</b>
-                      </button>
-                    </Link>
-                  </div>
-                ) : (
-                  (userType === "Admin" || userType === "Super Admin") && (
-                    <>
-                      <hr class="hr-primary mt-3" />
-                      <Row>
-                        <Col lg="3" md="3" sm="12"></Col>
-                        <Col lg="6" md="6" sm="12">
-                          <div className="admin-details mt-3 p-4">
-                            <h5>Name : {name}</h5>
-                            <h5>Email : {email}</h5>
-                            <h5>DOB : {DOB.substring(0, 10)}</h5>
-                            <h5>Mobie : {mobile}</h5>
-                          </div>
-                        </Col>
-                        <Col lg="3" md="3" sm="12"></Col>
-                      </Row>
-                      <div className="d-flex justify-content-center py-4">
-                        <button
-                          onClick={handleClick}
-                          className="btn gap-2 align-items-center "
-                        >
-                          <b>Edit Profile</b>
-                        </button>
-                      </div>
-
-                      <Row>
-                        <Col lg="12" md="3" sm="12">
-                          <div>
-                            {isShown && (
-                              <EditAdminDetails
-                                walletaddress={userWallet.address}
-                                setissubmit={props.setissubmit}
-                              />
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                    </>
-                  )
-                )}
-              </div>
-
-              {userType === "Customer" && (
-                <Row>
-                  <Col lg="12" md="3" sm="12">
-                    <Tabs
-                      defaultActiveKey="COLLECTIONS"
-                      id="uncontrolled-tab-example"
-                      className="mb-3 mt-5 justify-content-center"
-                    >
-                      <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
-                        <UserNFTList data={data} />
-                      </Tab>
-                      <Tab eventKey="ACTIVITY" title="ACTIVITY">
-                        {/* <Sonnet /> <div>"Have to build</div> */}
-                        <UserActivity walletaddress={userWallet.address} />
-                      </Tab>
-                      <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
-                        <EditProfile
-                          walletaddress={userWallet.address}
-                          setissubmit={props.setissubmit}
-                        />
-                      </Tab>
-                    </Tabs>
-                  </Col>
-                </Row>
-              )}
-            </Col>
-          </Row>
-          {userType === "Customer" && <hr class="hr-primary mt-0" />}
+          <Col lg="12" md="3" sm="12">
+            <Tabs
+              defaultActiveKey="COLLECTIONS"
+              id="uncontrolled-tab-example"
+              className="mb-3 mt-5 justify-content-center"
+            >
+              <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
+                <UserNFTList data={data} />
+              </Tab>
+              <Tab eventKey="ACTIVITY" title="ACTIVITY">
+                {/* <Sonnet /> <div>"Have to build</div> */}
+                <UserActivity walletaddress={userWallet.address} />
+              </Tab>
+              <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
+                <EditProfile
+                  walletaddress={userWallet.address}
+                  setissubmit={props.setissubmit}
+                />
+              </Tab>
+            </Tabs>
+          </Col>
         </Row>
-      </Container>
-    </section>
+      )}
+    </Container>
   );
 };
 

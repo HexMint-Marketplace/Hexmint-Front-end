@@ -14,12 +14,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Container } from "reactstrap";
 import "../../styles/viewAdmins.css";
 import "../../styles/superAdmin.css";
 import AdminServices from "../../services/AdminServices";
 import { toast } from "react-toastify";
 import moment from "moment";
 import Loader from "../../components/ui/Loader/Loader";
+import HeightBox from "./../../components/HeightBox/HeightBox";
 
 function ViewAdmins() {
   const [allAdmins, setAllAdmins] = useState([]);
@@ -33,13 +35,11 @@ function ViewAdmins() {
   };
 
   const handleYes = async (id) => {
-    // setIsdelete(true);
     handleDelete(id);
     setOpen(false);
   };
 
   const handleNo = async () => {
-    // setIsdelete(false);
     setOpen(false);
   };
 
@@ -91,102 +91,101 @@ function ViewAdmins() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div data-testid="admins_table">
+      <Container>
+        <HeightBox height="20px" />
         <CommonHeader title={"Admin Details & Management"} />
-        <div className="add-button">
-          <button className="mint_button d-flex align-items-center gap-2">
-            <Link to="/sadmin-addadmin">Add</Link>
-          </button>
-        </div>
-        <div>
-          <div>
-            <Dialog
-              open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+        <HeightBox height="20px" />
+        <Button className="btn">
+          <Link to="/sadmin-addadmin">Add</Link>
+        </Button>
+        <HeightBox height="20px" />
+        <Dialog
+          open={open}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this admin ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleYes(userid);
+              }}
             >
-              <DialogTitle id="alert-dialog-title">{"Confirm"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure you want to delete this admin ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    handleYes(userid);
-                  }}
-                >
-                  Yes
-                </Button>
-                <Button onClick={handleNo} autoFocus>
-                  No
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-          <TableContainer className="table" component={Paper}>
-            {allAdmins.length === 0 && (
-              <div>
-                <h5
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    margin: "10px",
-                  }}
-                >
-                  No Admins to display
-                </h5>
-              </div>
-            )}
-            {allAdmins.length !== 0 && (
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Admin Name</TableCell>
-                    <TableCell>Wallet Address</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>DoB</TableCell>
-                    <TableCell>Mobile</TableCell>
-                    <TableCell>Actions</TableCell>
+              Yes
+            </Button>
+            <Button onClick={handleNo} autoFocus>
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <TableContainer component={Paper}>
+          {allAdmins.length === 0 && (
+            <div>
+              <h5
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  margin: "10px",
+                }}
+              >
+                No Admins to display
+              </h5>
+            </div>
+          )}
+          {allAdmins.length !== 0 && (
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Admin Name</TableCell>
+                  <TableCell>Wallet Address</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>DoB</TableCell>
+                  <TableCell>Mobile</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allAdmins.map((row) => (
+                  <TableRow
+                    key={row.userid}
+                    hover
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.userid.name}
+                    </TableCell>
+                    <TableCell>{row.userid.username}</TableCell>
+                    <TableCell>{row.userid.walletaddress}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>
+                      {moment(row.DOB).format("YYYY-MM-DD")}
+                    </TableCell>
+                    <TableCell>{row.mobilenumber}</TableCell>
+                    <TableCell>
+                      <Button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          handleClickOpen(row.userid._id);
+                        }} //handleDelete(row.userid._id);
+                      >
+                        <Link to="">Delete</Link>
+                      </Button>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allAdmins.map((row) => (
-                    <TableRow
-                      key={row.userid}
-                      hover
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.userid.name}
-                      </TableCell>
-                      <TableCell>{row.userid.username}</TableCell>
-                      <TableCell>{row.userid.walletaddress}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>
-                        {moment(row.DOB).format("YYYY-MM-DD")}
-                      </TableCell>
-                      <TableCell>{row.mobilenumber}</TableCell>
-                      <TableCell>
-                        <button
-                          className="act-button btn btn-danger"
-                          onClick={() => {
-                            handleClickOpen(row.userid._id);
-                          }} //handleDelete(row.userid._id);
-                        >
-                          <Link to="">Delete</Link>
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+        <HeightBox height="50px" />
+      </Container>
     );
   }
 }

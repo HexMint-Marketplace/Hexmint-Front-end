@@ -1,15 +1,12 @@
 .btn {
-  border-radius: 50px;
   background: linear-gradient(to right, #59f9b7, #66feea);
-  padding: 13px 30px;
-  border-radius: 50px;
   font-size: 0.95rem;
 }
 
 .btn a {
   color: black;
   font-weight: bold;
-  text-decoration: none;
+  text-decoration: black;
 }
 
 .btn a:hover {
@@ -22,6 +19,6 @@
   color: white;
 }
 
-.rounded {
+.custom-rounded {
   aspect-ratio: 1 /1;
 }

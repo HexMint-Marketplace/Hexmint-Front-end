@@ -2,19 +2,18 @@ import { React, useEffect, useState } from "react";
 import ProfileHead from "../../components/ui/ProfileHead/ProfileHead";
 import Loader from "../../components/ui/Loader/Loader";
 import AdminServices from "../../services/AdminServices";
-import { useNavigate } from "react-router-dom";
+import { Container } from "reactstrap";
 
 function AdminProfile() {
   const [userWallet, setuserWallet] = useState({});
   const [loader, setLoader] = useState(false);
   const [userType, setUserType] = useState("");
-  const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [name] = useState("");
+  const [userName] = useState("");
   const [proPic, setProPic] = useState("");
   const [email, setemail] = useState("");
   const [DOB, setDOB] = useState("");
   const [mobile, setmobile] = useState("");
-  // const [showAddress,setShowAddress] = useState([]);
 
   const [issubmit, setissubmit] = useState(false);
 
@@ -24,13 +23,12 @@ function AdminProfile() {
 
     console.log("Should display", walletAddress);
 
-    // call the backend and get details
     getAdmindetails(walletAddress.address);
 
     setuserWallet(walletAddress);
     console.log("I fire once");
     console.log("In user Effect", userWallet);
-    // setLoader(false)
+
     setTimeout(() => {
       console.log("loader false calling");
       setLoader(false);
@@ -66,27 +64,23 @@ function AdminProfile() {
   };
 
   return (
-    <section>
+    <Container>
       {loader ? (
-        <div>
-          <Loader isLoading={loader} />
-        </div>
+        <Loader isLoading={loader} />
       ) : (
-        <div>
-          <ProfileHead
-            userWallet={userWallet}
-            email={email}
-            DOB={DOB}
-            mobile={mobile}
-            userType={userType}
-            name={name}
-            userName={userName}
-            proPic={proPic}
-            setissubmit={toggleisSubmit}
-          />
-        </div>
+        <ProfileHead
+          userWallet={userWallet}
+          email={email}
+          DOB={DOB}
+          mobile={mobile}
+          userType={userType}
+          name={name}
+          userName={userName}
+          proPic={proPic}
+          setissubmit={toggleisSubmit}
+        />
       )}
-    </section>
+    </Container>
   );
 }
 

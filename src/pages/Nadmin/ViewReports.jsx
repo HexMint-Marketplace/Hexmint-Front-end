@@ -8,12 +8,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import "../../styles/viewAdmins.css";
-import "../../styles/superAdmin.css";
 import ViewReport from "../../components/ui/ReportView/ReportView";
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
+import { Container } from "reactstrap";
+import HeightBox from "../../components/HeightBox/HeightBox";
+import Button from "@mui/material/Button";
 
 function ViewReports() {
   const [open, setOpen] = useState(false);
@@ -99,80 +100,80 @@ function ViewReports() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
+      <Container>
+        <HeightBox height="30px" />
         <CommonHeader title={"View User Reports"} />
-        <div>
-          {open && (
-            <ViewReport open={open} handleClose={handleClose} data={data} />
-          )}
-        </div>
-        <div>
-          <TableContainer
-            data-testid="reports_table"
-            className="table"
-            component={Paper}
-          >
-            {reports.length === 0 && (
-              <div>
-                <h5
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    margin: "10px",
-                  }}
-                >
-                  No Customers to display
-                </h5>
-              </div>
-            )}
-            {reports.length !== 0 && (
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Reported Customer</TableCell>
-                    <TableCell>Reporter</TableCell>
+        <HeightBox height="30px" />
+        {open && (
+          <ViewReport open={open} handleClose={handleClose} data={data} />
+        )}
 
-                    <TableCell>Actions</TableCell>
+        <TableContainer data-testid="reports_table" component={Paper}>
+          {reports.length === 0 && (
+            <div>
+              <h5
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  margin: "10px",
+                }}
+              >
+                No Customers to display
+              </h5>
+            </div>
+          )}
+          {reports.length !== 0 && (
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Reported Customer</TableCell>
+                  <TableCell>Reporter</TableCell>
+
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {reports.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    hover
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.to.name}
+                    </TableCell>
+                    <TableCell>{row.from.name}</TableCell>
+                    <TableCell>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() => handleClickOpen(row._id)}
+                        sx={{ ml: 2, mr: 2 }}
+                      >
+                        <Link to="">View</Link>
+                      </Button>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() => handleClickBlock(row.to._id, row._id)}
+                        sx={{ ml: 2, mr: 2 }}
+                      >
+                        <Link to="">Block</Link>
+                      </Button>
+                      <Button
+                        className="btn btn-danger"
+                        onClick={() => deleteReport(row._id)}
+                        sx={{ ml: 2, mr: 2 }}
+                      >
+                        <Link to="">Delete</Link>
+                      </Button>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {reports.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.to.name}
-                      </TableCell>
-                      <TableCell>{row.from.name}</TableCell>
-                      <TableCell>
-                        <button
-                          className="act-button btn btn-primary"
-                          onClick={() => handleClickOpen(row._id)}
-                        >
-                          <Link to="">View</Link>
-                        </button>
-                        <button
-                          className="act-button btn btn-primary"
-                          onClick={() => handleClickBlock(row.to._id, row._id)}
-                        >
-                          <Link to="">Block</Link>
-                        </button>
-                        <button
-                          className="act-button btn btn-danger"
-                          onClick={() => deleteReport(row._id)}
-                        >
-                          <Link to="">Delete</Link>
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+        <HeightBox height="50px" />
+      </Container>
     );
   }
 }

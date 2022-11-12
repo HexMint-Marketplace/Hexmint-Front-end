@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 function EditProfile(props) {
   const { walletaddress, setissubmit } = props;
@@ -78,106 +79,86 @@ function EditProfile(props) {
   };
 
   return (
-    <div>
+    <Container>
       <CommonHeader title={"Edit Profile"} />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={Submit}
-              >
-                {(formikProps) => {
-                  const {
-                    values,
-                    handleChange,
-                    handleSubmit,
-                    errors,
-                    touched,
-                  } = formikProps;
 
-                  return (
-                    <Box
-                      sx={{
-                        boxShadow: 12,
-                        width: "100%",
-                        padding: 3,
-                        borderRadius: 2,
-                        marginBottom: 5,
-                      }}
-                    >
-                      <form>
-                        <TextField
-                          type="file"
-                          name="pro"
-                          value={values.pro}
-                          onChange={(e) => {
-                            OnChangeFile(e);
-                            handleChange(e);
-                          }}
-                          helperText={
-                            touched.pro && errors.pro ? errors.pro : ""
-                          }
-                          error={errors.pro}
-                          fullWidth
-                          variant="outlined"
-                        />
-                        <HeightBox height={20} />
-                        <TextField
-                          type="text"
-                          name="name"
-                          value={values.name}
-                          onChange={handleChange("name")}
-                          helperText={
-                            touched.name && errors.name ? errors.name : ""
-                          }
-                          error={errors.name}
-                          fullWidth
-                          variant="outlined"
-                          label="Name"
-                          placeholder="Name"
-                        />
-                        <HeightBox height="20px" />
-                        <TextField
-                          type="text"
-                          name="username"
-                          value={values.username}
-                          onChange={handleChange("username")}
-                          helperText={
-                            touched.username && errors.username
-                              ? errors.username
-                              : ""
-                          }
-                          error={errors.username}
-                          fullWidth
-                          variant="outlined"
-                          label="User Name"
-                          placeholder="User Name"
-                        />
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={Submit}
+      >
+        {(formikProps) => {
+          const { values, handleChange, handleSubmit, errors, touched } =
+            formikProps;
 
-                        <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                          <button
-                            className="btn edit-profile-button d-flex align-items-center gap-2"
-                            type="submit"
-                            onClick={handleSubmit}
-                          >
-                            <Link to="/seller-profile">Save</Link>
-                          </button>
-                        </div>
-                      </form>
-                    </Box>
-                  );
-                }}
-              </Formik>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+          return (
+            <Box
+              sx={{
+                boxShadow: 12,
+                width: "100%",
+                padding: 3,
+                borderRadius: 2,
+                marginBottom: 5,
+              }}
+            >
+              <form>
+                <HeightBox height={30} />
+                <TextField
+                  type="file"
+                  name="pro"
+                  value={values.pro}
+                  onChange={(e) => {
+                    OnChangeFile(e);
+                    handleChange(e);
+                  }}
+                  helperText={touched.pro && errors.pro ? errors.pro : ""}
+                  error={errors.pro}
+                  fullWidth
+                  variant="outlined"
+                />
+                <HeightBox height={20} />
+                <TextField
+                  type="text"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange("name")}
+                  helperText={touched.name && errors.name ? errors.name : ""}
+                  error={errors.name}
+                  fullWidth
+                  variant="outlined"
+                  label="Name"
+                  placeholder="Name"
+                />
+                <HeightBox height="20px" />
+                <TextField
+                  type="text"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange("username")}
+                  helperText={
+                    touched.username && errors.username ? errors.username : ""
+                  }
+                  error={errors.username}
+                  fullWidth
+                  variant="outlined"
+                  label="User Name"
+                  placeholder="User Name"
+                />
+                <HeightBox height="20px" />
+                <Button
+                  className="btn btn-primary"
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  <Link to="/seller-profile">Save</Link>
+                </Button>
+              </form>
+              <HeightBox height={20} />
+            </Box>
+          );
+        }}
+      </Formik>
+    </Container>
   );
 }
 
