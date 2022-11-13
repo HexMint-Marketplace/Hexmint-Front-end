@@ -30,11 +30,27 @@ const ListingForm = () => {
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
 
+  const initialValues = {
+    ListingType: "",
+    listingPrize: "",
+    Duration: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    ListingType: Yup.string().required("Listing Type is required"),
+    listingPrize: Yup.string().required("Listing Prize is required"),
+    Duration: Yup.string().when("ListingType", {
+      is: "2",
+      then: Yup.string().required("Duration is required"),
+    }),
+  });
+
   console.log("NFTData: ", NFTData);
-  async function handleSubmit(e) {
+  async function handleSubmit(values) {
+    console.log("values: ", values);
     setLoader(true);
     toast.info("Please wait while we list your NFT");
-    e.preventDefault();
+
     try {
       //get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -67,9 +83,12 @@ const ListingForm = () => {
           console.log("tokenID: in use state ", tokenid);
         }
       );
-
+      console.log(
+        ".................tttttttttttttttttttt.............",
+        values.listingPrize
+      );
       //transfer the NFT'
-      const price = ethers.utils.parseUnits(listingPrize, "ether");
+      const price = ethers.utils.parseUnits(values.listingPrize, "ether");
       let listingPrice = await contract.getListPrice();
       listingPrice = listingPrice.toString();
 
@@ -136,98 +155,161 @@ const ListingForm = () => {
     }
   }, [tokenid, transactionObj]);
 
-  return (
-    <Container>
-      <div className="px-4 text-center">
-        <h1 className="mt-5 mb-3">List Item For Sale</h1>
-        <img
-          src={NFTData.image}
-          alt=""
-          className="rounded-circle rounded border border-5 img-fluid"
-          height="200"
-          width="200"
-        />
-      </div>
-
-      <form>
-        <label htmlFor="">Listing Type</label>
-        <select
-          onChange={(e) => setListingType(e.target.value)}
-          class="form-select"
-          aria-label="Default select example"
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <Container>
+        <HeightBox height="100px" />
+        <div className="px-4 text-center">
+          <h1 className="mt-5 mb-3">List Item For Sale</h1>
+          <HeightBox height="20px" />
+          <img
+            src={NFTData.image}
+            alt=""
+            className="rounded-circle rounded border border-5 img-fluid"
+            height="200"
+            width="200"
+          />
+          <HeightBox height="20px" />
+        </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
         >
-          <option selected>Open this select menu</option>
-          <option value="1" name="fixedPrize">
-            Fixed Prize
-          </option>
-          <option value="2" name="timedAuction">
-            Timed-Auction
-          </option>
-        </select>
+          {(formikProps) => {
+            const { values, handleChange, handleSubmit, errors, touched } =
+              formikProps;
 
-        {ListingType === "1" && (
-          <div className="form__input mt-3">
-            <label htmlFor="">Prize</label>
-            <input
-              type="text"
-              placeholder="Enter Prize"
-              onChange={(e) => setListingPrize(e.target.value)}
-            />
-          </div>
-        )}
-        {ListingType === "2" && (
-          <div>
-            <div className="form__input mt-3">
-              <label htmlFor="">Staritng Prize</label>
-              <input
-                type="text"
-                placeholder="Enter Starting Prize"
-                onChange={(e) => setListingPrize(e.target.value)}
-              />
-            </div>
-
-            <div className="form__input">
-              <label htmlFor="">Duration</label>
-              <select
-                onChange={(e) => setDuration(e.target.value)}
-                class="form-select"
-                aria-label="Default select example"
+            return (
+              <Box
+                sx={{
+                  boxShadow: 12,
+                  width: "100%",
+                  padding: 3,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                }}
               >
-                <option selected>Open this select menu</option>
-                <option value="1" name="fivedays">
-                  5 days
-                </option>
-                <option value="2" name="oneweek">
-                  1 week
-                </option>
-                <option value="1" name="twoweek">
-                  2 week
-                </option>
-                <option value="2" name="threeweek">
-                  3 week
-                </option>
-                <option value="1" name="onemonth">
-                  1 month
-                </option>
-                <option value="2" name="twomonth">
-                  2 month
-                </option>
-              </select>
-            </div>
-          </div>
-        )}
+                <form>
+                  <HeightBox height="20px" />
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    fullWidth
+                    label="Select"
+                    value={values.ListingType}
+                    onChange={handleChange("ListingType")}
+                    helperText={
+                      touched.ListingType && errors.ListingType
+                        ? errors.ListingType
+                        : ""
+                    }
+                    error={errors.ListingType}
+                  >
+                    <MenuItem key="1" value="1">
+                      Fixed Price
+                    </MenuItem>
+                    <MenuItem key="2" value="2">
+                      Timed Auction
+                    </MenuItem>
+                  </TextField>
+                  <HeightBox height="20px" />
 
-        <Button
-          type="submit"
-          className="btn btn-primary"
-          fullWidth
-          onClick={handleSubmit}
-        >
-          Complete Listing
-        </Button>
-      </form>
-    </Container>
-  );
+                  {values.ListingType === "1" && (
+                    <TextField
+                      type="text"
+                      name="listingPrize"
+                      value={values.listingPrize}
+                      onChange={handleChange("listingPrize")}
+                      helperText={
+                        touched.listingPrize && errors.listingPrize
+                          ? errors.listingPrize
+                          : ""
+                      }
+                      error={errors.listingPrize}
+                      fullWidth
+                      variant="outlined"
+                      label="Listing Price"
+                      placeholder="Listing Price"
+                    />
+                  )}
+                  <HeightBox height="20px" />
+                  {values.ListingType === "2" && (
+                    <div>
+                      <TextField
+                        type="text"
+                        name="listingPrize"
+                        value={values.listingPrize}
+                        onChange={handleChange("listingPrize")}
+                        helperText={
+                          touched.listingPrize && errors.listingPrize
+                            ? errors.listingPrize
+                            : ""
+                        }
+                        error={errors.listingPrize}
+                        fullWidth
+                        variant="outlined"
+                        label="Start Price"
+                        placeholder="Start Price"
+                      />
+                      <HeightBox height="20px" />
+                      <TextField
+                        id="outlined-select-currency"
+                        select
+                        fullWidth
+                        label="Select"
+                        value={values.Duration}
+                        onChange={handleChange("Duration")}
+                        helperText={
+                          touched.Duration && errors.Duration
+                            ? errors.Duration
+                            : ""
+                        }
+                        error={errors.Duration}
+                      >
+                        <MenuItem key="1" value="1">
+                          5 days
+                        </MenuItem>
+                        <MenuItem key="2" value="2">
+                          1 week
+                        </MenuItem>
+                        <MenuItem key="3" value="3">
+                          2 week
+                        </MenuItem>
+                        <MenuItem key="4" value="4">
+                          3 week
+                        </MenuItem>
+                        <MenuItem key="5" value="5">
+                          1 month
+                        </MenuItem>
+                        <MenuItem key="6" value="6">
+                          2 month
+                        </MenuItem>
+                      </TextField>
+                      <HeightBox height="20px" />
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    className="btn btn-primary"
+                    fullWidth
+                    onClick={handleSubmit}
+                  >
+                    Complete Listing
+                  </Button>
+                  <HeightBox height="20px" />
+                </form>
+              </Box>
+            );
+          }}
+        </Formik>
+        <HeightBox height="50px" />
+      </Container>
+    );
+  }
 };
 
 export default ListingForm;
