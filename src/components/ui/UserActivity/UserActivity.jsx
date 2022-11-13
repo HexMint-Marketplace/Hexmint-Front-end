@@ -13,6 +13,10 @@ import PaidIcon from "@mui/icons-material/Paid";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import CustomerServices from "../../../services/API/CustomerServices";
 import Loader from "../Loader/Loader";
+import UserActivities from "./../../../pages/UserActivities";
+import { Link } from "react-router-dom";
+import moment from "moment";
+moment().format();
 
 export default function UserActivity(props) {
   const walletaddress = props.walletaddress;
@@ -108,7 +112,14 @@ export default function UserActivity(props) {
                   <TableCell align="right">{row.price}</TableCell>
                   <TableCell align="right">{row.fromwalletaddress}</TableCell>
                   <TableCell align="right">{row.towalletaddress}</TableCell>
-                  <TableCell align="right">{row.time}</TableCell>
+                  <TableCell align="right">
+                    <a
+                      href={`https://goerli.etherscan.io/tx/${row.transactionhash}`}
+                      target="_blank"
+                    >
+                      {moment(row.time).fromNow()}
+                    </a>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
