@@ -22,6 +22,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import HeightBox from "./../../components/HeightBox/HeightBox";
+import Typography from "@mui/material/Typography";
 
 export const DataContext = React.createContext();
 function AdminRequests() {
@@ -159,17 +160,11 @@ function AdminRequests() {
 
         <TableContainer component={Paper}>
           {requests.length === 0 && (
-            <div>
-              <h5
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  margin: "10px",
-                }}
-              >
-                No Requests to Display
-              </h5>
-            </div>
+            <Paper>
+              <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
+                No Requests to display
+              </Typography>
+            </Paper>
           )}
           {requests.length !== 0 && (
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

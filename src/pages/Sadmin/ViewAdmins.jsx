@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import Loader from "../../components/ui/Loader/Loader";
 import HeightBox from "./../../components/HeightBox/HeightBox";
+import Typography from "@mui/material/Typography";
 
 function ViewAdmins() {
   const [allAdmins, setAllAdmins] = useState([]);
@@ -126,17 +127,11 @@ function ViewAdmins() {
 
         <TableContainer component={Paper}>
           {allAdmins.length === 0 && (
-            <div>
-              <h5
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  margin: "10px",
-                }}
-              >
+            <Paper>
+              <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
                 No Admins to display
-              </h5>
-            </div>
+              </Typography>
+            </Paper>
           )}
           {allAdmins.length !== 0 && (
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

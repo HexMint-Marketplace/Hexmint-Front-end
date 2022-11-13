@@ -16,6 +16,7 @@ import Loader from "../../components/ui/Loader/Loader";
 import Button from "@mui/material/Button";
 import { Container } from "reactstrap";
 import HeightBox from "./../../components/HeightBox/HeightBox";
+import Typography from "@mui/material/Typography";
 
 function ViewUsers() {
   const [allCustomers, setAllCustomers] = useState([]);
@@ -75,17 +76,11 @@ function ViewUsers() {
         <HeightBox height="30px" />
         <TableContainer component={Paper}>
           {allCustomers.length === 0 && (
-            <div>
-              <h5
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  margin: "10px",
-                }}
-              >
+            <Paper>
+              <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
                 No Customers to display
-              </h5>
-            </div>
+              </Typography>
+            </Paper>
           )}
           {allCustomers.length !== 0 && (
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
