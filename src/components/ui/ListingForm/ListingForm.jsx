@@ -7,11 +7,18 @@ import Marketplace from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import HeightBox from "../../HeightBox/HeightBox";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 
 // console.log(img01);
 const ListingForm = () => {
   const location = useLocation();
-  const [ListingType, setListingType] = useState("1");
+  const [ListingType, setListingType] = useState("");
   const [listingPrize, setListingPrize] = useState();
   const [message, updateMessage] = useState("");
   const [Duration, setDuration] = useState();
@@ -23,7 +30,7 @@ const ListingForm = () => {
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
 
-  console.log("NFTData: ",NFTData);
+  console.log("NFTData: ", NFTData);
   async function handleSubmit(e) {
     setLoader(true);
     toast.info("Please wait while we list your NFT");
@@ -77,9 +84,7 @@ const ListingForm = () => {
       settransactionObj(transaction);
       console.log("transactionObj: in use state ", transactionObj);
 
-
       updateMessage("");
-
     } catch (e) {
       alert("Upload error" + e);
     }
@@ -104,8 +109,6 @@ const ListingForm = () => {
         setTimeout(() => {
           window.location.replace("/");
         }, 4000);
-
-
       } else {
         toast.error("Error Occured!");
         setLoader(false);
@@ -120,7 +123,10 @@ const ListingForm = () => {
   useEffect(() => {
     console.log("use effect called -------------------------------");
     // if (tokenid && transactionObj) {
-    if (Object.keys(tokenid).length !== 0  && Object.keys(transactionObj).length !== 0) {
+    if (
+      Object.keys(tokenid).length !== 0 &&
+      Object.keys(transactionObj).length !== 0
+    ) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("listed", transactionObj, tokenid, new Date());
 
@@ -131,136 +137,96 @@ const ListingForm = () => {
   }, [tokenid, transactionObj]);
 
   return (
-    <div>
-    {loader ? (
-      <div>
-        <Loader isLoading={loader} />
+    <Container>
+      <div className="px-4 text-center">
+        <h1 className="mt-5 mb-3">List Item For Sale</h1>
+        <img
+          src={NFTData.image}
+          alt=""
+          className="rounded-circle rounded border border-5 img-fluid"
+          height="200"
+          width="200"
+        />
       </div>
-    ) : (
-    <div>
-      <section>
-        <Container>
-          <Row>
-            <Col lg="12" md="3" sm="12">
-              <div className="px-4 text-center">
-                <h1 className="mt-5 mb-3">List Item For Sale</h1>
-                <img
-                  src={NFTData.image}
-                  alt=""
-                  className="rounded-circle rounded border border-5 img-fluid"
-                  height="200"
-                  width="200"
-                />
-              </div>
-            </Col>
-            <Col lg="2" md="8" sm="6" className=""></Col>
-            <Col lg="8" md="8" sm="6" className="">
-              <div className="create__item mt-4">
-                <form>
-                  <div className="form__input">
-                    <label htmlFor="">Listing Type</label>
-                    <select
-                      onChange={(e) => setListingType(e.target.value)}
-                      class="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option selected>Open this select menu</option>
-                      <option value="1" name="fixedPrize">
-                        Fixed Prize
-                      </option>
-                      <option value="2" name="timedAuction">
-                        Timed-Auction
-                      </option>
-                    </select>
-                  </div>
 
-                  {ListingType === "1" ? (
-                    <div className="form__input mt-3">
-                      <label htmlFor="">Prize</label>
-                      <input
-                        type="text"
-                        placeholder="Enter Prize"
-                        onChange={(e) => setListingPrize(e.target.value)}
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="form__input mt-3">
-                        <label htmlFor="">Staritng Prize</label>
-                        <input
-                          type="text"
-                          placeholder="Enter Starting Prize"
-                          onChange={(e) => setListingPrize(e.target.value)}
-                        />
-                      </div>
+      <form>
+        <label htmlFor="">Listing Type</label>
+        <select
+          onChange={(e) => setListingType(e.target.value)}
+          class="form-select"
+          aria-label="Default select example"
+        >
+          <option selected>Open this select menu</option>
+          <option value="1" name="fixedPrize">
+            Fixed Prize
+          </option>
+          <option value="2" name="timedAuction">
+            Timed-Auction
+          </option>
+        </select>
 
-                      <div className="form__input">
-                        <label htmlFor="">Duration</label>
-                        <select
-                          onChange={(e) => setDuration(e.target.value)}
-                          class="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Open this select menu</option>
-                          <option value="1" name="fivedays">
-                            5 days
-                          </option>
-                          <option value="2" name="oneweek">
-                            1 week
-                          </option>
-                          <option value="1" name="twoweek">
-                            2 week
-                          </option>
-                          <option value="2" name="threeweek">
-                            3 week
-                          </option>
-                          <option value="1" name="onemonth">
-                            1 month
-                          </option>
-                          <option value="2" name="twomonth">
-                            2 month
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  )}
+        {ListingType === "1" && (
+          <div className="form__input mt-3">
+            <label htmlFor="">Prize</label>
+            <input
+              type="text"
+              placeholder="Enter Prize"
+              onChange={(e) => setListingPrize(e.target.value)}
+            />
+          </div>
+        )}
+        {ListingType === "2" && (
+          <div>
+            <div className="form__input mt-3">
+              <label htmlFor="">Staritng Prize</label>
+              <input
+                type="text"
+                placeholder="Enter Starting Prize"
+                onChange={(e) => setListingPrize(e.target.value)}
+              />
+            </div>
 
-                  {/* <div className="form__input">
-                    <label htmlFor="">Description</label>
-                    <textarea
-                      name=""
-                      id=""
-                      rows="7"
-                      placeholder="Enter description"
-                      className="w-100"
-                    ></textarea>
-                  </div> */}
+            <div className="form__input">
+              <label htmlFor="">Duration</label>
+              <select
+                onChange={(e) => setDuration(e.target.value)}
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option selected>Open this select menu</option>
+                <option value="1" name="fivedays">
+                  5 days
+                </option>
+                <option value="2" name="oneweek">
+                  1 week
+                </option>
+                <option value="1" name="twoweek">
+                  2 week
+                </option>
+                <option value="2" name="threeweek">
+                  3 week
+                </option>
+                <option value="1" name="onemonth">
+                  1 month
+                </option>
+                <option value="2" name="twomonth">
+                  2 month
+                </option>
+              </select>
+            </div>
+          </div>
+        )}
 
-                  <div class="col-md-12 text-center">
-                    <button
-                      type="submit"
-                      className="btn text-center p-2 px-5 mt-3 mb-5"
-                      onClick={handleSubmit}
-                    >
-                      Complete Listing
-                      {/* <Link to="">Complete Listing</Link> */}
-                      {/* <Link to={{pathname:'seller-profile/NFT/transfer-form',img:imgUrl}}>Transfer</Link> */}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </Col>
-            <Col lg="2" md="8" sm="6" className=""></Col>
-          </Row>
-
-          <Row>
-            <Col lg="12" md="3" sm="12"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
-    )}
-    </div>
+        <Button
+          type="submit"
+          className="btn btn-primary"
+          fullWidth
+          onClick={handleSubmit}
+        >
+          Complete Listing
+        </Button>
+      </form>
+    </Container>
   );
 };
 
