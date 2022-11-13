@@ -17,7 +17,7 @@ import TransferForm from "../components/ui/TransferForm/TransferForm";
 import ListingForm from "../components/ui/ListingForm/ListingForm";
 
 import NormalAdminDashboard from "../pages/Nadmin/Dashboard";
-import AdminProfile from "../pages/Nadmin/AdminProfile"
+import AdminProfile from "../pages/Nadmin/AdminProfile";
 import ViewReports from "./../pages/Nadmin/ViewReports";
 import BlockUsers from "./../pages/Nadmin/BlockUsers";
 import ViewUsers from "./../pages/Nadmin/ViewUsers";
@@ -26,6 +26,7 @@ import ViewAdmins from "./../pages/Sadmin/ViewAdmins";
 import AddAdmin from "../pages/Sadmin/AddAdmin";
 import AdminRequests from "../pages/Sadmin/AdminRequests";
 import EditAdminDetails from "../pages/EditAdminDetails";
+import Options from "../pages/Sadmin/Options";
 
 import NotFound from "../pages/NotFound";
 
@@ -70,10 +71,10 @@ function Routers() {
       <Route path="/sadmin-viewadmins" element={<ViewAdmins />} />
       <Route path="/sadmin-addadmin" element={<AddAdmin />} />
       <Route path="/sadmin-adminrequests" element={<AdminRequests />} />
-      <Route path='*' element={<NotFound />}/>
+      <Route path="/sadmin-options" element={<Options />} />
+      <Route path="*" element={<NotFound />} />
       {/* <Route path="/admin-profile/:address" element={<AdminProfile />} /> */}
       {/* <Route path="/edit-admin-details" element={<EditAdminDetails />} /> */}
-      
     </Routes>
   );
 }

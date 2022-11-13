@@ -258,6 +258,19 @@ function Header() {
                         {"Users"}
                       </NavLink>
                     )}
+                    {userType === "Super Admin" && isConnected && (
+                      <NavLink
+                        to={"/sadmin-options"}
+                        className={(navClass) =>
+                          navClass.isActive ? "active" : ""
+                        }
+                        onClick={() => {
+                          setToggleMenu(!toggleMenu);
+                        }}
+                      >
+                        {"Options"}
+                      </NavLink>
+                    )}
                   </li>
                   <li className="nav_item">
                     {userType === "Admin" && isConnected && (

@@ -15,6 +15,7 @@ import Loader from "../../components/ui/Loader/Loader";
 import { Container } from "reactstrap";
 import HeightBox from "../../components/HeightBox/HeightBox";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 function ViewReports() {
   const [open, setOpen] = useState(false);
@@ -110,17 +111,11 @@ function ViewReports() {
 
         <TableContainer data-testid="reports_table" component={Paper}>
           {reports.length === 0 && (
-            <div>
-              <h5
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  margin: "10px",
-                }}
-              >
+            <Paper>
+              <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
                 No Customers to display
-              </h5>
-            </div>
+              </Typography>
+            </Paper>
           )}
           {reports.length !== 0 && (
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
