@@ -8,6 +8,10 @@
   background-color: #14141f !important;
 }
 
+.logo-navlink {
+  text-decoration: none;
+}
+
 .nav_list {
   column-gap: 2rem;
 }

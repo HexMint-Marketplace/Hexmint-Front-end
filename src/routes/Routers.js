@@ -35,7 +35,8 @@ import NotFound from "../pages/NotFound";
 function Routers() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/home" />} />
+      {/* <Route path="/" element={<Navigate to="/home" />} /> */}
+      <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route path="/explore" element={<Explore />} />
       <Route path="/create" element={<Create />} />

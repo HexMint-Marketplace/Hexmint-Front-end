@@ -20,3 +20,15 @@ h1 {
 .profit {
   padding: 7% 0 !important;
 }
+
+.hero_content h2 {
+  line-height: 60px;
+  font-size: 2.5rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .hero_content h2 {
+    font-size: 1.5rem;
+    line-height: 40px;
+  }
+}

@@ -1,6 +1,7 @@
 .btn {
   background: linear-gradient(to right, #59f9b7, #66feea);
   font-size: 0.95rem;
+  text-align: center;
 }
 
 .btn a {
@@ -20,5 +21,5 @@
 }
 
 .custom-rounded {
-  aspect-ratio: 1 /1;
+  aspect-ratio: 1 /1 !important;
 }

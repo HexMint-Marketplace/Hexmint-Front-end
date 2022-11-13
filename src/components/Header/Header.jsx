@@ -69,7 +69,7 @@ function Header() {
           console.log(response.data.userType);
           navigate("/sadmin-dashboard");
         } else {
-          navigate("/home");
+          // navigate("/home");
         }
       }
     };
@@ -100,17 +100,19 @@ function Header() {
       <header className="header w-100">
         <Container>
           <div className="navigation d-flex  align-items-center justify-content-between ">
-            <div className="logo">
-              <h2
-                data-testid="HeXmint_txt"
-                className="d-flex gap-2 align-items-center"
-              >
-                <span>
-                  <i className="ri-zcool-fill"></i>
-                </span>
-                HeXmint
-              </h2>
-            </div>
+            <NavLink to="/home" className="logo-navlink">
+              <div className="logo">
+                <h2
+                  data-testid="HeXmint_txt"
+                  className="d-flex gap-2 align-items-center"
+                >
+                  <span>
+                    <i className="ri-zcool-fill"></i>
+                  </span>
+                  HeXmint
+                </h2>
+              </div>
+            </NavLink>
 
             <div className="nav_menu ">
               {(toggleMenu || screenWidth > 1200) && (
