@@ -47,10 +47,12 @@ function NormalAdminDashboard() {
         <Container>
           <Row>
             <Col lg="8" md="8" sm="12" className="mb-4">
-              <h1>
-                Discover Rare Digital Art And Collect
-                <span className="h1-mid"> Sell Extraordinary</span> NFTs
-              </h1>
+              <div className="hero_content">
+                <h2 data-testid="discover_txt">
+                  Discover rare digital art and collect{" "}
+                  <span>Sell Extraordinary</span> NFTs
+                </h2>
+              </div>
             </Col>
             <Col lg="4" md="4" sm="12" className="mb-4">
               <div className="card bg-transparent" style={{ zIndex: -1 }}>

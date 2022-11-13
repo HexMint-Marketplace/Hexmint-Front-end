@@ -41,7 +41,7 @@ const ProfileHead = (props) => {
           <img
             src={collectionIcon}
             alt=""
-            className="rounded-circle rounded border border-5 img-fluid"
+            className="rounded-circle rounded border border-5 img-fluid custom-rounded"
             height="200"
             width="200"
           />
