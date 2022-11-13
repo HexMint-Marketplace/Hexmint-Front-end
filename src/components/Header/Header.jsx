@@ -69,7 +69,7 @@ function Header() {
           console.log(response.data.userType);
           navigate("/sadmin-dashboard");
         } else {
-          // navigate("/home");
+          navigate("/home");
         }
       }
     };
