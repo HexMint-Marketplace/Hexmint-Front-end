@@ -40,6 +40,7 @@ const updateUserDetails = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/update-details",
     data: formData,
   });

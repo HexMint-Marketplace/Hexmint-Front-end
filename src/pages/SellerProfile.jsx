@@ -12,6 +12,7 @@ import axios from "axios";
 import NFTs from "./NFTs";
 import { Container } from "reactstrap";
 import HeightBox from "./../components/HeightBox/HeightBox";
+import AuthServices from "../services/AuthServices.js";
 
 function SellerProfile() {
   const [userWallet, setuserWallet] = useState({});
@@ -32,15 +33,13 @@ function SellerProfile() {
 
   useEffect(() => {
     setLoader(true);
-    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    setuserWallet(walletAddress);
+    // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+    const walletaddress = AuthServices.JWTDecodeWalletAddress();
+    console.log("Should display", walletaddress);
 
-    getuserdetails(walletAddress.address);
+    setuserWallet(walletaddress);
 
-    setTimeout(() => {
-      console.log("loader false calling");
-      setLoader(false);
-    }, 2000);
+    getuserdetails(walletaddress);
   }, [issubmit]);
 
   const toggleisSubmit = () => {
@@ -55,8 +54,12 @@ function SellerProfile() {
       );
       console.log("In get user details", details);
 
-      if (details.data.usertype === "Customer") {
-        const userType = details.data.usertype;
+      //Get user type from token
+      const tokenUserType = AuthServices.JWTDecodeUserType();
+      // if (details.data.usertype === "Customer") {
+      if (tokenUserType === "Customer") {
+        // const userType = details.data.usertype;
+        const userType = tokenUserType;
         setUserType(userType);
 
         const name = details.data.name;
@@ -68,7 +71,8 @@ function SellerProfile() {
         const propic = details.data.propic;
         setProPic(propic);
       } else {
-        const userType = details.data.usertype;
+        // const userType = details.data.usertype;
+        const userType = tokenUserType;
         setUserType(userType);
 
         const name = details.data.name;
@@ -92,6 +96,10 @@ function SellerProfile() {
     } catch (err) {
       console.log(err);
     }
+    setTimeout(() => {
+      console.log("loader false calling");
+      setLoader(false);
+    }, 2000);
   };
 
   async function getNFTData() {

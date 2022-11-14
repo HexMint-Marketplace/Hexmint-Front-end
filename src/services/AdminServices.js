@@ -3,6 +3,8 @@ import axios from "axios";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
+const token = JSON.parse(localStorage.getItem("token"));
+const header = {Authorization: `Bearer ${token}`};
 
 const deleteAdmin = async (id) => {
   return axios({
