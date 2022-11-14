@@ -49,7 +49,7 @@ function SellerProfile() {
     try {
       //Get user details by passing the user's wallet address
       const details = await UserServices.getUserDetailsFromWalletAddress(walletAddress);
-      console.log("In get user details", details);
+      // console.log("In get user details", details);
 
       if (details.data.usertype === "Customer") {
         const userType = details.data.usertype;

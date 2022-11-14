@@ -33,12 +33,10 @@ const ListingForm = () => {
       );
       //transfer the NFT'
       const price = ethers.utils.parseUnits(listingPrize, "ether");
-      let listingPrice = await contract.getListPrice();
-      listingPrice = listingPrice.toString();
+      // let listingPrice = await contract.getListPrice();
+      // listingPrice = listingPrice.toString();
 
-      let transaction = await contract.ListToken(NFTData.tokenId, price, {
-        value: listingPrice,
-      });
+      let transaction = await contract.ListToken(NFTData.tokenId, price);
       console.log("after create token method called");
       await transaction.wait();
       // console.log("await for transaction");

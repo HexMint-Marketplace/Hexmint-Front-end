@@ -29,47 +29,59 @@ const BuyanNFT = (props) => {
 
   async function buyNFT(tokenId) {
     try {
-        const ethers = require("ethers");
-        //After adding your Hardhat network to your metamask, this code will get providers and signers
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        updateBuyerWalletAddress(signer.getAddress());
-        //Pull the deployed contract instance
-        let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer);
-        const salePrice = ethers.utils.parseUnits(price, 'ether')
-        updateMessage("Buying the NFT... Please Wait (Upto 5 mins)")
-        console.log("update message");
-        //run the executeSale function
-        let transaction = await contract.executeSale(tokenId, {value:salePrice});
-        await transaction.wait();
-        console.log("transaction: ",transaction);
-        contract.on(
-          "TokenStatusUpdatedSuccess",
-          (tokenId, contractAddress, seller, price, currentlyListed, event) => {
-            // let info = {
-            //   tokenId: tokenId,
-            //   contractAddress: contractAddress,
-            //   seller: seller,
-            //   price: price,
-            //   currentlyListed: currentlyListed,
-            //   data: event,
-            // };
-            // console.log("info: ", info);
-            console.log("tokenId: ", tokenId);
-            console.log("seller: ", seller);
-            settokenid(tokenId.toString());
-            // settokenIDValue(tokenId.toString());
-            console.log("tokenID: in use state ", tokenid);
-          }
-        );
+      const ethers = require("ethers");
+      //After adding your Hardhat network to your metamask, this code will get providers and signers
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      updateBuyerWalletAddress(signer.getAddress());
+      //Pull the deployed contract instance
+      let contract = new ethers.Contract(
+        MarketplaceJSON.address,
+        MarketplaceJSON.abi,
+        signer
+      );
+      const referralRate = parseInt(await contract.getReferralRate());
+      console.log("rate: ", referralRate);
+      console.log("price: ", price*(referralRate+100)/100);
+      const totalFee = price*(referralRate+100)/100;
+      console.log("total feeeeeeeeeeee: ", totalFee);
+      const salePrice = ethers.utils.parseEther(totalFee.toString());
 
-        alert('You successfully bought the NFT!');
-        updateMessage("");
+      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
+      console.log("update message");
+      //run the executeSale function
+      let transaction = await contract.executeSale(tokenId, {
+        value: salePrice,
+      });
+      await transaction.wait();
+      console.log("transaction: ", transaction);
+      contract.on(
+        "TokenStatusUpdatedSuccess",
+        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+          // let info = {
+          //   tokenId: tokenId,
+          //   contractAddress: contractAddress,
+          //   seller: seller,
+          //   price: price,
+          //   currentlyListed: currentlyListed,
+          //   data: event,
+          // };
+          // console.log("info: ", info);
+          console.log("tokenId: ", tokenId);
+          console.log("seller: ", seller);
+          console.log("price: ", price);
+          settokenid(tokenId.toString());
+          // settokenIDValue(tokenId.toString());
+          console.log("tokenID: in use state ", tokenid);
+        }
+      );
+
+      alert("You successfully bought the NFT!");
+      updateMessage("");
+    } catch (e) {
+      alert("Upload Error: " + e);
     }
-    catch(e) {
-        alert("Upload Error: "+e)
-    }
-}
+  }
 
   return (
     <Container>
@@ -114,18 +126,29 @@ const BuyanNFT = (props) => {
                     </div>
 
                     <div className="buy_buttons align-items-center mb-2">
-                    { buyerWalletAddress == props.NFTData.owner || buyerWalletAddress == props.NFTData.seller ?
-                        <button className="buyNow_button  d-flex align-items-center" onClick={() => buyNFT(tokenId)}>Buy this NFT</button>
-                        : <div className="text-emerald-700">You are the owner of this NFT</div>
-                    }
-                    
-                    <div className="text-green text-center mt-3">{message}</div>
+                      {buyerWalletAddress == props.NFTData.owner ||
+                      buyerWalletAddress == props.NFTData.seller ? (
+                        <button
+                          className="buyNow_button  d-flex align-items-center"
+                          onClick={() => buyNFT(tokenId)}
+                        >
+                          Buy this NFT
+                        </button>
+                      ) : (
+                        <div className="text-emerald-700">
+                          You are the owner of this NFT
+                        </div>
+                      )}
+
+                      <div className="text-green text-center mt-3">
+                        {message}
+                      </div>
                       {/* <button
                         className="buyNow_button  d-flex align-items-center"
                         onClick={() => buyNFT(tokenId)}
                       > */}
-                        {/* <Link to="">Buy Now</Link> */}
-                        {/* Buy Now */}
+                      {/* <Link to="">Buy Now</Link> */}
+                      {/* Buy Now */}
                       {/* </button> */}
                     </div>
                   </div>

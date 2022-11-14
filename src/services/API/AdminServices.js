@@ -5,7 +5,7 @@ import axios from "axios";
 const APIEndpoint = config.DOMAIN_NAME + '/admin';
 
 const getAdminDetails = (walletAddress) => {
-    console.log(`in user services ${walletAddress}`);
+    // console.log(`in user services ${walletAddress}`);
     return axios.get(APIEndpoint + `/admin-details?walletAddress=${walletAddress}`, {
         params: {
             walletAddress: walletAddress
