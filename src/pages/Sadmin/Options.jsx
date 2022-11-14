@@ -17,6 +17,7 @@ import Button from "@mui/material/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -133,6 +134,11 @@ function Options() {
                       variant="outlined"
                       label="Withdraw Amount"
                       placeholder="Enter the amount to withdraw"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">ETH</InputAdornment>
+                        ),
+                      }}
                     />
                     <HeightBox height="20px" />
                     <Button
@@ -212,6 +218,11 @@ function Options() {
                       variant="outlined"
                       label="New Commision Rate"
                       placeholder="Enter the new commision rate"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">%</InputAdornment>
+                        ),
+                      }}
                     />
                     <HeightBox height="20px" />
                     <Button
