@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
+import React, { useState } from "react";
+import { Container } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/editProfile.css";
-import FormData from "form-data";
 import AdminServices from "../services/API/AdminServices";
 import Loader from "../components/ui/Loader/Loader";
 import { uploadFileToIPFS } from "../pinata";
 import { toast } from "react-toastify";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import HeightBox from "../components/HeightBox/HeightBox";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
@@ -15,10 +19,20 @@ function EditAdminDetails(props) {
   const [loader, setLoader] = useState(false);
 
   const [profilePic, setprofilePic] = useState();
-  // const [base64_img, setBase64Img] = useState("");
-  const [email, setemail] = useState("");
-  const [mobilenumber, setmobilenumber] = useState("");
-  const navigate = useNavigate();
+
+  const initialValues = {
+    pro: "",
+    email: "",
+    mobilenumber: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    pro: Yup.string().required("Required"),
+    email: Yup.string().email().required("Email is required").label("Email"),
+    mobilenumber: Yup.string()
+      .required("Mobile Number is required")
+      .label("Mobile Number"),
+  });
 
   // Validate uploaded image file
   // const fileValidation = () => {
@@ -59,26 +73,13 @@ function EditAdminDetails(props) {
   }
 
   //Update user details
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (values) => {
     setLoader(true);
     try {
-      e.preventDefault();
-
-      const formData = new FormData();
-      console.log(
-        "In the form data and wallet address is",
-        walletaddress,
-        "email is",
-        email,
-        "mobile number is",
-        mobilenumber
-      );
-      formData.append("walletaddress", walletaddress);
-      formData.append("email", email);
-      formData.append("mobilenumber", mobilenumber);
-      formData.append("propic", profilePic);
-      console.log("In the form data", formData);
-      //Update user details API call
+      const formData = values;
+      formData["walletaddress"] = walletaddress;
+      formData["propic"] = profilePic;
+      console.log(formData);
       const response = await AdminServices.updateAdminDetails(formData);
       console.log("In the response", response);
       if (response.status === 200) {
@@ -104,64 +105,93 @@ function EditAdminDetails(props) {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
-        <h2>Edit Profile</h2>
-        <section>
-          <Container>
-            <Row>
-              <Col lg="2"></Col>
-              <Col lg="8" md="8" sm="6">
-                <div className="edit-profile">
-                  <form>
-                    <div className="form-input">
-                      <label htmlFor="">Profile Picture</label>
-                      <input
-                        type="file"
-                        className="upload-input"
-                        id="propic"
-                        name="propic"
-                        onChange={OnChangeFile}
-                      />
-                    </div>
+      <Container>
+        <CommonHeader title={"Edit Profile"} />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {(formikProps) => {
+            const { values, handleChange, handleSubmit, errors, touched } =
+              formikProps;
 
-                    <div className="form-input mt-4">
-                      <label htmlFor="">Email</label>
-                      <input
-                        type="email"
-                        placeholder="Enter Your Email Address"
-                        name="email"
-                        onChange={(e) => setemail(e.target.value)}
-                      />
-                    </div>
+            return (
+              <Box
+                sx={{
+                  boxShadow: 12,
+                  width: "100%",
+                  padding: 3,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                }}
+              >
+                <form>
+                  <TextField
+                    type="file"
+                    name="pro"
+                    value={values.pro}
+                    onChange={(e) => {
+                      OnChangeFile(e);
+                      handleChange(e);
+                    }}
+                    helperText={touched.pro && errors.pro ? errors.pro : ""}
+                    error={errors.pro}
+                    fullWidth
+                    variant="outlined"
+                  />
 
-                    <div className="form-input mt-4">
-                      <label htmlFor="">Mobile Number</label>
-                      <input
-                        type="text"
-                        placeholder="Enter Your Mobile Number"
-                        name="mobilenumber"
-                        onChange={(e) => setmobilenumber(e.target.value)}
-                      />
-                    </div>
+                  <HeightBox height="20px" />
+                  <TextField
+                    type="emailS"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                    helperText={
+                      touched.email && errors.email ? errors.email : ""
+                    }
+                    error={errors.email}
+                    fullWidth
+                    variant="outlined"
+                    label="Email"
+                    placeholder="Email"
+                  />
+                  <HeightBox height="20px" />
 
-                    <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                      <button
-                        className="btn edit-profile-button d-flex align-items-center gap-2"
-                        type="submit"
-                        onClick={handleSubmit}
-                        data-setid="submit"
-                      >
-                        <Link to="/seller-profile">Save</Link>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </Col>
-              <Col lg="2"></Col>
-            </Row>
-          </Container>
-        </section>
-      </div>
+                  <TextField
+                    type="text"
+                    name="mobilenumber"
+                    value={values.mobilenumber}
+                    onChange={handleChange("mobilenumber")}
+                    helperText={
+                      touched.mobilenumber && errors.mobilenumber
+                        ? errors.mobilenumber
+                        : ""
+                    }
+                    error={errors.mobilenumber}
+                    fullWidth
+                    variant="outlined"
+                    label="Mobile Number"
+                    placeholder="Mobile Number"
+                  />
+                  <HeightBox height="20px" />
+
+                  <Button
+                    color="primary"
+                    onClick={handleSubmit}
+                    className="btn btn-primary"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 2, mb: 2 }}
+                  >
+                    Save
+                  </Button>
+                </form>
+              </Box>
+            );
+          }}
+        </Formik>
+      </Container>
     );
   }
 }

@@ -7,6 +7,12 @@ import FormData from "form-data";
 import CustomerServices from "../services/API/CustomerServices";
 import Loader from "../components/ui/Loader/Loader";
 import { uploadFileToIPFS } from "../pinata";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import HeightBox from "../components/HeightBox/HeightBox";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 function EditProfile(props) {
   const { walletaddress, setissubmit } = props;
@@ -18,8 +24,21 @@ function EditProfile(props) {
   const [username, setusername] = useState("");
   const navigate = useNavigate();
 
+  const initialValues = {
+    pro: "",
+    name: "",
+    username: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    pro: Yup.string().required("Required"),
+    name: Yup.string().required("Name is required").label("Name"),
+    username: Yup.string().required("Username is required").label("Username"),
+  });
+
   async function OnChangeFile(e) {
     var file = e.target.files[0];
+    console.log(file);
     try {
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
@@ -33,25 +52,23 @@ function EditProfile(props) {
     }
   }
 
-  const handleSubmit = async (e) => {
+  const Submit = async (values) => {
+    console.log("calling submit");
+
     try {
-      e.preventDefault();
       setLoader(true);
-      const formData = new FormData();
-      formData.append("walletaddress", walletaddress);
-      formData.append("username", username);
-      formData.append("name", name);
-      formData.append("propic", propic);
-      console.log("In the form data", formData);
+      const formData = values;
+      formData["propic"] = propic;
+      formData["walletaddress"] = walletaddress;
+      console.log("formdata", formData);
       const response = await CustomerServices.updateUserDetails(formData);
       console.log("In the response", response);
       if (response.status === 200) {
-  
         setissubmit(true);
-        setTimeout(()=>{
-          console.log("loader false calling")
-          setLoader(false)
-        },1500 )
+        setTimeout(() => {
+          console.log("loader false calling");
+          setLoader(false);
+        }, 1500);
         // setissubmit(true);
         // navigate(`/seller-profile/${walletaddress}`);
         console.log("In the if and updated user details succesfully");
@@ -62,63 +79,86 @@ function EditProfile(props) {
   };
 
   return (
-    <div>
+    <Container>
       <CommonHeader title={"Edit Profile"} />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="2"></Col>
-            <Col lg="8" md="8" sm="6">
-              <div className="edit-profile">
-                <form>
-                  <div className="form-input">
-                    <label htmlFor="">Profile Picture</label>
-                    <input
-                      type="file"
-                      className="upload-input"
-                      id="propic"
-                      name="propic"
-                      onChange={OnChangeFile}
-                    />
-                  </div>
 
-                  <div className="form-input mt-4">
-                    <label htmlFor="">Name</label>
-                    <input
-                      type="text"
-                      placeholder="Enter Your Name"
-                      name="name"
-                      onChange={(e) => setname(e.target.value)}
-                    />
-                  </div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={Submit}
+      >
+        {(formikProps) => {
+          const { values, handleChange, handleSubmit, errors, touched } =
+            formikProps;
 
-                  <div className="form-input mt-4">
-                    <label htmlFor="">Username</label>
-                    <input
-                      type="text"
-                      placeholder="Enter Your Name"
-                      name="username"
-                      onChange={(e) => setusername(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                    <button
-                      className="btn edit-profile-button d-flex align-items-center gap-2"
-                      type="submit"
-                      onClick={handleSubmit}
-                    >
-                      <Link to="/seller-profile">Save</Link>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </Col>
-            <Col lg="2"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+          return (
+            <Box
+              sx={{
+                boxShadow: 12,
+                width: "100%",
+                padding: 3,
+                borderRadius: 2,
+                marginBottom: 5,
+              }}
+            >
+              <form>
+                <HeightBox height={30} />
+                <TextField
+                  type="file"
+                  name="pro"
+                  value={values.pro}
+                  onChange={(e) => {
+                    OnChangeFile(e);
+                    handleChange(e);
+                  }}
+                  helperText={touched.pro && errors.pro ? errors.pro : ""}
+                  error={errors.pro}
+                  fullWidth
+                  variant="outlined"
+                />
+                <HeightBox height={20} />
+                <TextField
+                  type="text"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange("name")}
+                  helperText={touched.name && errors.name ? errors.name : ""}
+                  error={errors.name}
+                  fullWidth
+                  variant="outlined"
+                  label="Name"
+                  placeholder="Name"
+                />
+                <HeightBox height="20px" />
+                <TextField
+                  type="text"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange("username")}
+                  helperText={
+                    touched.username && errors.username ? errors.username : ""
+                  }
+                  error={errors.username}
+                  fullWidth
+                  variant="outlined"
+                  label="User Name"
+                  placeholder="User Name"
+                />
+                <HeightBox height="20px" />
+                <Button
+                  className="btn btn-primary"
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  <Link to="/seller-profile">Save</Link>
+                </Button>
+              </form>
+              <HeightBox height={20} />
+            </Box>
+          );
+        }}
+      </Formik>
+    </Container>
   );
 }
 

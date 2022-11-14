@@ -9,20 +9,38 @@ import "../styles/create.css";
 import CustomerServices from "../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../components/ui/Loader/Loader";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import HeightBox from "../components/HeightBox/HeightBox";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 
 function Create() {
   // const [tokenIDValue, settokenIDValue] = useState("");
   // const [transaction, setTransaction] = useState(0);
-  const [formParams, updateFormParams] = useState({
+
+  const initialValues = {
+    logo: "",
     title: "",
     description: "",
     collectionId: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    logo: Yup.string().required("Required"),
+    title: Yup.string().required("Collection Name is required").label("Name"),
+    description: Yup.string()
+      .required("Description is required")
+      .label("Description"),
+    collectionId: Yup.string().required("Collection ID is required"),
   });
   // let transactionObj;
   // let tokenid = "";
 
   const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState("");
+  const [tokenid, settokenid] = useState({});
 
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
@@ -65,8 +83,8 @@ function Create() {
   }
 
   //This function uploads the metadata to IPFS
-  async function uploadMetadataToIPFS() {
-    const { title, description, collectionId } = formParams;
+  async function uploadMetadataToIPFS(values) {
+    const { title, description, collectionId } = values;
     //Make sure that none of the fields are empty
     if (!title || !description || !collectionId || !fileURL) return;
 
@@ -89,15 +107,15 @@ function Create() {
     }
   }
 
-  async function mintNFT(e) {
+  async function mintNFT(values) {
     setLoader(true);
     toast.info("Please wait while we mint your NFT");
-    e.preventDefault();
+
     // console.log("e from mintNFT function: ",e.target.files[0]);
     //Upload data to IPFS
     try {
       // console.log("before await");
-      const metadataURL = await uploadMetadataToIPFS();
+      const metadataURL = await uploadMetadataToIPFS(values);
       // console.log("metadataURL: ", metadataURL);
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -125,7 +143,7 @@ function Create() {
           };
           console.log("info: ", info);
           console.log("tokenId: ", tokenId);
-          settokenid(tokenId.toString());
+          settokenid(info);
           // settokenIDValue(tokenId.toString());
           console.log("tokenID: in use state ", tokenid);
         }
@@ -173,11 +191,7 @@ function Create() {
       // saveUserActivity("minted", transaction, transactionTime);
 
       updateMessage("");
-      updateFormParams({
-        title: "",
-        description: "",
-        collectionId: "",
-      });
+
       console.log("after update form params");
       // window.location.replace("/");
     } catch (e) {
@@ -198,16 +212,15 @@ function Create() {
         contractInfo,
         transactionTime
       );
+      console.log("response is ", response);
       if (response.status === 200) {
         console.log("User activity saved successfully");
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
-        }, 2500);
-
-
+        }, 4000);
       } else {
-        toast.error("Error Occured!");
+        toast.error(response.data.message);
         setLoader(false);
       }
     } catch (error) {
@@ -219,9 +232,15 @@ function Create() {
 
   useEffect(() => {
     console.log("use effect called -------------------------------");
-    if (tokenid && transactionObj) {
+    if (
+      Object.keys(tokenid).length !== 0 &&
+      Object.keys(transactionObj).length !== 0
+    ) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("minted", transactionObj, tokenid, new Date());
+
+      settokenid({});
+      settransactionObj({});
 
       // settokenIDValue("");
     }
@@ -253,107 +272,117 @@ function Create() {
     }, 200);
   };
 
-  return (
-    <div>
-      {loader ? (
-        <div>
-          <Loader isLoading={loader} />
-        </div>
-      ) : (
-        <div>
-          <CommonHeader title={"Create New Item"} />
-          <section>
-            <Container>
-              <Row>
-                <Col lg="2"></Col>
-                <Col lg="8" md="8" sm="6">
-                  <div className="create__item">
-                    <form>
-                      <div className="form__input">
-                        <label htmlFor="image">Upload File</label>
-                        <input
-                          type={"file"}
-                          onChange={OnChangeFile}
-                          className="upload__input"
-                          required
-                        />
-                      </div>
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <Container>
+        <CommonHeader title={"Create New Item"} />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={mintNFT}
+        >
+          {(formikProps) => {
+            const { values, handleChange, handleSubmit, errors, touched } =
+              formikProps;
 
-                      <div className="form__input">
-                        <label htmlFor="title">Title</label>
-                        <input
-                          id="title"
-                          type="text"
-                          onChange={(e) =>
-                            updateFormParams({
-                              ...formParams,
-                              title: e.target.value,
-                            })
-                          }
-                          placeholder="Enter title"
-                          required
-                        ></input>
-                      </div>
-
-                      <div className="form__input">
-                        <label htmlFor="description">Description</label>
-                        <textarea
-                          name=""
-                          id="description"
-                          rows="7"
-                          placeholder="Enter description"
-                          className="w-100"
-                          onChange={(e) =>
-                            updateFormParams({
-                              ...formParams,
-                              description: e.target.value,
-                            })
-                          }
-                          required
-                        ></textarea>
-                      </div>
-
-                      <div className="form__input">
-                        <label htmlFor="collection">Collection</label>
-                        <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            updateFormParams({
-                              ...formParams,
-                              collectionId: e.target.value,
-                            })
-                          }
-                        >
-                          <option selected>Open this select menu</option>
-                          {allCollections.map((row) => (
-                            <option value={row._id}>
-                              {row.collectionName}
-                            </option>
-                          ))}
-                          required
-                        </select>
-                      </div>
-
-                      <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                        <button
-                          onClick={mintNFT}
-                          className="btn mint_button d-flex align-items-center gap-2"
-                        >
-                          Create
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </Col>
-                <Col lg="2"></Col>
-              </Row>
-            </Container>
-          </section>
-        </div>
-      )}
-    </div>
-  );
+            return (
+              <Box
+                sx={{
+                  boxShadow: 12,
+                  width: "100%",
+                  padding: 3,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                }}
+              >
+                <form>
+                  <HeightBox height={20} />
+                  <TextField
+                    type="file"
+                    name="logo"
+                    value={values.logo}
+                    onChange={(e) => {
+                      OnChangeFile(e);
+                      handleChange(e);
+                    }}
+                    helperText={touched.logo && errors.logo ? errors.logo : ""}
+                    error={errors.logo}
+                    fullWidth
+                    variant="outlined"
+                  />
+                  <HeightBox height={20} />
+                  <TextField
+                    type="text"
+                    name="title"
+                    value={values.title}
+                    onChange={handleChange("title")}
+                    helperText={
+                      touched.title && errors.title ? errors.title : ""
+                    }
+                    error={errors.title}
+                    fullWidth
+                    variant="outlined"
+                    label="Title"
+                    placeholder="Title"
+                  />
+                  <HeightBox height={20} />
+                  <TextField
+                    type="text"
+                    name="description"
+                    value={values.description}
+                    onChange={handleChange("description")}
+                    helperText={
+                      touched.description && errors.description
+                        ? errors.description
+                        : ""
+                    }
+                    error={errors.description}
+                    fullWidth
+                    variant="outlined"
+                    label="Description"
+                    placeholder="Description"
+                  />
+                  <HeightBox height={20} />
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    fullWidth
+                    label="Select"
+                    value={values.collectionId}
+                    onChange={handleChange("collectionId")}
+                    helperText={
+                      touched.collectionId && errors.collectionId
+                        ? errors.collectionId
+                        : ""
+                    }
+                    error={errors.collectionId}
+                  >
+                    {allCollections.map((row) => (
+                      <MenuItem key={row._id} value={row._id}>
+                        {row.collectionName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <HeightBox height={20} />
+                  <Button
+                    onClick={handleSubmit}
+                    className="btn btn-primary"
+                    fullWidth
+                  >
+                    Create
+                  </Button>
+                  <HeightBox height={20} />
+                </form>
+              </Box>
+            );
+          }}
+        </Formik>
+        <HeightBox height={50} />
+      </Container>
+    );
+  }
 }
 
 export default Create;

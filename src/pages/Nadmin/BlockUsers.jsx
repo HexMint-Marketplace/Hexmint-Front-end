@@ -10,10 +10,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../../styles/viewUsers.css";
 import "../../styles/superAdmin.css";
-import NormalAdminNav from "../../components/SideNav/NormalAdmin/NormalAdminNav";
 import CustomerServices from "../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
+import Button from "@mui/material/Button";
+import { Container } from "reactstrap";
+import HeightBox from "./../../components/HeightBox/HeightBox";
+import Typography from "@mui/material/Typography";
 
 function ViewUsers() {
   const [blkCustormers, setBlkCustomers] = useState([]);
@@ -67,63 +70,56 @@ function ViewUsers() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
-        <div className="side-bar">
-          <NormalAdminNav />
-        </div>
+      <Container>
+        <HeightBox height="30px" />
         <CommonHeader title={"Blocked Customers Details"} />
-        <div className="section">
-          <TableContainer className="table" component={Paper}>
-            {blkCustormers.length === 0 && (
-              <div>
-                <h5
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    margin: "10px",
-                  }}
-                >
-                  No Customers to display
-                </h5>
-              </div>
-            )}
-            {blkCustormers.length !== 0 && (
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>User Name</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Wallet Address</TableCell>
-                    <TableCell>Actions</TableCell>
+        <HeightBox height={"30px"} />
+        <TableContainer component={Paper}>
+          {blkCustormers.length === 0 && (
+            <Paper>
+              <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
+                No Customers to display
+              </Typography>
+            </Paper>
+          )}
+          {blkCustormers.length !== 0 && (
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>User Name</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Wallet Address</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {blkCustormers.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    hover
+                  >
+                    <TableCell>{row.username}</TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell>{row.walletaddress}</TableCell>
+                    <TableCell>
+                      <Button
+                        className="btn btn-danger"
+                        onClick={() => unBlockUser(row._id)}
+                      >
+                        <Link to="">Unblock</Link>
+                      </Button>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {blkCustormers.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row.username}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell>{row.walletaddress}</TableCell>
-                      <TableCell>
-                        <button
-                          className="act-button btn btn-danger"
-                          onClick={() => unBlockUser(row._id)}
-                        >
-                          <Link to="">Unblock</Link>
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+        <HeightBox height="50px" />
+      </Container>
     );
   }
 }

@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import NFTs from "./NFTs";
+import { Container } from "reactstrap";
+import HeightBox from "./../components/HeightBox/HeightBox";
+import AuthServices from "../services/AuthServices.js";
 
 function SellerProfile() {
   const [userWallet, setuserWallet] = useState({});
@@ -30,15 +33,13 @@ function SellerProfile() {
 
   useEffect(() => {
     setLoader(true);
-    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    setuserWallet(walletAddress);
+    // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+    const walletaddress = AuthServices.JWTDecodeWalletAddress();
+    console.log("Should display", walletaddress);
 
-    getuserdetails(walletAddress.address);
+    setuserWallet(walletaddress);
 
-    setTimeout(() => {
-      console.log("loader false calling");
-      setLoader(false);
-    }, 2000);
+    getuserdetails(walletaddress);
   }, [issubmit]);
 
   const toggleisSubmit = () => {
@@ -48,11 +49,19 @@ function SellerProfile() {
   const getuserdetails = async (walletAddress) => {
     try {
       //Get user details by passing the user's wallet address
-      const details = await UserServices.getUserDetailsFromWalletAddress(walletAddress);
-      // console.log("In get user details", details);
 
-      if (details.data.usertype === "Customer") {
-        const userType = details.data.usertype;
+      const details = await UserServices.getUserDetailsFromWalletAddress(
+        walletAddress
+      );
+      console.log("In get user details", details);
+
+
+      //Get user type from token
+      const tokenUserType = AuthServices.JWTDecodeUserType();
+      // if (details.data.usertype === "Customer") {
+      if (tokenUserType === "Customer") {
+        // const userType = details.data.usertype;
+        const userType = tokenUserType;
         setUserType(userType);
 
         const name = details.data.name;
@@ -64,7 +73,8 @@ function SellerProfile() {
         const propic = details.data.propic;
         setProPic(propic);
       } else {
-        const userType = details.data.usertype;
+        // const userType = details.data.usertype;
+        const userType = tokenUserType;
         setUserType(userType);
 
         const name = details.data.name;
@@ -73,7 +83,7 @@ function SellerProfile() {
         const userName = details.data.username;
         setUserName(userName);
 
-        const propic = details.data.profilePic;
+        const propic = details.data.propic;
         setProPic(propic);
 
         const email = details.data.email;
@@ -88,6 +98,10 @@ function SellerProfile() {
     } catch (err) {
       console.log(err);
     }
+    setTimeout(() => {
+      console.log("loader false calling");
+      setLoader(false);
+    }, 2000);
   };
 
   async function getNFTData() {
@@ -96,10 +110,10 @@ function SellerProfile() {
     //After adding your Hardhat network to metamask, get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    console.log("signer: ",signer);
+    console.log("signer: ", signer);
     // console.log("signer: ",signer);
     const addr = await signer.getAddress();
-    console.log("addr: ",addr);
+    console.log("addr: ", addr);
 
     //Pull the deployed contract instance
     let contract = new ethers.Contract(
@@ -110,7 +124,7 @@ function SellerProfile() {
 
     //create an NFT Token
     let transaction = await contract.getMyNFTs();
-    console.log("transaction: ",transaction);
+    console.log("transaction: ", transaction);
     /*
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
@@ -151,31 +165,28 @@ function SellerProfile() {
   if (!dataFetched) getNFTData(tokenId);
 
   return (
-    <section>
+    <Container>
+      <HeightBox height="60px" />
       {loader ? (
-        <div>
-          <Loader isLoading = {loader} />
-        </div>
+        <Loader isLoading={loader} />
       ) : (
-        <div>
-          <ProfileHead
-            userWallet={userWallet}
-            userType={userType}
-            name={name}
-            userName={userName}
-            propic={propic}
-            email={email}
-            DOB={DOB}
-            mobile={mobile}
-            key={COLLECTION_DATA.collectionId}
-            collectionData={COLLECTION_DATA}
-            data={data} 
-            setissubmit={toggleisSubmit}
-
-          />
-        </div>
+        <ProfileHead
+          userWallet={userWallet}
+          userType={userType}
+          name={name}
+          userName={userName}
+          propic={propic}
+          email={email}
+          DOB={DOB}
+          mobile={mobile}
+          key={COLLECTION_DATA.collectionId}
+          collectionData={COLLECTION_DATA}
+          data={data}
+          setissubmit={toggleisSubmit}
+        />
       )}
-    </section>
+      <HeightBox height="50px" />
+    </Container>
   );
 }
 

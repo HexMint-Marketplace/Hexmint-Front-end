@@ -1,4 +1,4 @@
-.form-input input{
+.form-input input {
   width: 100%;
   padding: 7px 25px;
   color: #fff;
@@ -19,9 +19,8 @@
   margin-bottom: 10px;
 }
 
-
 .form-input .upload-input {
-  padding: 40px 25px;
+  padding: 10px 25px;
 }
 
 ::-webkit-calendar-picker-indicator {
@@ -29,30 +28,25 @@
   cursor: pointer;
 }
 
-.edit-profile-button{
-
-    padding: 13px 40px !important;
-    border-radius: 50px !important;
-
-    
+.edit-profile-button {
+  padding: 13px 10px !important;
+  border-radius: 50px !important;
 }
 
-.edit-profile-button{
-    background: linear-gradient(to right, #59f9b7, #66feea);
+.edit-profile-button {
+  background: linear-gradient(to right, #59f9b7, #66feea);
 }
 
-.edit-profile-button{
-
-    text-decoration: none;
-    color: black;
-    font-weight: 650;
-    font-size: 1rem;
-    
+.edit-profile-button {
+  text-decoration: none;
+  color: black;
+  font-weight: 650;
+  font-size: 1rem;
 }
 
-.edit-profile-button a:hover{
-    color:rgb(103, 38, 38);
-    text-shadow: black 2px 2px 20px;
+.edit-profile-button a:hover {
+  color: rgb(103, 38, 38);
+  text-shadow: black 2px 2px 20px;
 }
 
 /* @media only screen and (max-width: 576px) {

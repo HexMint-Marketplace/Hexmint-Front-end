@@ -1,6 +1,10 @@
 import config from "../../config.json";
 import axios from "axios";
 
+
+const token = JSON.parse(localStorage.getItem("token"));
+const header = {Authorization: `Bearer ${token}`};
+
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/customer";
 
@@ -36,6 +40,7 @@ const updateUserDetails = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/update-details",
     data: formData,
   });
@@ -77,11 +82,13 @@ const saveUserActivity = async (
   tokenID,
   transactionTime
 ) => {
+  console.log("in customer services and token is",token);
   console.log(
     `in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`
   );
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/save-user-activity",
     data: {
       activityType: activityType,
@@ -96,12 +103,24 @@ const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
   return axios({
     method: "get",
-    url: APIEndpoint + "/get-user-activity-details",
+    url: APIEndpoint + `/get-user-activity-details/${walletAddress}`,
     params: {
       walletAddress: walletAddress,
     },
   });
 };
+
+const getCollectionName = async (collectionID) => {
+  console.log(`in customer services ${collectionID}`);
+  return axios({
+    method: "post",
+    url: APIEndpoint + "/get-collection-name",
+    data: {
+      collectionID: collectionID,
+    },
+  });
+};
+
 
 export default {
   updateUserDetails,
@@ -115,4 +134,5 @@ export default {
   unBlockUser,
   getReports,
   deleteReport,
+  getCollectionName
 };

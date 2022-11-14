@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
-import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
-import "../../styles/create.css";
-import SuperAdminNav from "../../components/SideNav/SuperAdmin/SuperAdminNav";
-import "../../styles/superAdmin.css";
+import { useNavigate } from "react-router-dom";
+import { Container } from "reactstrap";
 import AdminServices from "../../services/AdminServices";
 import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import HeightBox from "./../../components/HeightBox/HeightBox";
+import Button from "@mui/material/Button";
 
 function AddAdmin() {
   const formValues = {
@@ -18,28 +21,27 @@ function AddAdmin() {
     DOB: "",
   };
 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required").label("Name"),
+    walletaddress: Yup.string()
+      .required("Wallet Address is required")
+      .label("Wallet Address"),
+    email: Yup.string().email().required("Email is required").label("Email"),
+    mobilenumber: Yup.string()
+      .required("Mobile Number is required")
+      .label("Mobile Number"),
+    DOB: Yup.string().required("DOB is required").label("DOB"),
+  });
+
   const navigate = useNavigate();
 
-  var [state, setState] = useState(formValues);
   const [loader, setLoader] = useState(false);
-  // const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    console.log("in handle change");
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
-    console.log(state);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (values) => {
     setLoader(true);
-    e.preventDefault();
-    state = { ...state };
-    console.log(state);
+
     try {
-      const response = await AdminServices.addAdmin(state);
+      const response = await AdminServices.addAdmin(values);
       console.log(response);
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -61,93 +63,128 @@ function AddAdmin() {
     return <Loader isLoading={loader} />;
   } else {
     return (
-      <div>
-        <div className="side-bar">
-          <SuperAdminNav />
-        </div>
+      <Container>
+        <HeightBox height="20px" />
         <CommonHeader title={"Add an Admin"} />
-        <section>
-          <Container>
-            <Row>
-              <Col lg="2"></Col>
-              <Col lg="8" md="8" sm="6">
-                <div className="add_admin">
+        <HeightBox height="20px" />
+        <Container>
+          <Formik
+            initialValues={formValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {(formikProps) => {
+              const { values, handleChange, handleSubmit, errors, touched } =
+                formikProps;
+
+              return (
+                <Box
+                  sx={{
+                    boxShadow: 12,
+                    width: "100%",
+                    padding: 3,
+                    borderRadius: 2,
+                    marginBottom: 5,
+                  }}
+                >
                   <form>
-                    <div className="form__input">
-                      <label htmlFor="">Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        className="form-control"
-                        placeholder="Enter Name"
-                        onChange={handleChange}
-                      />
-                    </div>
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="name"
+                      value={values.name}
+                      onChange={handleChange("name")}
+                      helperText={
+                        touched.name && errors.name ? errors.name : ""
+                      }
+                      error={errors.name}
+                      fullWidth
+                      variant="outlined"
+                      label="Name"
+                      placeholder="Name"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="walletaddress"
+                      value={values.walletaddress}
+                      onChange={handleChange("walletaddress")}
+                      helperText={
+                        touched.walletaddress && errors.walletaddress
+                          ? errors.walletaddress
+                          : ""
+                      }
+                      error={errors.walletaddress}
+                      fullWidth
+                      variant="outlined"
+                      label="Wallet Address"
+                      placeholder="Wallet Address"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="emailS"
+                      name="email"
+                      value={values.email}
+                      onChange={handleChange("email")}
+                      helperText={
+                        touched.email && errors.email ? errors.email : ""
+                      }
+                      error={errors.email}
+                      fullWidth
+                      variant="outlined"
+                      label="Email"
+                      placeholder="Email"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="text"
+                      name="mobilenumber"
+                      value={values.mobilenumber}
+                      onChange={handleChange("mobilenumber")}
+                      helperText={
+                        touched.mobilenumber && errors.mobilenumber
+                          ? errors.mobilenumber
+                          : ""
+                      }
+                      error={errors.mobilenumber}
+                      fullWidth
+                      variant="outlined"
+                      label="Mobile Number"
+                      placeholder="Mobile Number"
+                    />
+                    <HeightBox height="20px" />
+                    <TextField
+                      type="date"
+                      name="DOB"
+                      value={values.DOB}
+                      onChange={handleChange("DOB")}
+                      helperText={touched.DOB && errors.DOB ? errors.DOB : ""}
+                      error={errors.DOB}
+                      fullWidth
+                      variant="outlined"
+                      label="Date of Birth"
+                    />
+                    <HeightBox height="20px" />
 
-                    <div className="form__input">
-                      <label htmlFor="">Wallet Address</label>
-                      <input
-                        type="text"
-                        name="walletaddress"
-                        className="form-control"
-                        placeholder="Enter Wallet Address"
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    <div className="form__input">
-                      <label htmlFor="">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        placeholder="Enter Email"
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    <div className="form__input">
-                      <label htmlFor="">Phone Number</label>
-                      <input
-                        type="text"
-                        name="mobilenumber"
-                        className="form-control"
-                        placeholder="Enter Phone Number"
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    <div className="form__input">
-                      <label htmlFor="">DoB</label>
-                      <input
-                        type="date"
-                        name="DOB"
-                        className="form-control"
-                        placeholder="Enter Date of Birth"
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    <div className="d-flex align-items-center gap-4 mt-5 mb-5">
-                      <button
-                        className="btn mint_button d-flex align-items-center gap-2"
-                        onClick={handleSubmit}
-                      >
-                        <Link to="">Add</Link>
-                      </button>
-                    </div>
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      className="btn btn-primary"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 2, mb: 2 }}
+                    >
+                      Add
+                    </Button>
                   </form>
-                </div>
-              </Col>
-              <Col lg="2"></Col>
-            </Row>
-          </Container>
-        </section>
-      </div>
+                </Box>
+              );
+            }}
+          </Formik>
+        </Container>
+      </Container>
     );
   }
 }
 
 export default AddAdmin;
-
-// onClick={() => {connect();}}

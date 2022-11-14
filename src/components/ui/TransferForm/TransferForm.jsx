@@ -1,19 +1,38 @@
 import React from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
-import { useState } from "react";
-import { Container, Row, Col } from "reactstrap";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Container } from "reactstrap";
 import Marketplace from "../../../Marketplace.json";
+import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
+import CustomerServices from "../../../services/API/CustomerServices";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import HeightBox from "../../HeightBox/HeightBox";
+import Button from "@mui/material/Button";
 
 function TransferForm() {
-  const [receiverWalletAddress, setReceiverWalletAddress] = useState();
   const location = useLocation();
   const ethers = require("ethers");
   const [message, updateMessage] = useState("");
   const { NFTData } = location.state;
   const [loader, setLoader] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState({});
+
+  const initialValues = { receiverWalletAddress: "" };
+
+  const validationSchema = Yup.object().shape({
+    receiverWalletAddress: Yup.string().required("Wallet Address is required"),
+  });
+
+  async function handleSubmit(values) {
+    setLoader(true);
+    toast.info("Please wait while we transfer your NFT");
+
     try {
       //get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -27,78 +46,166 @@ function TransferForm() {
         Marketplace.abi,
         signer
       );
+
+      contract.on(
+        "TokenStatusUpdatedSuccess",
+        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+          let info = {
+            tokenId: tokenId,
+            contractAddress: contractAddress,
+            seller: seller,
+            price: price,
+            currentlyListed: currentlyListed,
+            data: event,
+          };
+          console.log("info: ", info);
+          console.log("tokenId: ", tokenId);
+          settokenid(info);
+          // settokenIDValue(tokenId.toString());
+          console.log("tokenID: in use state ", tokenid);
+        }
+      );
+
       //transfer the NFT
-      let transaction = await contract.transferNFT(NFTData.tokenId,receiverWalletAddress);
+      let transaction = await contract.transferNFT(
+        NFTData.tokenId,
+        values.receiverWalletAddress
+      );
       console.log("after create token method called");
       await transaction.wait();
-      // console.log("await for transaction");
+      console.log("await for transaction", transaction);
+      settransactionObj(transaction);
 
-      alert("Successfully minted your NFT!");
       updateMessage("");
-      setReceiverWalletAddress("");
-      window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
   }
-  return (
-    <div>
-      <section>
-        <Container>
-          <Row>
-            <Col lg="12" md="3" sm="12">
-              <div className="px-4 text-center">
-                <h1 className="mt-5 mb-3">Transfer</h1>
-                <img
-                  src={NFTData.image}
-                  alt=""
-                  className="rounded-circle rounded border border-5 img-fluid"
-                  height="200"
-                  width="200"
-                />
-              </div>
-            </Col>
-            <Col lg="2" md="8" sm="6" className=""></Col>
-            <Col lg="8" md="8" sm="6" className="">
-              <div className="create__item mt-5">
-                <form className="text-center">
-                  <div className="form__input">
-                    <label
-                      htmlFor="receiverWalletAddress"
-                      className="text-center"
-                    >
-                      Receiver's Wallet Address
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Receiver's Wallet Address"
-                      onChange={(e) => setReceiverWalletAddress(e.target.value)}
-                      required
-                    />
-                  </div>
 
-                  <button
+  const saveUserActivity = async (
+    activityType,
+    transaction,
+    contractInfo,
+    transactionTime
+  ) => {
+    try {
+      const response = await CustomerServices.saveUserActivity(
+        activityType,
+        transaction,
+        contractInfo,
+        transactionTime
+      );
+      if (response.status === 200) {
+        console.log("User activity saved successfully");
+        toast.success("Successfully minted your NFT!");
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 4000);
+      } else {
+        toast.error("Error Occured!");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log("Error occur", error);
+      toast.error("Error Occured!");
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log("use effect called -------------------------------");
+    if (
+      Object.keys(tokenid).length !== 0 &&
+      Object.keys(transactionObj).length !== 0
+    ) {
+      console.log("In the saveuseractivity use effect function");
+      saveUserActivity("transferred", transactionObj, tokenid, new Date());
+
+      settokenid({});
+      settransactionObj({});
+      // settokenIDValue("");
+    }
+  }, [tokenid, transactionObj]);
+
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <Container>
+        <HeightBox height="100px" />
+        <div className="px-4 text-center">
+          <h1 className="mt-5 mb-3">Transfer</h1>
+          <HeightBox height="20px" />
+          <img
+            src={NFTData.image}
+            alt=""
+            className="rounded-circle rounded border border-5 img-fluid"
+            height="200"
+            width="200"
+          />
+        </div>
+        <HeightBox height="20px" />
+        <div className="px-4 text-center">
+          <h5>Transfer Your NFT</h5>
+        </div>
+        <HeightBox height="20px" />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {(formikProps) => {
+            const { values, handleChange, handleSubmit, errors, touched } =
+              formikProps;
+
+            return (
+              <Box
+                sx={{
+                  boxShadow: 12,
+                  width: "100%",
+                  padding: 3,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                }}
+              >
+                <form>
+                  <HeightBox height="20px" />
+                  <TextField
+                    type="text"
+                    name="receiverWalletAddress"
+                    value={values.receiverWalletAddress}
+                    onChange={handleChange("receiverWalletAddress")}
+                    helperText={
+                      touched.receiverWalletAddress &&
+                      errors.receiverWalletAddress
+                        ? errors.receiverWalletAddress
+                        : ""
+                    }
+                    error={errors.receiverWalletAddress}
+                    fullWidth
+                    variant="outlined"
+                    label="Receiver's Wallet Address"
+                    placeholder="Receiver's Wallet Address"
+                  />
+                  <HeightBox height="20px" />
+                  <Button
                     type="submit"
-                    className="btn text-center p-2 px-5 mt-3 mb-5"
+                    className="btn btn-primary"
+                    fullWidth
                     onClick={handleSubmit}
-                  >Transfer
-                    {/* <Link to=''>Transfer</Link> */}
-
-                    {/* <Link to={{pathname:'seller-profile/NFT/transfer-form',img:imgUrl}}>Transfer</Link> */}
-                  </button>
+                  >
+                    Transfer
+                  </Button>
+                  <HeightBox height="20px" />
                 </form>
-              </div>
-            </Col>
-            <Col lg="2" md="8" sm="6" className=""></Col>
-          </Row>
-
-          <Row>
-            <Col lg="12" md="3" sm="12"></Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
-  );
+              </Box>
+            );
+          }}
+        </Formik>
+        <HeightBox height="50px" />
+      </Container>
+    );
+  }
 }
 
 export default TransferForm;

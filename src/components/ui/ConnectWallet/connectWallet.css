@@ -1,0 +1,63 @@
+.connect-wallet-wrap{
+    background-color: #14141f;
+    border: 3px solid #b161fd;
+    /* display: block; */
+    z-index: 999;
+    position: fixed;
+    top: 30%;
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 30px;
+}
+
+.button-close{
+    background-color : #ff6384 !important;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: fit-content !important;
+    margin-left: auto;
+    margin-right: 0;
+}
+.button-connect{
+    border: 0;
+    text-align: center;
+    display: inline-block;
+    padding: 14px;
+    background: linear-gradient(to right, #59f9b7, #66feea);
+    border-radius: 10px;
+    color: black;
+    font-weight:600 !important;
+    /* box-shadow: 0px 0px 4px 1px #ffffff !important; */
+    transition: box-shadow 200ms ease-out !important;
+}
+
+.button-connect:hover{
+    /* color: black; */
+    box-shadow: 0px 0px 4px 1px #fff !important;
+}
+
+@media screen and (max-width: 500px) {
+    .connect-wallet-wrap {
+        width: 80%;
+        left: 10%;
+        margin-left: 0;
+        padding: 10px;
+        padding-top: 20px;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    /* opacity: 0.8; */
+    z-index: 990;
+}
+
