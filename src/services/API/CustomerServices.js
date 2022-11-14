@@ -1,6 +1,10 @@
 import config from "../../config.json";
 import axios from "axios";
 
+
+const token = JSON.parse(localStorage.getItem("token"));
+const header = {Authorization: `Bearer ${token}`};
+
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/customer";
 
@@ -77,11 +81,13 @@ const saveUserActivity = async (
   tokenID,
   transactionTime
 ) => {
+  console.log("in customer services and token is",token);
   console.log(
     `in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`
   );
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/save-user-activity",
     data: {
       activityType: activityType,
