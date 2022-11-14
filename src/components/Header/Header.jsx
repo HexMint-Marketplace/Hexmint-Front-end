@@ -56,17 +56,21 @@ function Header() {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`);
       const response = await AuthServices.connectwallet({ address });
+      const JWTData = response.data.JWTData;
+      const token = JWTData.token;
+      console.log(token);
+      localStorage.setItem("token", JSON.stringify(token));
       setuserAddress({ address });
       console.log("This is user details", userAddress);
       console.log("address", address);
-      console.log("type", response.data.userType);
-      setuserType(response.data.userType);
+      console.log("type", JWTData.usertype);
+      setuserType(JWTData.usertype);
       {
-        if (response.data.userType === "Admin") {
-          console.log(response.data.userType);
+        if (JWTData.usertype === "Admin") {
+          console.log(JWTData.usertype);
           navigate("/nadmin-dashboard");
-        } else if (response.data.userType === "Super Admin") {
-          console.log(response.data.userType);
+        } else if (JWTData.usertype === "Super Admin") {
+          console.log(JWTData.usertype);
           navigate("/sadmin-dashboard");
         } else {
           navigate("/home");

@@ -20,6 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 function Create() {
   // const [tokenIDValue, settokenIDValue] = useState("");
   // const [transaction, setTransaction] = useState(0);
+
   const initialValues = {
     logo: "",
     title: "",
@@ -211,6 +212,7 @@ function Create() {
         contractInfo,
         transactionTime
       );
+      console.log("response is ", response);
       if (response.status === 200) {
         console.log("User activity saved successfully");
         toast.success("Successfully minted your NFT!");
@@ -218,7 +220,7 @@ function Create() {
           window.location.replace("/");
         }, 4000);
       } else {
-        toast.error("Error Occured!");
+        toast.error(response.data.message);
         setLoader(false);
       }
     } catch (error) {
