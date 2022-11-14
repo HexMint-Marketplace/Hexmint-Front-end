@@ -1,5 +1,34 @@
 import config from "../config.json";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+
+const JWTDecodeUserType  = () => {
+  //If token not found, return null
+  const token = JSON.parse(localStorage.getItem("token"));
+  if (!token) return null;
+  try{
+  const decoded = jwt_decode(token);
+  return decoded.usertype;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+const JWTDecodeWalletAddress  = () => {
+  //If token not found, return null
+  const token = JSON.parse(localStorage.getItem("token"));
+  if (!token) return null;
+  try{
+  const decoded = jwt_decode(token);
+  console.log("decoded wallet address is..................",decoded.walletaddress);
+  const walletaddress = decoded.walletaddress;
+  return walletaddress;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + '/auth';
@@ -21,4 +50,6 @@ const connectwallet = async(data) => {
 
 export default {
   connectwallet,
+  JWTDecodeUserType,
+  JWTDecodeWalletAddress,
 }

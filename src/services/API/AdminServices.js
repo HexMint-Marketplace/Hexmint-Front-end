@@ -3,6 +3,8 @@ import axios from "axios";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + '/admin';
+const token = JSON.parse(localStorage.getItem("token"));
+const header = {Authorization: `Bearer ${token}`};
 
 const getAdminDetails = (walletAddress) => {
     console.log(`in user services ${walletAddress}`);
@@ -17,6 +19,7 @@ const updateAdminDetails = (formData) => {
     console.log(`in admin services ${formData}`);
     return axios({
       method: "post",
+      headers: header,
       url: APIEndpoint + "/update-admin-details",
       data: formData,
       // headers: {

@@ -47,30 +47,29 @@ function Header() {
   const [showConnectWallet, setshowConnectWallet] = useState(false);
 
   useEffect(() => {
-    //set the user wallet address to local storage
-    localStorage.setItem("userAddress", JSON.stringify({ address }));
-  }, [{ address }]);
-
-  //Getting user type by passing the wallet address after Connecting the wallet
-  useEffect(() => {
     const handleConnectWallet = async (e) => {
       console.log(`${address} InhandleConnectWallet`);
       const response = await AuthServices.connectwallet({ address });
       const JWTData = response.data.JWTData;
+      console.log("JWTData", JWTData);
       const token = JWTData.token;
+      console.log("token in JSOn Stringify", JSON.stringify(token));
       console.log(token);
       localStorage.setItem("token", JSON.stringify(token));
-      setuserAddress({ address });
+      setuserAddress(address);
       console.log("This is user details", userAddress);
-      console.log("address", address);
-      console.log("type", JWTData.usertype);
-      setuserType(JWTData.usertype);
+      console.log("address from wagmi", address);
+
+      const JWTuserttype = await AuthServices.JWTDecodeUserType();
+      setuserType(JWTuserttype);
+      console.log("userType from jwt decode", JWTuserttype);
+      console.log("userType from useState", userType);
       {
-        if (JWTData.usertype === "Admin") {
+        if (JWTuserttype === "Admin") {
           console.log(JWTData.usertype);
           navigate("/nadmin-dashboard");
-        } else if (JWTData.usertype === "Super Admin") {
-          console.log(JWTData.usertype);
+        } else if (JWTuserttype === "Super Admin") {
+          console.log(JWTuserttype);
           navigate("/sadmin-dashboard");
         } else {
           navigate("/home");
