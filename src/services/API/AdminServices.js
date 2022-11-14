@@ -7,7 +7,7 @@ const token = JSON.parse(localStorage.getItem("token"));
 const header = {Authorization: `Bearer ${token}`};
 
 const getAdminDetails = (walletAddress) => {
-    console.log(`in user services ${walletAddress}`);
+    // console.log(`in user services ${walletAddress}`);
     return axios.get(APIEndpoint + `/admin-details?walletAddress=${walletAddress}`, {
         params: {
             walletAddress: walletAddress

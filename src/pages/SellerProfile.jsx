@@ -49,10 +49,12 @@ function SellerProfile() {
   const getuserdetails = async (walletAddress) => {
     try {
       //Get user details by passing the user's wallet address
+
       const details = await UserServices.getUserDetailsFromWalletAddress(
         walletAddress
       );
       console.log("In get user details", details);
+
 
       //Get user type from token
       const tokenUserType = AuthServices.JWTDecodeUserType();

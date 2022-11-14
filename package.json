@@ -13,6 +13,7 @@
     "@mui/material": "^5.10.7",
     "@mui/styled-engine-sc": "^5.10.6",
     "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/contracts-ethereum-package": "^3.0.0",
     "@styled-icons/feather": "^10.46.0",
     "@synthetixio/synpress": "^3.0.0",
     "@testing-library/jest-dom": "^5.16.4",
