@@ -1,6 +1,12 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import "./singleCollectionHead.css";
+import HeightBox from "../../HeightBox/HeightBox";
+import Banner from "../../../asssets/images/banner.jpg";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Paper from "@mui/material/Paper";
+import { borderRadius } from "@mui/system";
 
 const SingleCollectionHead = (props) => {
   const {
@@ -18,56 +24,70 @@ const SingleCollectionHead = (props) => {
     updatedAt,
     userid,
   } = props.collectionData;
-    console.log(props.collectionData);
+  console.log(props.collectionData);
   // if (listedNFTcount > 0);
   return (
-    <section>
-      <Container>
-        <Row>
-          <Row>
-            <Col lg="3" md="3" sm="12">
-              <div className="px-4">
-                <img
-                  src={logoImg}
-                  alt=""
-                  className="w-100 rounded-circle rounded-0 border border-5 img-fluid float-start"
-                />
-              </div>
-            </Col>
-          </Row>
+    <Container>
+      <HeightBox height="30px" />
 
-          <Row>
-            <Col lg="8" md="3" sm="12">
-              <div className="h2 px-4 mt-3 collection-name">
-                {collectionName}
-              </div>
+      <Row>
+        <div>
+          <img src={Banner} alt="banner" className="banner-img" />
+          <div className="ajust-logo">
+            <img
+              src={logoImg}
+              alt=""
+              className="rounded-circle rounded-0 border border-5 img-fluid float-start custom-logoimg"
+            />
+          </div>
+        </div>
+      </Row>
 
-              <div className="px-4 mt-3 collection-description">
-                {collectionDescription}
-              </div>
-            </Col>
+      <Row>
+        <Col sm="12" md="4" lg="4" className="ajust-details">
+          <div className="h2 collection-name">{collectionName}</div>
 
-            <Col lg="4" md="3" sm="12">
-              <div className="d-flex">
-                <div className="NFT-count p-2 mt-4 mx-5">
-                  {numberofNfts + " total NFTs"}
-                </div>
-                <div className="NFT-count p-2 mt-4 mx-5">
-                  {"total volume of "+totalPrice}
-                </div>
-                <div className="owners-count p-2 mt-4">
-                  {ownersCount + " Owner(s)"}
-                </div>
-                <div className="NFT-count p-2 mt-4 mx-5">
-                  {"Floor Prize: " + floorPrize}
-                </div>
-              </div>
-            </Col>
-          </Row>
-          <hr class="hr-primary mt-4" />
-        </Row>
-      </Container>
-    </section>
+          <div className="collection-description">{collectionDescription}</div>
+          <HeightBox height="5px" />
+        </Col>
+
+        <Col sm="12" md="8" lg="8">
+          <Card
+            variant="outlined"
+            sx={{ p: 1, textAlign: "center", borderRadius: 3 }}
+          >
+            <CardContent>
+              <Row>
+                <Col>
+                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
+                    <h4>{numberofNfts + " total NFTs"}</h4>
+                  </Paper>
+                </Col>
+                <Col>
+                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
+                    <h4>{"Total volume of " + totalPrice}</h4>
+                  </Paper>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
+                    <h4>{ownersCount + " Owner(s)"}</h4>
+                  </Paper>
+                </Col>
+                <Col>
+                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
+                    <h4>{"Floor Prize: " + floorPrize}</h4>
+                  </Paper>
+                </Col>
+              </Row>
+            </CardContent>
+          </Card>
+        </Col>
+      </Row>
+
+      <hr class="hr-primary mt-4" />
+    </Container>
   );
 };
 
