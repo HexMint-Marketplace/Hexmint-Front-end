@@ -4,7 +4,9 @@ import jwt_decode from "jwt-decode";
 
 const JWTDecodeUserType  = () => {
   //If token not found, return null
-  const token = JSON.parse(localStorage.getItem("token"));
+  console.log("in jwt decode user type before gettign token");
+  const token = localStorage.getItem("token");
+  console.log("token is.................in authservices.",token);
   if (!token) return null;
   try{
   const decoded = jwt_decode(token);
