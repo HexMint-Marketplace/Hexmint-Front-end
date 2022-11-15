@@ -105,7 +105,7 @@ const ProfileHead = (props) => {
               <div>
                 {isShown && (
                   <EditAdminDetails
-                    walletaddress={userWallet.address}
+                    walletaddress={userWallet}
                     setissubmit={props.setissubmit}
                   />
                 )}
@@ -131,7 +131,7 @@ const ProfileHead = (props) => {
             </Tab>
             <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
               <EditProfile
-                walletaddress={userWallet.address}
+                walletaddress={userWallet}
                 setissubmit={props.setissubmit}
               />
             </Tab>

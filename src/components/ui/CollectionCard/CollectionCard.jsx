@@ -10,7 +10,7 @@ const CollectionCard = (props) => {
   const [creatorImg, setCreatorImg] = useState();
   const [loader, setLoader] = useState(false);
   // const {creatorImg} = '';
-  console.log("userid: ",userid);
+  // console.log("userid: ",userid);
   // const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
   useEffect(() => {
     getuserdetails(userid);
@@ -20,7 +20,7 @@ const CollectionCard = (props) => {
     try {
       //Get user details by passing the user's wallet address
       const details = await UserServices.getUserDetailsFromUserId(userid);
-      console.log("In get user details", details.data);
+      // console.log("In get user details", details.data);
       setCreatorImg(details.data.propic);
       
 

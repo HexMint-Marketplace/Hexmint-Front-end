@@ -45,7 +45,7 @@ describe("Hexmint NFT Marketplace", function () {
   });
 
   describe("get sold item count", function () {
-    it.only("should get sold items count", async function () {
+    it("should get sold items count", async function () {
       const prev_count = await contract.getSoldItemCount();
       const response = await contract
         .connect(owner)
@@ -56,9 +56,7 @@ describe("Hexmint NFT Marketplace", function () {
       const value = ethers.utils.parseEther("0.01");
       const response1 = await contract
         .connect(owner)
-        .ListToken(newTokenId, price, {
-          value: value,
-        });
+        .ListToken(newTokenId, price);
       const response2 = contract
         .connect(addr1)
         .executeSale(newTokenId, { value: providedValue });
@@ -136,55 +134,36 @@ describe("Hexmint NFT Marketplace", function () {
     });
   });
 
-  describe("list minted token", async function () {
-    const newTokenId = await contract
+  describe("list minted token", function () {
+    it("price should be positive", async function () {
+      const newTokenId = await contract
       .connect(owner)
       .callStatic.createToken("metadata url");
-    console.log("new token: ", newTokenId);
-
-    it("should listing cost would be same", async function () {
-      // const tokenId = 1;
-      const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
-      expect(
-        contract.ListToken(newTokenId, price, { value: value.toString() })
-      ).to.be.revertedWith("Hopefully sending the correct price");
-    });
-
-    it("price should be positive", async function () {
-      // const tokenId = 1;
-      const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
-      expect(
-        contract.ListToken(newTokenId, price, { value: value.toString() })
+      const price = ethers.utils.parseEther("0");
+      await expect(
+        contract.ListToken(newTokenId, price)
       ).to.be.revertedWith("Make sure the price isn't negative");
     });
-    it.only("price get updated", async function () {
-      // const newTokenId = await contract
-      //   .connect(owner).callStatic
-      //   .createToken("metadata url");
-      // console.log("new token: ", newTokenId);
+    it("price get updated", async function () {
+      const newTokenId = await contract
+        .connect(owner).callStatic
+        .createToken("metadata url");
       const price = ethers.utils.parseEther("0.01");
-      const value = ethers.utils.parseEther("0.01");
       const response = await contract
         .connect(owner)
-        .ListToken(newTokenId, price, {
-          value: value,
-        });
+        .ListToken(newTokenId, price);
       await response.wait();
       const response1 = await getTokenForId(newTokenId);
       await response1.wait();
       expect(response1.price).to.equal(price);
-      // expect("").to.equal("");
     });
 
     it("token get listed", async function () {
-      // const tokenId = 1;
+      const newTokenId = await contract
+        .connect(owner).callStatic
+        .createToken("metadata url");
       const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const response1 = await getTokenForId(newTokenId);
       await response1.wait();
@@ -192,13 +171,13 @@ describe("Hexmint NFT Marketplace", function () {
     });
 
     it("ownership of token should be changed", async function () {
+      const newTokenId = await contract
+        .connect(owner).callStatic
+        .createToken("metadata url");
       const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
       const response = await contract
         .connect(owner)
-        .ListToken(newTokenId, price, {
-          value: value,
-        });
+        .ListToken(newTokenId, price);
       await response.wait();
       const response2 = await contract.getTokenOwner(newTokenId);
       await response2.wait();
@@ -206,16 +185,13 @@ describe("Hexmint NFT Marketplace", function () {
     });
   });
 
-  describe("get all nfts", function () {
+  describe.only("get all nfts", function () {
     it("listed token count match the length of array", async function () {
       const prevArray = await contract.getAllNFTs();
       const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
       const response = await contract
         .connect(owner)
-        .ListToken(newTokenId, price, {
-          value: value,
-        });
+        .ListToken(newTokenId, price);
       await response.wait();
       const newArray = await contract.getAllNFTs();
       expect(newArray.length).to.equal(prevArray.length + 1);
@@ -224,14 +200,14 @@ describe("Hexmint NFT Marketplace", function () {
 
   describe("get my nfts", function () {
     it("listed token count by one address match the length of array", async function () {
-      const prevArray = await contract.connect(owner).getAllNFTs();
+      const newTokenId = await contract
+        .connect(addr1).callStatic
+        .createToken("metadata url");
+      const prevArray = await contract.connect(addr1).getMyNFTs();
       const price = ethers.utils.parseEther("0.001");
-      const value = ethers.utils.parseEther("0.01");
       const response = await contract
-        .connect(owner)
-        .ListToken(newTokenId, price, {
-          value: value,
-        });
+        .connect(addr1)
+        .ListToken(newTokenId, price);
       await response.wait();
       const newArray = await contract.connect(owner).getMyNFTs();
       expect(newArray.length).to.equal(prevArray.length + 1);
@@ -262,9 +238,7 @@ describe("Hexmint NFT Marketplace", function () {
     it("token state changes to unlisted", async function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const response1 = await contract
         .connect(owner)
@@ -303,9 +277,7 @@ describe("Hexmint NFT Marketplace", function () {
       // const newTokenId = await contract.callStatic.createToken("metadata url");
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       //signer with no money required
       expect(contract.executeSale(newTokenId)).to.be.revertedWith(
         "Not sufficient funds for execute sale"
@@ -316,9 +288,7 @@ describe("Hexmint NFT Marketplace", function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       const providedValue = ethers.utils.parseEther("0.005");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       await expect(
         contract.executeSale(newTokenId, { value: providedValue })
@@ -331,9 +301,7 @@ describe("Hexmint NFT Marketplace", function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       const providedValue = ethers.utils.parseEther("0.001");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const response1 = contract
         .connect(addr1)
@@ -347,9 +315,7 @@ describe("Hexmint NFT Marketplace", function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       const providedValue = ethers.utils.parseEther("0.001");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const response1 = contract
         .connect(addr1)
@@ -366,9 +332,7 @@ describe("Hexmint NFT Marketplace", function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
       const providedValue = ethers.utils.parseEther("0.001");
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const response1 = contract
         .connect(addr1)
@@ -394,9 +358,7 @@ describe("Hexmint NFT Marketplace", function () {
       const price = ethers.utils.parseEther("0.001");
       const value = ethers.utils.parseEther("0.01");
 
-      const response = await contract.ListToken(newTokenId, price, {
-        value: value.toString(),
-      });
+      const response = await contract.ListToken(newTokenId, price);
       await response.wait();
       const accountBalanceBeforeWithdraw = ethers.utils.formatEther(
         await contract.provider.getBalance(owner.address)
