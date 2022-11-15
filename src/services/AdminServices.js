@@ -1,14 +1,14 @@
 import config from "../config";
 import axios from "axios";
+import Token from "./Token";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
-const token = JSON.parse(localStorage.getItem("token"));
-const header = {Authorization: `Bearer ${token}`};
 
 const deleteAdmin = async (id) => {
   return axios({
     method: "delete",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/delete-admin/${id}`,
   });
 };
@@ -16,12 +16,14 @@ const deleteAdmin = async (id) => {
 const approveRequest = async (id) => {
   return axios({
     method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/approve-request/${id}`,
   });
 };
 
 const declineRequest = async (id) => {
   return axios({
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     method: "delete",
     url: APIEndpoint + `/decline-request/${id}`,
   });
@@ -30,6 +32,7 @@ const declineRequest = async (id) => {
 const addAdmin = async (data) => {
   return axios({
     method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/add-admin",
     data: {
       name: data["name"],
@@ -45,6 +48,7 @@ const addAdmin = async (data) => {
 const getAdmins = async () => {
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-all-admins",
   });
 };
@@ -52,6 +56,7 @@ const getAdmins = async () => {
 const getAdminRequests = async () => {
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-admin-requests",
   });
 };

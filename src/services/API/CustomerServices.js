@@ -1,9 +1,6 @@
 import config from "../../config.json";
 import axios from "axios";
-
-
-const token = JSON.parse(localStorage.getItem("token"));
-const header = {Authorization: `Bearer ${token}`};
+import Token from "../Token";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/customer";
@@ -11,6 +8,7 @@ const APIEndpoint = config.DOMAIN_NAME + "/customer";
 const getCustomers = async () => {
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-all-customers",
   });
 };
@@ -18,6 +16,7 @@ const getCustomers = async () => {
 const getBlockedCustomers = async () => {
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-all-blocked-users",
   });
 };
@@ -25,6 +24,7 @@ const getBlockedCustomers = async () => {
 const getReports = async () => {
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-reports",
   });
 };
@@ -32,6 +32,7 @@ const getReports = async () => {
 const deleteReport = async (id) => {
   return axios({
     method: "delete",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/delete-report/${id}`,
   });
 };
@@ -40,7 +41,7 @@ const updateUserDetails = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/update-details",
     data: formData,
   });
@@ -50,6 +51,7 @@ const createCollection = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/create-collection",
     data: formData,
   });
@@ -58,6 +60,7 @@ const createCollection = async (formData) => {
 const unBlockUser = async (id) => {
   return axios({
     method: "delete",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/unblock-user/${id}`,
   });
 };
@@ -65,11 +68,13 @@ const unBlockUser = async (id) => {
 const blockUser = async (id) => {
   return axios({
     method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/block-user/${id}`,
   });
 };
 
 const getAllCollections = async () => {
+  console.log("in get all collections", Token.getAccessToken());
   return axios({
     method: "get",
     url: APIEndpoint + "/get-collection-count",
@@ -82,13 +87,9 @@ const saveUserActivity = async (
   tokenID,
   transactionTime
 ) => {
-  console.log("in customer services and token is",token);
-  console.log(
-    `in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`
-  );
   return axios({
     method: "post",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/save-user-activity",
     data: {
       activityType: activityType,
@@ -100,9 +101,9 @@ const saveUserActivity = async (
 };
 
 const getUserActivityDetails = async (walletAddress) => {
-  console.log(`in customer services ${walletAddress}`);
   return axios({
     method: "get",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/get-user-activity-details/${walletAddress}`,
     params: {
       walletAddress: walletAddress,
@@ -111,16 +112,15 @@ const getUserActivityDetails = async (walletAddress) => {
 };
 
 const getCollectionName = async (collectionID) => {
-  console.log(`in customer services ${collectionID}`);
   return axios({
     method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-collection-name",
     data: {
       collectionID: collectionID,
     },
   });
 };
-
 
 export default {
   updateUserDetails,
@@ -134,5 +134,5 @@ export default {
   unBlockUser,
   getReports,
   deleteReport,
-  getCollectionName
+  getCollectionName,
 };

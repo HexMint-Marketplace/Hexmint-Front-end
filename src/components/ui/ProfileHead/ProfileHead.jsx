@@ -127,7 +127,7 @@ const ProfileHead = (props) => {
             </Tab>
             <Tab eventKey="ACTIVITY" title="ACTIVITY">
               {/* <Sonnet /> <div>"Have to build</div> */}
-              <UserActivity walletaddress={userWallet.address} />
+              <UserActivity walletaddress={userWallet} />
             </Tab>
             <Tab eventKey="EDIT PROFILE" title="EDIT PROFILE">
               <EditProfile
