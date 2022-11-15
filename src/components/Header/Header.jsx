@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ConnectWallet from "../ui/ConnectWallet/ConnectWallet";
 import { toast } from "react-toastify";
+import ConnectingServices from "../../services/ConnectingServices";
+import { useRef } from "react";
 
 const NAV_LINKS = [
   {
@@ -43,55 +45,47 @@ function Header() {
   });
 
   //Set user type and useraddress
-  const [userType, setuserType] = useState();
+  const [userType, setUserType] = useState();
   const [userAddress, setuserAddress] = useState("");
   const [showConnectWallet, setshowConnectWallet] = useState(false);
 
+  const [fixedAddress, setfixedAddress] = useState(address);
+  const prevFixedAddress = useRef();
+
+  const getUserType = (Utype) => {
+    setUserType(Utype);
+  };
+
   useEffect(() => {
-    const handleConnectWallet = async (e) => {
-      console.log(`${address} InhandleConnectWallet`);
-      const response = await AuthServices.connectwallet({ address });
-      const JWTData = response.data.JWTData;
-      console.log("JWTData", JWTData);
-      const token = JWTData.token;
-      console.log("token in JSOn Stringify", JSON.stringify(token));
-      console.log(token);
-      localStorage.setItem("token", JSON.stringify(token));
-
-      if (JSON.parse(localStorage.getItem("token")) !== null) {
-        console.log("token is set tested");
-        setuserAddress(address);
-        console.log("This is user details", userAddress);
-        console.log("address from wagmi", address);
-
-        const JWTuserttype = await AuthServices.JWTDecodeUserType();
-        setuserType(JWTuserttype);
-        console.log("userType from jwt decode", JWTuserttype);
-        console.log("userType from useState", userType);
-
-        if (JWTuserttype === "Admin") {
-          console.log(JWTData.usertype);
-          navigate("/nadmin-dashboard");
-        } else if (JWTuserttype === "Super Admin") {
-          console.log(JWTuserttype);
-          navigate("/sadmin-dashboard");
-        } else {
-          navigate("/home");
-        }
-      } else {
-        toast.error("Error in connecting wallet");
-        navigate("/home");
-      }
-    };
+    prevFixedAddress.current = fixedAddress;
 
     if (isConnected) {
+      handleConnect();
       setshowConnectWallet(false);
+
       //call handleconncect wallet function if the user is connected
-      handleConnectWallet();
     } else {
       navigate("/home");
     }
   }, [address]);
+
+  const handleConnect = async () => {
+    console.log("clicked");
+    console.log("connected ? ", isConnected);
+    const JWTUserType = await ConnectingServices.creatingNewToken(address);
+
+    console.log("JWTUserType in the pop up window", JWTUserType);
+    setUserType(JWTUserType);
+    if (address !== prevFixedAddress.current) {
+      if (JWTUserType === "Admin") {
+        navigate("/nadmin-dashboard");
+      } else if (JWTUserType === "Super Admin") {
+        navigate("/sadmin-dashboard");
+      } else if (JWTUserType === "Customer") {
+        navigate("/home");
+      }
+    }
+  };
 
   useEffect(() => {
     const changeWidth = () => {
@@ -365,7 +359,10 @@ function Header() {
         </Container>
       </header>
       {showConnectWallet && (
-        <ConnectWallet setshowConnectWallet={setshowConnectWallet} />
+        <ConnectWallet
+          setshowConnectWallet={setshowConnectWallet}
+          setUserType={getUserType}
+        />
       )}
     </>
   );

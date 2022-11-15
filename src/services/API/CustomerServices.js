@@ -1,5 +1,6 @@
 import config from "../../config.json";
 import axios from "axios";
+import Token from "../Token"
 
 
 
@@ -93,11 +94,10 @@ const blockUser = async (id) => {
 };
 
 const getAllCollections = async () => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = {Authorization: `Bearer ${token}`};
+  console.log("in get all collections", Token.getAccessToken());
   return axios({
     method: "get",
-    headers: header,
+    headers: {Authorization: `Bearer ${Token.getAccessToken()}`},
     url: APIEndpoint + "/get-collection-count",
   });
 };
