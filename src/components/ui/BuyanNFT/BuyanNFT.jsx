@@ -52,8 +52,8 @@ const BuyanNFT = (props) => {
       );
       const referralRate = parseInt(await contract.getReferralRate());
       console.log("rate: ", referralRate);
-      console.log("price: ", (price * (referralRate + 100)) / 100);
-      const totalFee = (price * (referralRate + 100)) / 100;
+      console.log("price: ", (price * (referralRate + 100)/ 100) );
+      const totalFee = (price * (referralRate + 100) / 100);
       console.log("total feeeeeeeeeeee: ", totalFee);
       const salePrice = ethers.utils.parseEther(totalFee.toString());
 
