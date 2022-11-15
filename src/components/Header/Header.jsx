@@ -9,6 +9,7 @@ import DehazeIcon from "@mui/icons-material/Dehaze";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ConnectWallet from "../ui/ConnectWallet/ConnectWallet";
+import { toast } from "react-toastify";
 
 const NAV_LINKS = [
   {
@@ -56,15 +57,18 @@ function Header() {
       console.log("token in JSOn Stringify", JSON.stringify(token));
       console.log(token);
       localStorage.setItem("token", JSON.stringify(token));
-      setuserAddress(address);
-      console.log("This is user details", userAddress);
-      console.log("address from wagmi", address);
 
-      const JWTuserttype = await AuthServices.JWTDecodeUserType();
-      setuserType(JWTuserttype);
-      console.log("userType from jwt decode", JWTuserttype);
-      console.log("userType from useState", userType);
-      {
+      if (JSON.parse(localStorage.getItem("token")) !== null) {
+        console.log("token is set tested");
+        setuserAddress(address);
+        console.log("This is user details", userAddress);
+        console.log("address from wagmi", address);
+
+        const JWTuserttype = await AuthServices.JWTDecodeUserType();
+        setuserType(JWTuserttype);
+        console.log("userType from jwt decode", JWTuserttype);
+        console.log("userType from useState", userType);
+
         if (JWTuserttype === "Admin") {
           console.log(JWTData.usertype);
           navigate("/nadmin-dashboard");
@@ -74,6 +78,9 @@ function Header() {
         } else {
           navigate("/home");
         }
+      } else {
+        toast.error("Error in connecting wallet");
+        navigate("/home");
       }
     };
 
