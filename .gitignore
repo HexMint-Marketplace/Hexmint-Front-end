@@ -41,8 +41,6 @@ coverage
 coverage.json
 typechain
 typechain-types
-contracts_original
-test_template
 
 #Hardhat files
 cache

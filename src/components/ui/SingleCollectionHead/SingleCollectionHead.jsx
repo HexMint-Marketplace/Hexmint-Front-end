@@ -18,7 +18,7 @@ const SingleCollectionHead = (props) => {
     updatedAt,
     userid,
   } = props.collectionData;
-  //   console.log(props.collectionData);
+    console.log(props.collectionData);
   // if (listedNFTcount > 0);
   return (
     <section>
@@ -52,7 +52,9 @@ const SingleCollectionHead = (props) => {
                 <div className="NFT-count p-2 mt-4 mx-5">
                   {numberofNfts + " total NFTs"}
                 </div>
-
+                <div className="NFT-count p-2 mt-4 mx-5">
+                  {"total volume of "+totalPrice}
+                </div>
                 <div className="owners-count p-2 mt-4">
                   {ownersCount + " Owner(s)"}
                 </div>

@@ -45,7 +45,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
     }
 
     function updateReferralRate(uint256 __referralRate) external onlyOwner {
-            _referralRate = __referralRate;
+        _referralRate = __referralRate;
     }
 
     function getReferralRate() public view returns (uint256) {
@@ -67,10 +67,6 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
 
     function getCurrentToken() public view returns (uint256) {
         return _tokenIds.current();
-    }
-
-    function getTokenOwner(uint256 tokenId) public view returns (address) {
-        return ownerOf(tokenId);
     }
 
     //mint NFT
@@ -223,7 +219,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
             "tokenId is not listed"
         );
         require(
-            (price + price/100*_referralRate) == msg.value,
+            (price + (price / 100) * _referralRate) <= msg.value,
             "Not sufficient funds for execute sale"
         );
 
@@ -251,8 +247,9 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         );
     }
 
-    function withdraw() public onlyOwner {
+    function withdraw(uint256 amount) public onlyOwner {
         uint balance = address(this).balance;
-        payable(msg.sender).transfer(balance);
+        require(amount <= balance, "Unsufficient ethers to withdraw");
+        payable(msg.sender).transfer(amount);
     }
 }

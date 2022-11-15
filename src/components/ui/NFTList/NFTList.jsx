@@ -10,6 +10,7 @@ const NFTList = (props) => {
   console.log("props: ", props);
   // const { _id } = props.collectionData;
   const data = props.NFTData;
+  console.log("data: ",data);
   return (
     <section>
       <Container>

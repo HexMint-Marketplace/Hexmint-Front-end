@@ -18,9 +18,6 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 function Create() {
-  // const [tokenIDValue, settokenIDValue] = useState("");
-  // const [transaction, setTransaction] = useState(0);
-
   const initialValues = {
     logo: "",
     title: "",
@@ -36,8 +33,6 @@ function Create() {
       .label("Description"),
     collectionId: Yup.string().required("Collection ID is required"),
   });
-  // let transactionObj;
-  // let tokenid = "";
 
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
@@ -45,11 +40,6 @@ function Create() {
   const [fileURL, setFileURL] = useState(null);
   const ethers = require("ethers");
   const [message, updateMessage] = useState("");
-  // let tokenID = "";
-
-  //getting user wallet address
-  // const location = useLocation();
-  // // const walletAddress = location.userAddress;
 
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -57,24 +47,19 @@ function Create() {
   const [contractAddress, setContractAddress] = useState();
   const [price, setPrice] = useState();
   const [currentlyListed, serCurrentlyListed] = useState();
-  // const stateRef = useRef(tokenid);
 
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
   async function OnChangeFile(e) {
     var file = e.target.files[0];
-    // console.log("e from onchange function: ", e);
-    // console.log("file: ", file);
     console.log("process: ", PINATA_API_KEY);
     //check for file extension
     try {
       console.log("In the try block on changeFile");
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
-      // console.log("response is: ", response);
       if (response.success === true) {
-        // console.log("Uploaded image to Pinata: ", response.pinataURL);
         setFileURL(response.pinataURL);
       }
     } catch (e) {
@@ -99,7 +84,6 @@ function Create() {
       //upload the metadata JSON to IPFS
       const response = await uploadJSONToIPFS(nftJSON);
       if (response.success === true) {
-        // console.log("Uploaded JSON to Pinata: ", response);
         return response.pinataURL;
       }
     } catch (e) {
@@ -111,16 +95,12 @@ function Create() {
     setLoader(true);
     toast.info("Please wait while we mint your NFT");
 
-    // console.log("e from mintNFT function: ",e.target.files[0]);
     //Upload data to IPFS
     try {
-      // console.log("before await");
       const metadataURL = await uploadMetadataToIPFS(values);
-      // console.log("metadataURL: ", metadataURL);
-      //After adding your Hardhat network to your metamask, this code will get providers and signers
+      //After adding Hardhat network to metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      // console.log("before update message");
       updateMessage("Please wait.. uploading (upto 5 mins)");
 
       //Pull the deployed contract instance
@@ -141,25 +121,12 @@ function Create() {
             currentlyListed: currentlyListed,
             data: event,
           };
-          console.log("info: ", info);
-          console.log("tokenId: ", tokenId);
           settokenid(info);
-          // settokenIDValue(tokenId.toString());
-          console.log("tokenID: in use state ", tokenid);
         }
       );
 
-      //massage the params to be sent to the create NFT request
-      // console.log("before price");
-      // const price = ethers.utils.parseUnits(formParams.price, "ether");
-      // let listingPrice = await contract.getListPrice();
-      // console.log("after get listing price");
-      // listingPrice = listingPrice.toString();
-
       //actually create the NFT
-      // console.log("before create token method called");
       let transac = await contract.createToken(metadataURL.toString());
-      // console.log("after create token method called");
 
       await transac.wait();
 

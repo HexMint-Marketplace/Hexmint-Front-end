@@ -18,10 +18,10 @@ import MenuItem from "@mui/material/MenuItem";
 // console.log(img01);
 const ListingForm = () => {
   const location = useLocation();
-  const [ListingType, setListingType] = useState("");
-  const [listingPrize, setListingPrize] = useState();
+  // const [ListingType, setListingType] = useState("");
+  // const [listingPrize, setListingPrize] = useState();
   const [message, updateMessage] = useState("");
-  const [Duration, setDuration] = useState();
+  // const [Duration, setDuration] = useState();
   const ethers = require("ethers");
   const { NFTData } = location.state;
 
@@ -46,7 +46,12 @@ const ListingForm = () => {
   });
 
   console.log("NFTData: ", NFTData);
-  async function handleSubmit(values) {
+
+
+  async function listNFT(values) {
+    // setListingType(values.ListingType);
+    // setListingPrize(values.listingPrize);
+    // setDuration(values.Duration);
     console.log("values: ", values);
     setLoader(true);
     toast.info("Please wait while we list your NFT");
@@ -83,15 +88,14 @@ const ListingForm = () => {
           console.log("tokenID: in use state ", tokenid);
         }
       );
-      console.log(
-        ".................tttttttttttttttttttt.............",
-        values.listingPrize
-      );
       //transfer the NFT'
 
-      const price = ethers.utils.parseUnits(listingPrize.toString(), "ether");
+      console.log("listing prize: ", values.listingPrize);
+      const price = ethers.utils.parseEther(values.listingPrize);
+
       // let listingPrice = await contract.getListPrice();
       // listingPrice = listingPrice.toString();
+     
 
       let transaction = await contract.ListToken(NFTData.tokenId, price);
       console.log("after create token method called");
@@ -175,7 +179,7 @@ const ListingForm = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={listNFT}
         >
           {(formikProps) => {
             const { values, handleChange, handleSubmit, errors, touched } =

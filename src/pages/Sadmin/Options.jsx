@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeightBox from "./../../components/HeightBox/HeightBox";
 import { Container } from "reactstrap";
 import CommonHeader from "../../components/ui/CommonHeader/CommonHeader";
@@ -18,6 +18,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
+import MarketplaceJSON from "../../Marketplace.json";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,8 +34,10 @@ const ExpandMore = styled((props) => {
 function Options() {
   const [expandedOne, setExpandedOne] = React.useState(false);
   const [expandedTwo, setExpandedTwo] = React.useState(false);
-  const [amount, setAmount] = React.useState("10 ETH");
-  const [currentProfit, setCurrentProfit] = React.useState("0.01");
+  const [amount, setAmount] = React.useState("10");
+  const [currentReferralRate, setCurrentReferralRate] = React.useState("0.01");
+  const [contract, setContract] = React.useState();
+  const ethers = require("ethers");
 
   const initialValuesOne = {
     withdrawAmount: "",
@@ -56,12 +59,57 @@ function Options() {
       .label("New Commision Rate"),
   });
 
+  useEffect(() => {
+    try {
+      //After adding your Hardhat network to your metamask, this code will get providers and signers
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      //Pull the deployed contract instance
+      const contract_ = new ethers.Contract(
+        MarketplaceJSON.address,
+        MarketplaceJSON.abi,
+        signer
+      );
+      setContract(contract_);
+      updateCurrentBalance(provider, contract_);
+      updateCurrentReferralRate(contract_);
+    } catch (e) {}
+  }, []);
+
+  const updateCurrentBalance = async (provider, contract) => {
+    const balance = await provider.getBalance(contract.address);
+    console.log("balance: ",balance);
+    setAmount(balance.toString()/(10**18));
+  };
+
+  const updateCurrentReferralRate = async (contract) => {
+    const referralRate = await contract.getReferralRate();
+    setCurrentReferralRate(referralRate.toString());
+  };
+
   const handleWithdraw = async (values) => {
     console.log(values.withdrawAmount);
+    const withdrawAmount = ethers.utils.parseEther(values.withdrawAmount.toString());
+    console.log(withdrawAmount);
+    try {
+      const transaction = await contract.withdraw(withdrawAmount);
+      await transaction.wait();
+      alert("withdraw = " + withdrawAmount/(10**18) + " ETH successfully");
+    } catch (e) {
+      alert("upload error: " + e);
+    }
   };
 
   const handleProfitChange = async (values) => {
     console.log(values.newProfit);
+    const newReferralRate = values.newProfit;
+    try {
+      const transaction = await contract.updateReferralRate(newReferralRate);
+      await transaction.wait();
+      alert("update referral rate = " + newReferralRate + "% successfully");
+    } catch (e) {
+      alert("upload error: " + e);
+    }
   };
 
   const handleExpandClickOne = () => {
@@ -80,7 +128,7 @@ function Options() {
       <Card>
         <CardHeader />
         <Paper elevation={24} sx={{ p: 3 }}>
-          <h3>Your Balance : {amount}</h3>
+          <h3>Your Balance : {amount}<span> ETH</span></h3>
         </Paper>
         <CardContent>
           <Typography variant="body2" color="text.secondary">
@@ -164,7 +212,7 @@ function Options() {
       <Card>
         <CardHeader />
         <Paper elevation={24} sx={{ p: 3 }}>
-          <h3>Your Current Commision Rate : {currentProfit}%</h3>
+          <h3>Your Current Commision Rate : {currentReferralRate}%</h3>
         </Paper>
         <CardContent>
           <Typography variant="body2" color="text.secondary">
@@ -233,7 +281,7 @@ function Options() {
                       variant="contained"
                       sx={{ mt: 2, mb: 2 }}
                     >
-                      Withdraw
+                      Update
                     </Button>
                     <HeightBox height="20px" />
                   </Box>
