@@ -86,9 +86,6 @@ function EditAdminDetails(props) {
         setissubmit(true);
 
         toast.success("Profile Edit request submitted successfully");
-        // setissubmit(true);
-        // navigate(`/seller-profile/${walletaddress}`);
-        console.log("In the if and updated admin details succesfully");
       } else {
         toast.error(response.data.message);
       }
