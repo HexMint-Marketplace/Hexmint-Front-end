@@ -89,10 +89,9 @@ const ListingForm = () => {
       );
       //transfer the NFT'
 
-      const price = ethers.utils.parseUnits(listingPrize, "ether");
+      const price = ethers.utils.parseUnits(listingPrize.toString(), "ether");
       // let listingPrice = await contract.getListPrice();
       // listingPrice = listingPrice.toString();
-
 
       let transaction = await contract.ListToken(NFTData.tokenId, price);
       console.log("after create token method called");
