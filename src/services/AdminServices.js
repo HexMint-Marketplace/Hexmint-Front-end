@@ -3,10 +3,10 @@ import axios from "axios";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
-const token = JSON.parse(localStorage.getItem("token"));
-const header = { Authorization: `Bearer ${token}` };
 
 const deleteAdmin = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "delete",
     headers: header,
@@ -15,6 +15,8 @@ const deleteAdmin = async (id) => {
 };
 
 const approveRequest = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "post",
     headers: header,
@@ -23,6 +25,8 @@ const approveRequest = async (id) => {
 };
 
 const declineRequest = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     headers: header,
     method: "delete",
@@ -31,6 +35,8 @@ const declineRequest = async (id) => {
 };
 
 const addAdmin = async (data) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "post",
     headers: header,
@@ -47,6 +53,8 @@ const addAdmin = async (data) => {
 };
 
 const getAdmins = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "get",
     headers: header,
@@ -55,6 +63,8 @@ const getAdmins = async () => {
 };
 
 const getAdminRequests = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "get",
     headers: header,
