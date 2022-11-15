@@ -1,45 +1,38 @@
 import config from "../config";
 import axios from "axios";
+import Token from "./Token";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
 
 const deleteAdmin = async (id) => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "delete",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/delete-admin/${id}`,
   });
 };
 
 const approveRequest = async (id) => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "post",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + `/approve-request/${id}`,
   });
 };
 
 const declineRequest = async (id) => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     method: "delete",
     url: APIEndpoint + `/decline-request/${id}`,
   });
 };
 
 const addAdmin = async (data) => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "post",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/add-admin",
     data: {
       name: data["name"],
@@ -53,21 +46,17 @@ const addAdmin = async (data) => {
 };
 
 const getAdmins = async () => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "get",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-all-admins",
   });
 };
 
 const getAdminRequests = async () => {
-  const token = JSON.parse(localStorage.getItem("token"));
-  const header = { Authorization: `Bearer ${token}` };
   return axios({
     method: "get",
-    headers: header,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-admin-requests",
   });
 };
