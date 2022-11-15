@@ -17,19 +17,18 @@ const updateAdminDetails = (formData) => {
   });
 };
 
-const getAdminDetails = (walletAddress) => {
-  // console.log(`in user services ${walletAddress}`);
-  return axios.get(
-    APIEndpoint + `/admin-details?walletAddress=${walletAddress}`,
-    {
-      params: {
-        walletAddress: walletAddress,
-      },
-    }
-  );
-};
+// const getAdminDetails = (walletAddress) => {
+//   // console.log(`in user services ${walletAddress}`);
+//   return axios.get(
+//     APIEndpoint + `/admin-details?walletAddress=${walletAddress}`,
+//     {
+//       params: {
+//         walletAddress: walletAddress,
+//       },
+//     }
+//   );
+// };
 
 export default {
-  getAdminDetails,
   updateAdminDetails,
 };
