@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import AuthServices from "../services/AuthServices";
 
 function CreateCollection() {
   const Navigate = useNavigate();
@@ -37,8 +38,9 @@ function CreateCollection() {
   const [userWallet, setuserWallet] = useState();
 
   useEffect(() => {
-    const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    setuserWallet(walletAddress.address);
+    // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
+    const walletAddress = AuthServices.JWTDecodeWalletAddress();
+    setuserWallet(walletAddress);
   }, []);
 
   async function OnChangeFile(e) {
