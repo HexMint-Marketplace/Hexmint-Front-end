@@ -2,13 +2,15 @@ import config from "../../config.json";
 import axios from "axios";
 
 
-const token = JSON.parse(localStorage.getItem("token"));
-const header = {Authorization: `Bearer ${token}`};
+
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/customer";
 
 const getCustomers = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
+  console.log("In get customer method in service header........",header);
   return axios({
     method: "get",
     headers: header,
@@ -17,6 +19,8 @@ const getCustomers = async () => {
 };
 
 const getBlockedCustomers = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "get",
     headers: header,
@@ -25,6 +29,8 @@ const getBlockedCustomers = async () => {
 };
 
 const getReports = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "get",
     headers: header,
@@ -33,6 +39,8 @@ const getReports = async () => {
 };
 
 const deleteReport = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "delete",
     headers: header,
@@ -41,6 +49,8 @@ const deleteReport = async (id) => {
 };
 
 const updateUserDetails = async (formData) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
@@ -51,6 +61,8 @@ const updateUserDetails = async (formData) => {
 };
 
 const createCollection = async (formData) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
@@ -61,6 +73,8 @@ const createCollection = async (formData) => {
 };
 
 const unBlockUser = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "delete",
     headers: header,
@@ -69,6 +83,8 @@ const unBlockUser = async (id) => {
 };
 
 const blockUser = async (id) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "post",
     headers: header,
@@ -77,6 +93,8 @@ const blockUser = async (id) => {
 };
 
 const getAllCollections = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "get",
     headers: header,
@@ -94,6 +112,8 @@ const saveUserActivity = async (
   console.log(
     `in customer services ${activityType} and transaction ${transaction} and transactionTime ${transactionTime}`
   );
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "post",
     headers: header,
@@ -109,6 +129,8 @@ const saveUserActivity = async (
 
 const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "get",
     headers: header,
@@ -121,6 +143,8 @@ const getUserActivityDetails = async (walletAddress) => {
 
 const getCollectionName = async (collectionID) => {
   console.log(`in customer services ${collectionID}`);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = {Authorization: `Bearer ${token}`};
   return axios({
     method: "post",
     headers: header,

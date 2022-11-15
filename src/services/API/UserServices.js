@@ -3,8 +3,7 @@ import axios from "axios";
 
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/user";
-const token = JSON.parse(localStorage.getItem("token"));
-const header = { Authorization: `Bearer ${token}` };
+
 
 // const getUserType = (walletAddress) => {
 //     console.log(`in user services ${walletAddress}`);
@@ -16,7 +15,9 @@ const header = { Authorization: `Bearer ${token}` };
 // }
 
 const getUserDetailsFromWalletAddress = (walletAddress) => {
-  // console.log(`in user services ${walletAddress}`);
+  console.log("in get user  details from wallet ...... sevices",token);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios.get(
     APIEndpoint +
       `/user-details-from-walletaddress?walletAddress=${walletAddress}`,
@@ -31,6 +32,8 @@ const getUserDetailsFromWalletAddress = (walletAddress) => {
 
 const getUserDetailsFromUserId = (userid) => {
   // console.log(`in user services ${userid}`);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   return axios.get(APIEndpoint + `/user-details-from-userid?userid=${userid}`, {
     headers: header,
     params: {
