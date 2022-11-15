@@ -11,6 +11,7 @@ const APIEndpoint = config.DOMAIN_NAME + "/customer";
 const getCustomers = async () => {
   return axios({
     method: "get",
+    headers: header,
     url: APIEndpoint + "/get-all-customers",
   });
 };
@@ -18,6 +19,7 @@ const getCustomers = async () => {
 const getBlockedCustomers = async () => {
   return axios({
     method: "get",
+    headers: header,
     url: APIEndpoint + "/get-all-blocked-users",
   });
 };
@@ -25,6 +27,7 @@ const getBlockedCustomers = async () => {
 const getReports = async () => {
   return axios({
     method: "get",
+    headers: header,
     url: APIEndpoint + "/get-reports",
   });
 };
@@ -32,6 +35,7 @@ const getReports = async () => {
 const deleteReport = async (id) => {
   return axios({
     method: "delete",
+    headers: header,
     url: APIEndpoint + `/delete-report/${id}`,
   });
 };
@@ -50,6 +54,7 @@ const createCollection = async (formData) => {
   console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/create-collection",
     data: formData,
   });
@@ -58,6 +63,7 @@ const createCollection = async (formData) => {
 const unBlockUser = async (id) => {
   return axios({
     method: "delete",
+    headers: header,
     url: APIEndpoint + `/unblock-user/${id}`,
   });
 };
@@ -65,6 +71,7 @@ const unBlockUser = async (id) => {
 const blockUser = async (id) => {
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + `/block-user/${id}`,
   });
 };
@@ -72,6 +79,7 @@ const blockUser = async (id) => {
 const getAllCollections = async () => {
   return axios({
     method: "get",
+    headers: header,
     url: APIEndpoint + "/get-collection-count",
   });
 };
@@ -103,6 +111,7 @@ const getUserActivityDetails = async (walletAddress) => {
   console.log(`in customer services ${walletAddress}`);
   return axios({
     method: "get",
+    headers: header,
     url: APIEndpoint + `/get-user-activity-details/${walletAddress}`,
     params: {
       walletAddress: walletAddress,
@@ -114,6 +123,7 @@ const getCollectionName = async (collectionID) => {
   console.log(`in customer services ${collectionID}`);
   return axios({
     method: "post",
+    headers: header,
     url: APIEndpoint + "/get-collection-name",
     data: {
       collectionID: collectionID,
