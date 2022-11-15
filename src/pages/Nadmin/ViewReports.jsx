@@ -113,7 +113,7 @@ function ViewReports() {
           {reports.length === 0 && (
             <Paper>
               <Typography variant="h5" sx={{ p: 3, textAlign: "center" }}>
-                No Customers to display
+                No Reports to display
               </Typography>
             </Paper>
           )}

@@ -1,13 +1,12 @@
 import config from "../../config.json";
 import axios from "axios";
 
-const token = JSON.parse(localStorage.getItem("token"));
-const header = { Authorization: `Bearer ${token}` };
-
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/admin";
 
 const updateAdminDetails = (formData) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const header = { Authorization: `Bearer ${token}` };
   console.log(`in admin services ${formData}`);
   return axios({
     method: "post",
