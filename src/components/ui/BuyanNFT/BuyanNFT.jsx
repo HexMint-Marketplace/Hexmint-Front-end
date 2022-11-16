@@ -4,6 +4,8 @@ import "./buyanNFT.css";
 import MarketplaceJSON from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
+import AuthServices from "../../../services/AuthServices";
+import Token from "../../../services/Token";
 import { toast } from "react-toastify";
 import Card from "@mui/material/Card";
 import HeightBox from "./../../HeightBox/HeightBox";
@@ -15,7 +17,6 @@ const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
   // const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
-
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
@@ -24,20 +25,22 @@ const BuyanNFT = (props) => {
     _v,
     _id,
     contractAddress,
-    collectionDescription,
     collectionName,
+    collectionDescription,
     createdAt,
+    floorPrize,
     logoImg,
     numberofNfts,
     ownersCount,
     totalPrice,
-    floorPrize,
     updatedAt,
     userid,
   } = props.collectionData;
 
   const { NFTname, collectionId, description, image, price, seller, tokenId } =
     props.NFTData;
+
+  console.log("props.NFTData: ", props.collectionData);
 
   async function buyNFT(tokenId) {
     setLoader(true);
@@ -47,13 +50,16 @@ const BuyanNFT = (props) => {
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
+      console.log("signer.getAddress(): ",signer.getAddress());
       updateBuyerWalletAddress(signer.getAddress());
+      console.log("buyerWalletAddress: ",buyerWalletAddress);
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
         MarketplaceJSON.address,
         MarketplaceJSON.abi,
         signer
       );
+      console.log("contract: ", contract);
       const referralRate = parseInt(await contract.getReferralRate());
       console.log("rate: ", referralRate);
       console.log("price: ", (price * (referralRate + 100)) / 100);
@@ -141,6 +147,15 @@ const BuyanNFT = (props) => {
       // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
+  
+  useEffect(() => {
+    const walletAddress = Token.JWTDecodeWalletAddress();
+    updateBuyerWalletAddress(walletAddress);
+  }, []);
+  if (buyerWalletAddress == undefined){
+    return null;
+  }
+
 
   if (loader) {
     return <Loader isLoading={loader} />;
@@ -181,8 +196,7 @@ const BuyanNFT = (props) => {
                       </div>
                     </CardContent>
                   </Card>
-                  {buyerWalletAddress == props.NFTData.owner ||
-                  buyerWalletAddress == props.NFTData.seller ? (
+                  {buyerWalletAddress !== props.NFTData.seller ? (
                     <Button
                       sx={{ mt: 3, mb: 3 }}
                       className="buyNow_button  d-flex align-items-center"
