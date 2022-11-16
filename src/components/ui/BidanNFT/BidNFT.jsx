@@ -1,10 +1,9 @@
 import { React, useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
-import "./buyanNFT.css";
+import "./bidNFT.css";
 import MarketplaceJSON from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
-import AuthServices from "../../../services/AuthServices";
 import Token from "../../../services/Token";
 import { toast } from "react-toastify";
 import Card from "@mui/material/Card";
@@ -14,11 +13,15 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { useNavigate } from "react-router-dom";
+import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import SellIcon from "@mui/icons-material/Sell";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
-const BuyanNFT = (props) => {
+const BidNFT = (props) => {
+  const [isShown, setisShown] = useState(false);
+  console.log("In time auction buying");
   const [message, updateMessage] = useState();
-  // const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
@@ -47,7 +50,7 @@ const BuyanNFT = (props) => {
 
   console.log("props.NFTData: ", props.collectionData);
 
-  async function buyNFT(tokenId) {
+  async function bidNFT(tokenId) {
     if (!isConnected) {
       toast.info("Please connect your wallet");
       return;
@@ -195,29 +198,65 @@ const BuyanNFT = (props) => {
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
                         <CardContent>
                           <h6 className="d-inline">Owned By : </h6>
-                          <span className="d-inline">
-                            {seller.substring(0, 16) + "........"}
-                          </span>
+                          <span className="d-inline">{seller.substring(0, 16) + "........"}</span>
                         </CardContent>
                       </Card>
                       <div className="prize-is">
-                        <h5 className="py-2">Price : {price} ETH</h5>
+                        <h5 className="py-2">Current bid : 1.6 ETH</h5>
+                        <div>
+                          <AccessAlarmsIcon /> Sale ends 21 November 2022 at
+                          11:53 am GMT+5:30{" "}
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
                   {buyerWalletAddress !== props.NFTData.seller ? (
-                    <Button
-                      sx={{ mt: 3, mb: 3 }}
-                      className="buyNow_button  d-flex align-items-center"
-                      onClick={() => buyNFT(tokenId)}
-                      fullWidth
-                    >
-                      <span className="text-white">
-                        {" "}
-                        <SellIcon />{" "}
-                        Buy this NFT
-                      </span>
-                    </Button>
+                    <>
+                      <Button
+                        sx={{ mt: 3, mb: 3 }}
+                        className="buyNow_button  d-flex align-items-center"
+                        onClick={() => setisShown(true)}
+                        fullWidth
+                      >
+                        <span className="text-white">
+                          <SellIcon /> Place Bid
+                        </span>
+                      </Button>
+                      <>
+                        {isShown && (
+                          <Box
+                            sx={{
+                              boxShadow: 12,
+                              width: "100%",
+                              padding: 3,
+                              borderRadius: 2,
+                              marginBottom: 5,
+                              textAlign: "center",
+                              outline: "none",
+                            }}
+                          >
+                            <form>
+                              <TextField
+                                type="number"
+                                label="Your Bid Amount"
+                                variant="outlined"
+                                placeholder="Enter Bid Amount"
+                                fullWidth
+                              />
+                            </form>
+                            <Button
+                              color="primary"
+                              onClick={() => bidNFT(tokenId)}
+                              className="btn btn-primary"
+                              variant="contained"
+                              sx={{ mt: 2, mb: 2 }}
+                            >
+                              Bid Now
+                            </Button>
+                          </Box>
+                        )}
+                      </>
+                    </>
                   ) : (
                     <Paper sx={{ p: 3, m: 1 }} elevation={3}>
                       <span className="text-white">
@@ -235,4 +274,4 @@ const BuyanNFT = (props) => {
   }
 };
 
-export default BuyanNFT;
+export default BidNFT;
