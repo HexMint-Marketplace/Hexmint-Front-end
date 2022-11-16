@@ -2,11 +2,10 @@ import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import "./singleCollectionHead.css";
 import HeightBox from "../../HeightBox/HeightBox";
-import Banner from "../../../asssets/images/banner.jpg";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
-import { border } from "@mui/system";
+import Banner from "../../../asssets/images/banner.png";
 
 const SingleCollectionHead = (props) => {
   const {
@@ -45,9 +44,19 @@ const SingleCollectionHead = (props) => {
 
       <Row>
         <Col sm="12" md="6" lg="6" className="ajust-details">
-          <div className="h1 collection-name">{collectionName}</div>
+          <div
+            className="h1 fw-bold collection-name"
+            style={{ fontSize: "4rem", paddingLeft: "10%" }}
+          >
+            {collectionName}
+          </div>
 
-          <div className="collection-description">{collectionDescription}</div>
+          <div
+            className="collection-description"
+            style={{ fontSize: "1.5rem", paddingLeft: "10%" }}
+          >
+            {collectionDescription}
+          </div>
           <HeightBox height="5px" />
         </Col>
 
