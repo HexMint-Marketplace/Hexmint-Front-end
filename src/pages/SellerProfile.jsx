@@ -13,6 +13,7 @@ import NFTs from "./NFTs";
 import { Container } from "reactstrap";
 import HeightBox from "./../components/HeightBox/HeightBox";
 import AuthServices from "../services/AuthServices.js";
+import Token from "../services/Token";
 
 function SellerProfile() {
   const [userWallet, setuserWallet] = useState({});
@@ -34,7 +35,9 @@ function SellerProfile() {
   useEffect(() => {
     setLoader(true);
     // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    const walletaddress = AuthServices.JWTDecodeWalletAddress();
+    console.log("in the seller profile and before wallet get");
+    const walletaddress = Token.JWTDecodeWalletAddress();
+    console.log("in the seller profile and after wallet get");
     console.log("Should display", walletaddress);
 
     setuserWallet(walletaddress);
@@ -55,9 +58,8 @@ function SellerProfile() {
       );
       console.log("In get user details", details);
 
-
       //Get user type from token
-      const tokenUserType = AuthServices.JWTDecodeUserType();
+      const tokenUserType = Token.JWTDecodeUserType();
       // if (details.data.usertype === "Customer") {
       if (tokenUserType === "Customer") {
         // const userType = details.data.usertype;

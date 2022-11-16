@@ -11,23 +11,49 @@ const getAccessToken = () => {
 
 const removeAccessToken = () => {
   localStorage.removeItem("token");
-}
+};
 
-// const getAuth = () => {
-//   const jwt = localStorage.getItem("AccessToken");
+const getDecodedAccessTokenExp = () => {
+  const token = getAccessToken();
+  if (!token) {
+    return null;
+  }
+  const decoded = jwtDecode(token);
+  return decoded.exp;
+};
 
-//   try {
-//     const user = jwtDecode(jwt);
-//     console.log("user :", user);
-//     return user;
-//   } catch (err) {
-//     return null;
-//   }
-// }
+const JWTDecodeUserType = () => {
+  //If token not found, return null
+
+  const token = getAccessToken();
+
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.usertype;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const JWTDecodeWalletAddress = () => {
+  //If token not found, return null
+  const token = getAccessToken();
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode(token);
+    const walletaddress = decoded.walletaddress;
+    return walletaddress;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export default {
   setAccessToken,
   getAccessToken,
   removeAccessToken,
-
+  getDecodedAccessTokenExp,
+  JWTDecodeUserType,
+  JWTDecodeWalletAddress,
 };
