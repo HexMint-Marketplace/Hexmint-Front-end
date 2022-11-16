@@ -131,6 +131,28 @@ const getCollectionName = async (collectionID) => {
   });
 };
 
+const getCustomerDetailsFromWalletAddress = async (walletaddress) => {
+  console.log("in get customer details from wallet address", walletaddress);
+  return axios({
+    method: "get",
+    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url: APIEndpoint + `/get-customer-details-from-wallet-address/${walletaddress}`,
+  });
+};
+    
+const reportSeller = async(sellerWalletAddress, reason, ViewerAddress) =>{
+  return axios({
+    method: "post",
+    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url: APIEndpoint + "/report-seller",
+    data: {
+      sellerWalletAddress: sellerWalletAddress,
+      reason: reason,
+      ViewerAddress: ViewerAddress,
+    },
+  });
+};
+
 export default {
   updateUserDetails,
   getCustomers,
@@ -144,4 +166,6 @@ export default {
   getReports,
   deleteReport,
   getCollectionName,
+  getCustomerDetailsFromWalletAddress,
+  reportSeller,
 };

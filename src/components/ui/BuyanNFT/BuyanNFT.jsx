@@ -13,7 +13,7 @@ import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SellIcon from "@mui/icons-material/Sell";
 
 const BuyanNFT = (props) => {
@@ -24,6 +24,7 @@ const BuyanNFT = (props) => {
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
   const { address, isConnected } = useAccount();
+  const [BuyerUserType, setBuyerUserType] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -159,7 +160,9 @@ const BuyanNFT = (props) => {
 
   useEffect(() => {
     const walletAddress = Token.JWTDecodeWalletAddress();
+    const userType = Token.JWTDecodeUserType();
     updateBuyerWalletAddress(walletAddress);
+    setBuyerUserType(userType);
   }, []);
   if (buyerWalletAddress == undefined) {
     return null;
@@ -193,12 +196,21 @@ const BuyanNFT = (props) => {
                       </h4>
                       <div className="bcollection-name">{collectionName}</div>
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
-                        <CardContent>
-                          <h6 className="d-inline">Owned By : </h6>
-                          <span className="d-inline">
-                            {seller.substring(0, 16) + "........"}
-                          </span>
-                        </CardContent>
+                        {buyerWalletAddress !== props.NFTData.seller ? (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <Link to={`/profile-view/${seller}`}>
+                              <span className="d-inline">
+                                {seller.substring(0, 16) + "........"}
+                              </span>
+                            </Link>
+                          </CardContent>
+                        ) : (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <span className="d-inline">You</span>
+                          </CardContent>
+                        )}
                       </Card>
                       <div className="prize-is">
                         <h5 className="py-2">Price : {price} ETH</h5>
@@ -211,11 +223,12 @@ const BuyanNFT = (props) => {
                       className="buyNow_button  d-flex align-items-center"
                       onClick={() => buyNFT(tokenId)}
                       fullWidth
+                      disabled={BuyerUserType !== "Customer" ? true : false}
+                      disabled={BuyerUserType !== "Customer" ? true : false}
                     >
                       <span className="text-white">
                         {" "}
-                        <SellIcon />{" "}
-                        Buy this NFT
+                        <SellIcon /> Buy this NFT
                       </span>
                     </Button>
                   ) : (
