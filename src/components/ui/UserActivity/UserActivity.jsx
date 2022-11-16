@@ -109,7 +109,7 @@ export default function UserActivity(props) {
                   )}
 
                   <TableCell align="right">{row.NFTid}</TableCell>
-                  <TableCell align="right">{row.price}</TableCell>
+                  <TableCell align="right">{row.price} ETH</TableCell>
                   <TableCell align="right">{row.fromwalletaddress}</TableCell>
                   <TableCell align="right">{row.towalletaddress}</TableCell>
                   <TableCell align="right">

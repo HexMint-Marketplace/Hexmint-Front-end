@@ -18,6 +18,7 @@ import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import Token from "../services/Token"
 
 function Create() {
   const [transactionObj, settransactionObj] = useState({});
@@ -227,7 +228,7 @@ function Create() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        const walletAddress =  AuthServices.JWTDecodeWalletAddress();
+        const walletAddress =  Token.JWTDecodeWalletAddress();
         const userId = await getuserdetails(walletAddress.toString());
         const ownedCollections = (response.data.collections).filter((element) => {
           return element.userid === userId;

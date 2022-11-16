@@ -78,7 +78,8 @@ function TransferForm() {
 
       updateMessage("");
     } catch (e) {
-      alert("Upload error" + e);
+      toast.error("Upload error" + e);
+      loader(false);
     }
   }
 
