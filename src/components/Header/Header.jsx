@@ -12,6 +12,8 @@ import ConnectWallet from "../ui/ConnectWallet/ConnectWallet";
 import { toast } from "react-toastify";
 import ConnectingServices from "../../services/ConnectingServices";
 import { useRef } from "react";
+import Token from "../../services/Token";
+import { useDisconnect } from "wagmi";
 
 const NAV_LINKS = [
   {
@@ -34,8 +36,10 @@ const NAV_LINKS = [
 
 function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [islogoutcalling, setIslogoutcalling] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
+  const { disconnect } = useDisconnect();
 
   //Wagmi Hooks
   const { address, isConnected } = useAccount();
@@ -55,6 +59,18 @@ function Header() {
   const getUserType = (Utype) => {
     setUserType(Utype);
   };
+
+  // const t = setInterval(() => {
+  //   console.log("interval");
+  //   if (isConnected) {
+  //     handleLogout();
+  //   }
+  // }, 10000);
+  // clearInterval(t);
+
+  useEffect(() => {
+    handleLogout();
+  });
 
   useEffect(() => {
     prevFixedAddress.current = fixedAddress;
@@ -83,6 +99,21 @@ function Header() {
         navigate("/sadmin-dashboard");
       } else if (JWTUserType === "Customer") {
         navigate("/home");
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    console.log("logout calling");
+    if (isConnected) {
+      const checkTokenExp = Token.getDecodedAccessTokenExp();
+      if (checkTokenExp) {
+        if (checkTokenExp * 1000 < Date.now()) {
+          toast.error("Session Expired, Please Connect Wallet Again");
+          setIslogoutcalling(false);
+          disconnect();
+          Token.removeAccessToken();
+        }
       }
     }
   };

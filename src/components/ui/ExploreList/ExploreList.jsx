@@ -1,12 +1,11 @@
-import React,{useState, useEffect} from 'react'
-import {Container,Col,Row} from 'reactstrap'
-import {NFT__DATA} from '../../../asssets/data/data.js'
-import CollectionCard from '../CollectionCard/CollectionCard.jsx'
+import React, { useState, useEffect } from "react";
+import { Container, Col, Row } from "reactstrap";
+import { NFT__DATA } from "../../../asssets/data/data.js";
+import CollectionCard from "../CollectionCard/CollectionCard.jsx";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 
 function ExploreList() {
-
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
   useEffect(() => {
@@ -34,19 +33,18 @@ function ExploreList() {
   };
 
   return (
-    <section data-testid = 'collection_section'>
-    <Container>
-      <Row>
-
-        {allCollections.slice(0, 6).map((item) => (
-          <Col lg="4" md="4" sm="6" className="mb-4">
-            <CollectionCard key={item.id} item={item} />
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  </section>
-  )
+    <section data-testid="collection_section">
+      <Container>
+        <Row>
+          {allCollections.map((item) => (
+            <Col lg="4" md="4" sm="6" className="mb-4">
+              <CollectionCard key={item.id} item={item} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </section>
+  );
 }
 
-export default ExploreList
+export default ExploreList;

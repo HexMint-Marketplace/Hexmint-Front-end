@@ -14,6 +14,7 @@ import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AuthServices from "../services/AuthServices";
+import Token from "../services/Token";
 
 function CreateCollection() {
   const Navigate = useNavigate();
@@ -39,7 +40,7 @@ function CreateCollection() {
 
   useEffect(() => {
     // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    const walletAddress = AuthServices.JWTDecodeWalletAddress();
+    const walletAddress = Token.JWTDecodeWalletAddress();
     setuserWallet(walletAddress);
   }, []);
 

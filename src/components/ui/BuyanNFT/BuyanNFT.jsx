@@ -1,12 +1,17 @@
 import { React, useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import "./buyanNFT.css";
-import { Link } from "react-router-dom";
 import MarketplaceJSON from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
 import AuthServices from "../../../services/AuthServices";
+import Token from "../../../services/Token";
 import { toast } from "react-toastify";
+import Card from "@mui/material/Card";
+import HeightBox from "./../../HeightBox/HeightBox";
+import CardContent from "@mui/material/CardContent";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 
 const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
@@ -142,99 +147,77 @@ const BuyanNFT = (props) => {
       // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
-
+  
   useEffect(() => {
-    const walletAddress = AuthServices.JWTDecodeWalletAddress();
+    const walletAddress = Token.JWTDecodeWalletAddress();
     updateBuyerWalletAddress(walletAddress);
   }, []);
   if (buyerWalletAddress == undefined){
     return null;
   }
-  return (
-    <div>
-      {loader ? (
-        <div>
-          <Loader isLoading={loader} />
+
+
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <Container>
+        <HeightBox height="20px" />
+        <div className="mt-4 d-flex align-items-center">
+          <Card sx={{ borderRadius: 4 }}>
+            <CardContent>
+              <Row>
+                <Col lg="6" md="6" sm="12">
+                  <div>
+                    <img
+                      src={image}
+                      alt=""
+                      className="w-100 img-fluid bnft-icon"
+                    />
+                  </div>
+                </Col>
+                <Col lg="6" md="6" sm="12">
+                  <Card sx={{ p: 3 }} elevation={3}>
+                    <CardContent>
+                      <h4>
+                        {NFTname}
+                        <span> #{tokenId}</span>
+                      </h4>
+                      <div className="bcollection-name">{collectionName}</div>
+                      <Card sx={{ p: 1, mt: 3, mb: 3 }}>
+                        <CardContent>
+                          <h4>Owned By</h4>
+                          <p>{seller}</p>
+                        </CardContent>
+                      </Card>
+                      <div className="prize-is">
+                        {price}
+                        <span> ETH</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  {buyerWalletAddress !== props.NFTData.seller ? (
+                    <Button
+                      sx={{ mt: 3, mb: 3 }}
+                      className="buyNow_button  d-flex align-items-center"
+                      onClick={() => buyNFT(tokenId)}
+                      fullWidth
+                    >
+                      Buy this NFT
+                    </Button>
+                  ) : (
+                    <Paper sx={{ p: 3, m: 1 }} elevation={3}>
+                      <h5>You are the owner of this NFT</h5>
+                    </Paper>
+                  )}
+                </Col>
+              </Row>
+            </CardContent>
+          </Card>
         </div>
-      ) : (
-        <Container>
-          <Row className="">
-            <Col lg="1"></Col>
-            <Col lg="10" md="4" sm="6" className="mb-3 ">
-              <div className="single_service mt-5">
-                <Row>
-                  <form>
-                    <Col lg="5" md="5" sm="6">
-                      <div>
-                        <img
-                          src={image}
-                          alt=""
-                          className="w-100 img-fluid bnft-icon"
-                        />
-                      </div>
-                    </Col>
-
-                    <Col lg="7" md="7" sm="6">
-                      <div className="text-start">
-                        <div className="h2 bnft-name">
-                          {NFTname}
-                          <span> #{tokenId}</span>
-                        </div>
-                        <div className="bcollection-name">{collectionName}</div>
-
-                        <div className="mt-3 d-flex align-items-center">
-                          <div className="bowner-name">Owned By</div>
-                          <div className="NFT-count p-2 mx-5">{seller}</div>
-                        </div>
-
-                        <div className="bprize-wrapper mt-4">
-                          <div className="prize-is">
-                            {price}
-                            <span> ETH</span>
-                          </div>
-
-                          <div className="b-prize fw-bold fs-5">
-                            {/* {currentBid} ETH */}
-                          </div>
-                        </div>
-
-                        <div className="buy_buttons align-items-center mb-2">
-                          {buyerWalletAddress !== props.NFTData.seller ? (
-                            <button
-                              className="buyNow_button  d-flex align-items-center"
-                              onClick={() => buyNFT(tokenId)}
-                            >
-                              Buy this NFT
-                            </button>
-                          ) : (
-                            <div className="text-emerald-700">
-                              You are the owner of this NFT
-                            </div>
-                          )}
-
-                          <div className="text-green text-center mt-3">
-                            {message}
-                          </div>
-                          {/* <button
-                        className="buyNow_button  d-flex align-items-center"
-                        onClick={() => buyNFT(tokenId)}
-                      > */}
-                          {/* <Link to="">Buy Now</Link> */}
-                          {/* Buy Now */}
-                          {/* </button> */}
-                        </div>
-                      </div>
-                    </Col>
-                  </form>
-                </Row>
-              </div>
-            </Col>
-            <Col lg="1"></Col>
-          </Row>
-        </Container>
-      )}
-    </div>
-  );
+      </Container>
+    );
+  }
 };
 
 export default BuyanNFT;

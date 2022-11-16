@@ -6,6 +6,7 @@ import axios from "axios";
 import "./CollectionCard.css";
 
 const CollectionCard = (props) => {
+
   const [creatorImg, setCreatorImg] = useState();
   const [loader, setLoader] = useState(false);
   const [dataFetched, updateFetched] = useState(false);
@@ -41,6 +42,7 @@ const CollectionCard = (props) => {
       console.log(err);
     }
   };
+
 
   async function getNFTData() {
     const ethers = require("ethers");
@@ -113,12 +115,13 @@ const CollectionCard = (props) => {
   if (!isListedNFTsExist) {
     return null;
   }
+
   return (
     <div className="single_collection_card">
       <div className="collection_img">
         <Link
           to={`/explore/collection/${_id}`}
-          state={{ collectionData: props.item, data: data }}
+          state={{ collectionData: props.item , data: data}}
         >
           <img
             data-testid="collection_image"
@@ -133,7 +136,7 @@ const CollectionCard = (props) => {
         <div className="creator_img">
           <Link
             to={`/explore/collection/${_id}`}
-            state={{ collectionData: props.item, data: data }}
+            state={{ collectionData: props.item , data: data}}
           >
             <img src={creatorImg} alt="" className="creator_image w-100" />
           </Link>
