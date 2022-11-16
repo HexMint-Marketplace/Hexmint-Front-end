@@ -12,6 +12,8 @@ import HeightBox from "./../../HeightBox/HeightBox";
 import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import { useAccount, useConnect, useEnsName } from "wagmi";
+import { useNavigate } from "react-router-dom";
 
 const BuyanNFT = (props) => {
   const [message, updateMessage] = useState();
@@ -20,6 +22,8 @@ const BuyanNFT = (props) => {
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
+  const { address, isConnected } = useAccount();
+  const navigate = useNavigate();
 
   const {
     _v,
@@ -43,6 +47,10 @@ const BuyanNFT = (props) => {
   console.log("props.NFTData: ", props.collectionData);
 
   async function buyNFT(tokenId) {
+    if (!isConnected) {
+      toast.info("Please connect your wallet");
+      return;
+    }
     setLoader(true);
     toast.info("Please wait while we countinue the transaction");
     try {
@@ -50,9 +58,9 @@ const BuyanNFT = (props) => {
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log("signer.getAddress(): ",signer.getAddress());
+      console.log("signer.getAddress(): ", signer.getAddress());
       updateBuyerWalletAddress(signer.getAddress());
-      console.log("buyerWalletAddress: ",buyerWalletAddress);
+      console.log("buyerWalletAddress: ", buyerWalletAddress);
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
         MarketplaceJSON.address,
@@ -147,15 +155,14 @@ const BuyanNFT = (props) => {
       // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
-  
+
   useEffect(() => {
     const walletAddress = Token.JWTDecodeWalletAddress();
     updateBuyerWalletAddress(walletAddress);
   }, []);
-  if (buyerWalletAddress == undefined){
+  if (buyerWalletAddress == undefined) {
     return null;
   }
-
 
   if (loader) {
     return <Loader isLoading={loader} />;
