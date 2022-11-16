@@ -6,7 +6,7 @@ import Banner from "../../../asssets/images/banner.jpg";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
-import { borderRadius } from "@mui/system";
+import { border } from "@mui/system";
 
 const SingleCollectionHead = (props) => {
   const {
@@ -44,40 +44,82 @@ const SingleCollectionHead = (props) => {
       </Row>
 
       <Row>
-        <Col sm="12" md="4" lg="4" className="ajust-details">
-          <div className="h2 collection-name">{collectionName}</div>
+        <Col sm="12" md="6" lg="6" className="ajust-details">
+          <div className="h1 collection-name">{collectionName}</div>
 
           <div className="collection-description">{collectionDescription}</div>
           <HeightBox height="5px" />
         </Col>
 
-        <Col sm="12" md="8" lg="8">
+        <Col sm="12" md="6" lg="6">
           <Card
             variant="outlined"
-            sx={{ p: 1, textAlign: "center", borderRadius: 3 }}
+            sx={{
+              p: 1,
+              textAlign: "center",
+              borderRadius: 3,
+              border: 1,
+              borderColor: "grey.500",
+              backgroundColor: "transparent",
+            }}
           >
             <CardContent>
               <Row>
                 <Col>
-                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
-                    <h4>{numberofNfts + " total NFTs"}</h4>
+                  <Paper
+                    sx={{
+                      p: 1,
+                      m: 1,
+                      border: 1,
+                      borderColor: "",
+                      backgroundColor: "#14141f",
+                    }}
+                    elevation={3}
+                  >
+                    <p>{numberofNfts + " total NFTs"}</p>
                   </Paper>
                 </Col>
                 <Col>
-                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
-                    <h4>{"Total volume of " + totalPrice}</h4>
+                  <Paper
+                    sx={{
+                      p: 1,
+                      m: 1,
+                      border: 1,
+                      borderColor: "",
+                      backgroundColor: "transparent",
+                    }}
+                    elevation={3}
+                  >
+                    <p>{"Total volume of " + totalPrice}</p>
                   </Paper>
                 </Col>
-              </Row>
-              <Row>
+
                 <Col>
-                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
-                    <h4>{ownersCount + " Owner(s)"}</h4>
+                  <Paper
+                    sx={{
+                      p: 1,
+                      m: 1,
+                      border: 1,
+                      borderColor: "",
+                      backgroundColor: "transparent",
+                    }}
+                    elevation={3}
+                  >
+                    <p>{ownersCount + " Owner(s)"}</p>
                   </Paper>
                 </Col>
                 <Col>
-                  <Paper sx={{ p: 1, m: 1 }} elevation={3}>
-                    <h4>{"Floor Prize: " + floorPrize}</h4>
+                  <Paper
+                    sx={{
+                      p: 1,
+                      m: 1,
+                      border: 1,
+                      borderColor: "",
+                      backgroundColor: "transparent",
+                    }}
+                    elevation={3}
+                  >
+                    <p>{"Floor Prize: " + floorPrize}</p>
                   </Paper>
                 </Col>
               </Row>

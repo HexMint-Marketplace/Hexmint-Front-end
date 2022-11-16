@@ -1,9 +1,11 @@
 .collection-name {
   color: white;
+  font-size: 4rem !important;
 }
 
 .collection-description {
   color: white;
+  font-size: 1.5rem !important;
 }
 
 .owners-count,
