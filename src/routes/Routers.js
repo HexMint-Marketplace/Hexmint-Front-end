@@ -15,6 +15,7 @@ import NFTDetailsB from "../pages/NftDetailsB";
 import NFTDetailsU from "../pages/NFTDetailsU";
 import TransferForm from "../components/ui/TransferForm/TransferForm";
 import ListingForm from "../components/ui/ListingForm/ListingForm";
+import ProfileView from "../pages/ProfileView"
 
 import NormalAdminDashboard from "../pages/Nadmin/Dashboard";
 import AdminProfile from "../pages/Nadmin/AdminProfile";
@@ -63,6 +64,7 @@ function Routers() {
         path="/seller-profile/seller-collection/NFT/listing-form"
         element={<ListingForm />}
       />
+      <Route path="/profile-view/:address" element={<ProfileView/>}/>
 
       <Route path="/nadmin-dashboard" element={<NormalAdminDashboard />} />
       <Route path="/nadmin-viewreports" element={<ViewReports />} />
