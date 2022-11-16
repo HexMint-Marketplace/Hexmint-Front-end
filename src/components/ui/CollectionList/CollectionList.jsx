@@ -22,7 +22,7 @@ function CollectionList() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        // console.log("hi new data........", response.data.collections);
+        console.log("hi new data........", response.data.collections);
         setAllCollections(response.data.collections);
       } else {
         toast.error("Error Occured!");
@@ -45,12 +45,6 @@ function CollectionList() {
               <h3 data-testid = 'explore_txt'>Explore</h3>
             </div>
           </Col>
-
-          {/* {NFT__DATA.slice(0, 6).map((item) => (
-            <Col lg="4" md="4" sm="6" className="mb-4">
-              <CollectionCard key={item.id} item={item} />
-            </Col>
-          ))} */}
 
           {allCollections.slice(0, 6).map((item) => (
             <Col lg="4" md="4" sm="6" className="mb-4">

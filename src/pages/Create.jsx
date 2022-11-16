@@ -7,6 +7,8 @@ import { Container, Row, Col } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/create.css";
 import CustomerServices from "../services/API/CustomerServices";
+import AuthServices from "../services/AuthServices";
+import UserServices from "../services/API/UserServices";
 import { toast } from "react-toastify";
 import Loader from "../components/ui/Loader/Loader";
 import { Formik } from "formik";
@@ -18,6 +20,10 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 function Create() {
+  const [transactionObj, settransactionObj] = useState({});
+  const [tokenid, settokenid] = useState({});
+  const [fileURL, setFileURL] = useState(null);
+  const ethers = require("ethers");
   const initialValues = {
     logo: "",
     title: "",
@@ -34,19 +40,8 @@ function Create() {
     collectionId: Yup.string().required("Collection ID is required"),
   });
 
-  const [transactionObj, settransactionObj] = useState({});
-  const [tokenid, settokenid] = useState({});
-
-  const [fileURL, setFileURL] = useState(null);
-  const ethers = require("ethers");
-  const [message, updateMessage] = useState("");
-
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
-
-  const [contractAddress, setContractAddress] = useState();
-  const [price, setPrice] = useState();
-  const [currentlyListed, serCurrentlyListed] = useState();
 
   const { PINATA_API_KEY } = process.env;
 
@@ -101,7 +96,6 @@ function Create() {
       //After adding Hardhat network to metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      updateMessage("Please wait.. uploading (upto 5 mins)");
 
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
@@ -157,7 +151,6 @@ function Create() {
       // //Activity type, from wallet address, prize, transaction hash,
       // saveUserActivity("minted", transaction, transactionTime);
 
-      updateMessage("");
 
       console.log("after update form params");
       // window.location.replace("/");
@@ -219,14 +212,27 @@ function Create() {
     getCollections();
   }, []);
 
+  const getuserdetails = async (walletAddress) => {
+    //Get user details by passing the user's wallet address
+
+    const details = await UserServices.getUserDetailsFromWalletAddress(
+      walletAddress
+    );
+    return details.data.userid;
+  };
+
   const getCollections = async () => {
     setLoader(true);
     try {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        // console.log("hi new data........", response.data.collections);
-        setAllCollections(response.data.collections);
+        const walletAddress =  AuthServices.JWTDecodeWalletAddress();
+        const userId = await getuserdetails(walletAddress.toString());
+        const ownedCollections = (response.data.collections).filter((element) => {
+          return element.userid === userId;
+        });
+        setAllCollections(ownedCollections);
       } else {
         toast.error("Error Occured!");
       }

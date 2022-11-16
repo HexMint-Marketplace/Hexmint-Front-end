@@ -1,11 +1,11 @@
 import React from "react";
-import { NFT__DATA } from "../asssets/data/data.js";
 import BuyanNFT from "../components/ui/BuyanNFT/BuyanNFT";
 import ExploreMore from "../components/ui/ExploreMore/ExploreMore";
 import { useLocation } from "react-router-dom";
 
 function NFTDetailsB() {
   const location = useLocation();
+  // use location from NFTCard.jsx
   const { NFTData, collectionData } = location.state;
   return (
     <section>

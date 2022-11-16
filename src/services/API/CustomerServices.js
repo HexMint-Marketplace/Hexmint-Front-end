@@ -57,6 +57,15 @@ const createCollection = async (formData) => {
   });
 };
 
+const updateCollectionOwners = async (formData) => {
+  return axios({
+    method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url: APIEndpoint + "//create-collection-owner",
+    data: formData,
+  });
+};
+
 const unBlockUser = async (id) => {
   return axios({
     method: "delete",

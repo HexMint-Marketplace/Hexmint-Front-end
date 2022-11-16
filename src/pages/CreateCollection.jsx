@@ -66,7 +66,7 @@ function CreateCollection() {
 
       formData["userid"] = userWallet;
       formData["logoImg"] = collectionIcon;
-      formData["ownersCount"] = 1;
+      formData["ownersCount"] = 0;
 
       const response = await CustomerServices.createCollection(formData);
       console.log("In the response", response);
