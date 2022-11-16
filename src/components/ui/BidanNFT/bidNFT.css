@@ -1,0 +1,53 @@
+.bnft-icon {
+    border: 6px solid #ffffff;
+    width: 80% !important;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+  }
+  
+  .bnft-name {
+    color: white;
+  }
+  
+  .bcollection-name {
+    color: #59f9b7;
+  }
+  
+  .bowner-name,
+  .prize-is {
+    color: white;
+  }
+  
+  .b-prize {
+    color: white;
+  }
+  
+  .buy_buttons {
+    margin-top: 40px;
+  }
+  
+  .buyNow_button {
+    padding: 15px 30px !important;
+    border-radius: 10px !important;
+    border: 2px solid white;
+  }
+  
+  .buyNow_button {
+    background-color: blueviolet !important ;
+  }
+  
+  .buyNow_button a {
+    text-decoration: none;
+    color: black;
+    font-weight: 650;
+  
+    font-size: 1rem;
+  }
+  
+  .buy_buttons button a:hover {
+    color: #fff;
+  }
+  

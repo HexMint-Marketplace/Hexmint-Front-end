@@ -120,7 +120,7 @@ const ProfileHead = (props) => {
           <Tabs
             defaultActiveKey="COLLECTIONS"
             id="uncontrolled-tab-example"
-            className="mb-3 mt-5 justify-content-center"
+          className="mb-3 mt-5 justify-content-center"
           >
             <Tab eventKey="COLLECTIONS" title="COLLECTIONS">
               <UserNFTList data={data} />
