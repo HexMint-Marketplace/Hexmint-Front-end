@@ -123,7 +123,6 @@ const getUserActivityDetails = async (walletAddress) => {
 const getCollectionName = async (collectionID) => {
   return axios({
     method: "post",
-    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/get-collection-name",
     data: {
       collectionID: collectionID,

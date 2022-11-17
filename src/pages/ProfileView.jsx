@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import Loader from "../components/ui/Loader/Loader";
 import CustomerServices from "../services/API/CustomerServices";
 import HeightBox from "../components/HeightBox/HeightBox";
@@ -20,6 +20,10 @@ import Select from "@mui/material/Select";
 import Token from "../services/Token";
 import { toast } from "react-toastify";
 
+import MarketplaceJSON from "../Marketplace.json";
+import axios from "axios";
+import SellerNFTCard from "../components/ui/SellerNFTCard/SellerNFTCard";
+
 function ProfileView() {
   const [loader, setLoader] = useState(false);
   const [userName, setUserName] = useState("");
@@ -27,6 +31,8 @@ function ProfileView() {
   const [name, setName] = useState("");
   const [sellerWalletAddress, setSellerWalletAddress] = useState("");
   const [ViewerAddress, setViewerAddress] = useState("");
+  const [SellerNFTDetails, setSellerNFTDetails] = useState([]);
+  const [isfetched, setisFetched] = useState(false);
   const walletAddress = useParams();
   const { address, isConnected } = useAccount();
 
@@ -69,10 +75,62 @@ function ProfileView() {
     setSellerWalletAddress(walletAddress.address);
     setViewerAddress(Token.JWTDecodeWalletAddress());
     console.log("in profile view after set", sellerWalletAddress);
-    // setuserWallet(walletaddress);
 
+    // setuserWallet(walletaddress);
     getuserdetails(walletAddress.address);
   }, []);
+
+  async function filterSellersNFTs(Waddress) {
+    const ethers = require("ethers");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner(MarketplaceJSON.address);
+
+    //Pull the deployed contract instance
+    let contract = new ethers.Contract(
+      MarketplaceJSON.address,
+      MarketplaceJSON.abi,
+      signer
+    );
+
+    let transaction = await contract.getAllNFTs();
+
+    const items = await Promise.all(
+      transaction.map(async (i) => {
+        const tokenURI = await contract.tokenURI(i.tokenId);
+        let meta = await axios.get(tokenURI);
+        meta = meta.data;
+        let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+        console.log(
+          "seller from contract",
+          i.seller,
+          "......seller profile address",
+          Waddress
+        );
+        if (i.seller === Waddress) {
+          let item = {
+            price,
+            tokenId: i.tokenId.toNumber(),
+            seller: i.seller,
+            contractAddress: i._owner,
+            image: meta.image,
+            NFTname: meta.title,
+            description: meta.description,
+            collectionId: meta.collectionId,
+          };
+
+          return item;
+        }
+      })
+    );
+    console.log("items are ", items);
+    const filteredItems = items.filter((item) => item !== undefined);
+    console.log("filtered items", filteredItems);
+    setSellerNFTDetails(filteredItems);
+    if (filteredItems.length > 0) {
+      console.log("in if fiktered items", filteredItems);
+      setisFetched(true);
+    }
+  }
 
   const getuserdetails = async (Waddress) => {
     try {
@@ -93,6 +151,7 @@ function ProfileView() {
     } catch (err) {
       console.log(err);
     }
+    await filterSellersNFTs(Waddress);
     setTimeout(() => {
       console.log("loader false calling");
       setLoader(false);
@@ -102,27 +161,29 @@ function ProfileView() {
   const reportSeller = async () => {
     console.log("in report seller in profile view and viewer", ViewerAddress);
     try {
+      console.log("in try.............................");
       const response = await CustomerServices.reportSeller(
         sellerWalletAddress,
         reason,
         ViewerAddress
       );
-      console.log("Report Seller Response", response);
+      console.log("Report Seller Response");
 
       if (response.data.status === 200) {
         toast.success("Your Report Request Submited Successfully");
-      } else if (response.status === 401) {
+      } else if (response.status === 400) {
         toast.error(response.message);
       } else {
         toast.error("Something went wrong");
       }
     } catch (err) {
-      toast.error(err);
+      toast.error("Something went wrong");
     }
     setTimeout(() => {
       setLoader(false);
     }, 2000);
   };
+
   const showAddress = sellerWalletAddress
     ? sellerWalletAddress.substring(0, 4) +
       "...." +
@@ -216,19 +277,26 @@ function ProfileView() {
             </div>
 
             <hr class="hr-primary mt-3" />
-            {/* <Container>
-            <section>
+
             <Container>
-                <Row>
-                    {data.map((value, index) => (
+              {isfetched === true && (
+                <section>
+                  <Container>
+                    <Row>
+                      {SellerNFTDetails.map((value, index) => (
                         <Col lg="3" md="4" sm="6" className="mb-4">
-                            <SellerNFTCard key={index} item={value} />
+                          <SellerNFTCard
+                            key={index}
+                            item={value}
+                            isViewUser={true}
+                          />
                         </Col>
-                    ))}
-                </Row>
+                      ))}
+                    </Row>
+                  </Container>
+                </section>
+              )}
             </Container>
-            </section> 
-        </Container> */}
           </>
         )}
       </Container>

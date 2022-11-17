@@ -6,6 +6,7 @@ import "./footer.css";
 import { Link } from "react-router-dom";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import { toast } from "react-toastify";
 
 const Basic_Navs = [
   {
@@ -41,19 +42,16 @@ const Footer = () => {
       <Container>
         <Row>
           <Col lg="6" md="6" sm="6" className="mb-2">
-            <div className="logo">
-              <h2 className=" d-flex gap-2 align-items-center ">
-                <span>
-                  <i className="ri-fire-fill"></i>
-                </span>
-                NFTs
-              </h2>
-              <p data-testid="footer_txt">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptate, quod repellat! Quis quos dolorum tenetur fuga?
-                Aspernatur rerum quae amet.
-              </p>
-            </div>
+            <Link to={"/home"} className="text-decoration-none">
+              <div className="logo">
+                <h2 className=" d-flex gap-2 align-items-center ">
+                  <span>
+                    <i className="ri-fire-fill"></i>
+                  </span>
+                  HeXmint
+                </h2>
+              </div>
+            </Link>
           </Col>
 
           <Col lg="1" md="1" sm="6" className="mb-2">
@@ -75,10 +73,14 @@ const Footer = () => {
           <Col lg="1" md="1" sm="6" className="mb-2">
             <div className="list__group">
               <div className="list__item">
-                {isConnected ? (
-                  <Link to={"/create"}>{"Create"}</Link>
-                ) : (
-                  <Link onClick={() => connect()} to="">
+                {isConnected && <Link to={"/create"}>{"Create"}</Link>}
+                {!isConnected && (
+                  <Link
+                    onClick={() =>
+                      toast.info("You have to connect your wallet first")
+                    }
+                    to=""
+                  >
                     {"Create"}
                   </Link>
                 )}
@@ -97,10 +99,14 @@ const Footer = () => {
           <Col lg="2" md="2" sm="6" className="mb-2">
             <div className="list__group">
               <div className="list__item">
-                {isConnected ? (
-                  <Link to="">{"Connect Wallet"}</Link>
-                ) : (
-                  <Link onClick={() => connect()} to="">
+                {isConnected && <Link to="">{"Connect Wallet"}</Link>}
+                {!isConnected && (
+                  <Link
+                    onClick={() =>
+                      toast.info("You have to connect your wallet first")
+                    }
+                    to=""
+                  >
                     {"Connect Wallet"}
                   </Link>
                 )}
