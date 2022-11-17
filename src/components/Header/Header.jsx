@@ -14,6 +14,7 @@ import ConnectingServices from "../../services/ConnectingServices";
 import { useRef } from "react";
 import Token from "../../services/Token";
 import { useDisconnect } from "wagmi";
+import Loader from "../ui/Loader/Loader"
 
 const NAV_LINKS = [
   {
@@ -39,6 +40,7 @@ function Header() {
   const [islogoutcalling, setIslogoutcalling] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
   const { disconnect } = useDisconnect();
 
   //Wagmi Hooks
@@ -59,14 +61,6 @@ function Header() {
   const getUserType = (Utype) => {
     setUserType(Utype);
   };
-
-  // const t = setInterval(() => {
-  //   console.log("interval");
-  //   if (isConnected) {
-  //     handleLogout();
-  //   }
-  // }, 10000);
-  // clearInterval(t);
 
   useEffect(() => {
     handleLogout();
@@ -133,7 +127,11 @@ function Header() {
 
   return (
     <>
+    
       <header className="header w-100">
+      {loader ? (
+        <Loader isLoading={loader} />
+      ) : (
         <Container>
           <div className="navigation d-flex  align-items-center justify-content-between ">
             <NavLink to="/home" className="logo-navlink">
@@ -411,6 +409,7 @@ function Header() {
             </div>
           </div>
         </Container>
+      )}
       </header>
       {showConnectWallet && (
         <ConnectWallet

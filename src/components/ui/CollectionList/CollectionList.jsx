@@ -7,12 +7,13 @@ import CollectionCard from "../CollectionCard/CollectionCard";
 import MarketplaceJSON from "../../../Marketplace.json";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
+import Loader from "../Loader/Loader";
 
 function CollectionList() {
-
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
   useEffect(() => {
+    setLoader(true);
     getCollections();
   }, []);
 
@@ -33,33 +34,39 @@ function CollectionList() {
     }
     setTimeout(() => {
       setLoader(false);
-    }, 200);
+    }, 500);
   };
 
   return (
-    <section>
-      <Container>
-        <Row>
-          <Col lg="12" className="mb-5">
-            <div className="explore_list d-flex align-items-center justify-content-between ">
-              <h3 data-testid = 'explore_txt'>Explore</h3>
-            </div>
-          </Col>
+    <>
+      {loader ? (
+        <Loader isLoading={loader} />
+      ) : (
+        <section>
+          <Container>
+            <Row>
+              <Col lg="12" className="mb-5">
+                <div className="explore_list d-flex align-items-center justify-content-between ">
+                  <h3 data-testid="explore_txt">Explore</h3>
+                </div>
+              </Col>
 
-          {allCollections.slice(0, 6).map((item) => (
-            <Col lg="4" md="4" sm="6" className="mb-4">
-              <CollectionCard key={item.id} item={item} />
-            </Col>
-          ))}
+              {allCollections.slice(0, 6).map((item) => (
+                <Col lg="4" md="4" sm="6" className="mb-4">
+                  <CollectionCard key={item.id} item={item} />
+                </Col>
+              ))}
 
-          <Col lg="12" className="mb-5">
-            <div className="more">
-              <Link to="/explore">Explore more</Link>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+              <Col lg="12" className="mb-5">
+                <div className="more">
+                  <Link to="/explore">Explore more</Link>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+      )}
+    </>
   );
 }
 

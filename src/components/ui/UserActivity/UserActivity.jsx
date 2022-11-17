@@ -94,10 +94,10 @@ export default function UserActivity(props) {
                     </TableCell>
                   )}
 
-                  {row.activitytype === "buyed" && (
+                  {row.activitytype === "bought" && (
                     <TableCell component="th" scope="row">
                       <PaidIcon />
-                      &nbsp;Buyed
+                      &nbsp;Bought
                     </TableCell>
                   )}
 
