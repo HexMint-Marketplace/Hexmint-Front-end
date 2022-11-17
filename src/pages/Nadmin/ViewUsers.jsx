@@ -50,7 +50,7 @@ function ViewUsers() {
 
     try {
       const response = await CustomerServices.getCustomers();
-      console.log("response", response.data.data);
+      console.log("response in get customers", response.data.data);
       if (response.status === 200) {
         console.log("hi new data........", response);
         setAllCustomers(response.data.data);

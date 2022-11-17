@@ -86,9 +86,9 @@ function ViewReports() {
     }, 200);
   };
 
-  const handleClickBlock = (userid, reportid) => {
+  const handleClickBlock = (userid) => {
     blockUser(userid);
-    deleteReport(reportid);
+    deleteReport(userid);
   };
 
   const handleClickOpen = (id) => {
@@ -148,7 +148,7 @@ function ViewReports() {
                       </Button>
                       <Button
                         className="btn btn-primary"
-                        onClick={() => handleClickBlock(row.to._id, row._id)}
+                        onClick={() => handleClickBlock(row.to._id)}
                         sx={{ ml: 2, mr: 2 }}
                       >
                         <Link to="">Block</Link>
