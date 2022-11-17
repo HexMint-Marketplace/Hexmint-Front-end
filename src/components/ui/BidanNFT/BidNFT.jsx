@@ -17,6 +17,8 @@ import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import SellIcon from "@mui/icons-material/Sell";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 const BidNFT = (props) => {
   const [isShown, setisShown] = useState(false);
@@ -29,6 +31,14 @@ const BidNFT = (props) => {
   const [BuyerUserType, setBuyerUserType] = useState("");
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
+
+  const initialValues = {
+    bidPrice: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    bidPrice: Yup.number().required("Required").label("Your Bid Amount"),
+  });
 
   const {
     _v,
@@ -239,36 +249,62 @@ const BidNFT = (props) => {
                       </Button>
                       <>
                         {isShown && (
-                          <Box
-                            sx={{
-                              boxShadow: 12,
-                              width: "100%",
-                              padding: 3,
-                              borderRadius: 2,
-                              marginBottom: 5,
-                              textAlign: "center",
-                              outline: "none",
-                            }}
+                          <Formik
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={() => bidNFT(tokenId)}
                           >
-                            <form>
-                              <TextField
-                                type="number"
-                                label="Your Bid Amount"
-                                variant="outlined"
-                                placeholder="Enter Bid Amount"
-                                fullWidth
-                              />
-                            </form>
-                            <Button
-                              color="primary"
-                              onClick={() => bidNFT(tokenId)}
-                              className="btn btn-primary"
-                              variant="contained"
-                              sx={{ mt: 2, mb: 2 }}
-                            >
-                              Bid Now
-                            </Button>
-                          </Box>
+                            {(formikProps) => {
+                              const {
+                                values,
+                                handleChange,
+                                handleSubmit,
+                                errors,
+                                touched,
+                              } = formikProps;
+
+                              return (
+                                <Box
+                                  sx={{
+                                    boxShadow: 12,
+                                    width: "100%",
+                                    padding: 3,
+                                    borderRadius: 2,
+                                    marginBottom: 5,
+                                    textAlign: "center",
+                                    outline: "none",
+                                  }}
+                                >
+                                  <form>
+                                    <TextField
+                                      type="number"
+                                      name="bidPrice"
+                                      value={values.bidPrice}
+                                      onChange={handleChange("bidPrice")}
+                                      helperText={
+                                        touched.bidPrice && errors.bidPrice
+                                      }
+                                      label="Your Bid Amount"
+                                      error={errors.bidPrice}
+                                      variant="outlined"
+                                      placeholder="Enter Bid Amount"
+                                      fullWidth
+                                    />
+
+                                    <Button
+                                      color="primary"
+                                      onClick={handleSubmit}
+                                      className="btn btn-primary"
+                                      variant="contained"
+                                      sx={{ mt: 2, mb: 2 }}
+                                    >
+                                      Bid Now
+                                    </Button>
+                                  </form>
+                                </Box>
+                              );
+                            }}
+                          </Formik>
                         )}
                       </>
                     </>

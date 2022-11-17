@@ -224,7 +224,6 @@ const BuyanNFT = (props) => {
                       onClick={() => buyNFT(tokenId)}
                       fullWidth
                       disabled={BuyerUserType !== "Customer" ? true : false}
-                      disabled={BuyerUserType !== "Customer" ? true : false}
                     >
                       <span className="text-white">
                         {" "}
