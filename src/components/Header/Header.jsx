@@ -105,6 +105,7 @@ function Header() {
 
   const handleLogout = () => {
     console.log("logout calling");
+
     if (isConnected) {
       const checkTokenExp = Token.getDecodedAccessTokenExp();
       if (checkTokenExp) {
@@ -341,10 +342,31 @@ function Header() {
 
             <div className="nav_right d-flex align-items-center gap-5">
               {/* Connect the user's wallet into the system after click or display the wallet address if the user already connect to the system */}
-              {isConnected ? (
+              {isConnected && userType === "Super Admin" && (
+                <button className="btn d-flex gap-1 align-items-center custom-style ">
+                  <span className="overflow-hidden wallet-address">
+                    <b>
+                      <span className="px-1">
+                        <AccountCircleIcon
+                          fontSize={screenWidth > 1200 ? "large" : "small"}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1rem" }}>
+                        {screenWidth > 700 &&
+                          (ensName ?? address).substring(0, 8) + "....."}
+
+                        {screenWidth <= 700 &&
+                          (ensName ?? address).substring(0, 3) + ".."}
+                      </span>
+                    </b>
+                  </span>
+                </button>
+              )}
+              {isConnected && userType !== "Super Admin" && (
                 <Link
                   to={`/seller-profile/${address}`}
                   className="text-decoration-none to-user"
+                  disable={userType === "Super Admin" ? true : false}
                 >
                   <button className="btn d-flex gap-1 align-items-center custom-style ">
                     <span className="overflow-hidden wallet-address">
@@ -365,7 +387,8 @@ function Header() {
                     </span>
                   </button>
                 </Link>
-              ) : (
+              )}
+              {!isConnected && (
                 <button
                   onClick={() => {
                     setshowConnectWallet(true);
