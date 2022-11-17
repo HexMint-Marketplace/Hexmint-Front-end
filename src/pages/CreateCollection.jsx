@@ -73,7 +73,7 @@ function CreateCollection() {
       console.log("In the response", response);
       if (response.status === 202) {
         console.log("In the if and updated user details succesfully");
-        Navigate("/explore");
+        Navigate(`/seller-profile/${userWallet}`);
       }
     } catch (error) {
       console.log("error", error);
