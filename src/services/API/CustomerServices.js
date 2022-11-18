@@ -152,6 +152,16 @@ const reportSeller = async(sellerWalletAddress, reason, ViewerAddress) =>{
   });
 };
 
+const getBlockedUsersWalletAddress = async (address) => {
+  return axios({
+    method: "get",
+    url: APIEndpoint + "/get-blocked-users-walletaddress",
+    data: {
+      walletaddress: address,
+    }
+  });
+};
+
 export default {
   updateUserDetails,
   getCustomers,
@@ -168,4 +178,5 @@ export default {
   getCollectionName,
   getCustomerDetailsFromWalletAddress,
   reportSeller,
+  getBlockedUsersWalletAddress
 };

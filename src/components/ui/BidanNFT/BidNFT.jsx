@@ -21,9 +21,6 @@ import TextField from "@mui/material/TextField";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { Formik } from "formik";
-import * as Yup from "yup";
-
 const BidNFT = (props) => {
   const [isShown, setisShown] = useState(false);
   console.log("In time auction buying");
