@@ -23,6 +23,17 @@ const CollectionCard = (props) => {
     userid,
   } = props.item;
 
+  // const date = new Date();
+  // date.setTime(date.getTime() + 5 * 60 * 1000);
+  // console.log("end date: ", date);
+  // const date1 = new Date("2022-11-09T19:10:22.991+00:00");
+  // const duration = date.getTime()-date1.getTime();
+  // const days = Math.floor(duration/(1000 * 3600 * 24));
+  // const hours = Math.floor((duration%(1000 * 3600 * 24))/(1000 * 3600));
+  // const minutes = Math.floor(((duration%(1000 * 3600 * 24))%(1000 * 3600))/(1000*60));
+  // console.log("created At: ", days, hours, minutes);
+  // console.log("created            : ", new Date(date1.getTime()).toISOString());
+
   useEffect(() => {
     getuserdetails(userid);
     const fetchData = async () => {
@@ -101,11 +112,11 @@ const CollectionCard = (props) => {
       props.item.floorPrize = floorPrize;
     }
     // updateTotalPrice(sumPrice.toPrecision(3));
-
+    console.log("items_: ", items);
     const items_ = items.filter((element) => {
       return element !== undefined;
     });
-    // console.log("items_.length: ", items_.length);
+    console.log("items_: ", items_);
     if (items_.length > 0) {
       setListedNFTsExist(true);
     }

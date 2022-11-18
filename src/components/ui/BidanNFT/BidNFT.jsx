@@ -4,6 +4,7 @@ import "./bidNFT.css";
 import MarketplaceJSON from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
+import UserServices from "../../../services/API/UserServices";
 import Token from "../../../services/Token";
 import { toast } from "react-toastify";
 import Card from "@mui/material/Card";
@@ -17,6 +18,9 @@ import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import SellIcon from "@mui/icons-material/Sell";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -56,12 +60,29 @@ const BidNFT = (props) => {
     userid,
   } = props.collectionData;
 
-  const { NFTname, collectionId, description, image, price, seller, tokenId } =
-    props.NFTData;
+  const {
+    NFTname,
+    collectionId,
+    description,
+    image,
+    price,
+    seller,
+    tokenId,
+    currentbid,
+    currentBidder,
+    remainingTime,
+    endDate,
+    initialBid,
+  } = props.NFTData;
 
-  console.log("props.NFTData: ", props.collectionData);
+  const initialValues = {
+    biddingPrice: "",
+  };
 
-  async function bidNFT(tokenId) {
+  const validationSchema = Yup.object().shape({});
+  // console.log("props.NFTData: ", props.collectionData);
+
+  async function bidNFT(values) {
     if (!isConnected) {
       toast.info("Please connect your wallet");
       return;
@@ -83,20 +104,22 @@ const BidNFT = (props) => {
         signer
       );
       console.log("contract: ", contract);
-      const referralRate = parseInt(await contract.getReferralRate());
-      console.log("rate: ", referralRate);
-      console.log("price: ", (price * (referralRate + 100)) / 100);
-      const totalFee = (price * (referralRate + 100)) / 100;
-      console.log("total feeeeeeeeeeee: ", totalFee);
-      const salePrice = ethers.utils.parseEther(totalFee.toString());
+
+      const salePrice = ethers.utils.parseEther((values.biddingPrice).toString());
 
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
       console.log("update message");
-      //run the executeSale function
-      let transaction = await contract.executeSale(tokenId, {
+
+      //run the chargeForbid function
+      let transaction = await contract.chargeForbid(tokenId, currentBidder, {
         value: salePrice,
       });
       await transaction.wait();
+      const details = await UserServices.getUserDetailsFromWalletAddress(seller);
+      transaction.ownerId = details.data.userid;
+      transaction.currentbid = values.biddingPrice;
+      transaction.endDate = endDate;
+      
       console.log("transaction: ", transaction);
       settransactionObj(transaction);
       console.log("transactionObj: in use state ", transactionObj);
@@ -209,6 +232,7 @@ const BidNFT = (props) => {
                       </h4>
                       <div className="bcollection-name">{collectionName}</div>
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
+
                         {buyerWalletAddress !== props.NFTData.seller ? (
                           <CardContent>
                             <h6 className="d-inline">Owned By : </h6>
@@ -224,12 +248,12 @@ const BidNFT = (props) => {
                             <span className="d-inline">You</span>
                           </CardContent>
                         )}
+
                       </Card>
                       <div className="prize-is">
-                        <h5 className="py-2">Current bid : 1.6 ETH</h5>
+                        <h5 className="py-2">Current bid : {price} ETH</h5>
                         <div>
-                          <AccessAlarmsIcon /> Sale ends 21 November 2022 at
-                          11:53 am GMT+5:30{" "}
+                          <AccessAlarmsIcon /> {remainingTime}{" "}
                         </div>
                       </div>
                     </CardContent>
@@ -252,7 +276,8 @@ const BidNFT = (props) => {
                           <Formik
                             initialValues={initialValues}
                             validationSchema={validationSchema}
-                            onSubmit={() => bidNFT(tokenId)}
+                            onSubmit={bidNFT}
+
                           >
                             {(formikProps) => {
                               const {
@@ -278,17 +303,18 @@ const BidNFT = (props) => {
                                   <form>
                                     <TextField
                                       type="number"
-                                      name="bidPrice"
-                                      value={values.bidPrice}
-                                      onChange={handleChange("bidPrice")}
+                                      name="biddingPrice"
+                                      value={values.biddingPrice}
+                                      onChange={handleChange("biddingPrice")}
                                       helperText={
                                         touched.bidPrice && errors.bidPrice
                                       }
-                                      label="Your Bid Amount"
-                                      error={errors.bidPrice}
-                                      variant="outlined"
-                                      placeholder="Enter Bid Amount"
                                       fullWidth
+                                      error={errors.biddingPrice}
+                                      variant="outlined"
+                                      label="biddingPrice"
+                                      placeholder="Enter Bid Amount"
+
                                     />
 
                                     <Button

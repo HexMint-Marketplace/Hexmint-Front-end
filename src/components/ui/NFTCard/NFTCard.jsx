@@ -14,9 +14,13 @@ const NFTCard = (props) => {
     price,
     seller,
     tokenId,
+    currentbid,
+    remainingTime,
+    endDate,
+    initialBid,
   } = props.item;
   // const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
-
+// console.log("currentbid: ",currentbid,"remainingTime: ",remainingTime);
   return (
     <>
     {props.sellType == "Buy Now" && (
@@ -107,7 +111,7 @@ const NFTCard = (props) => {
                 >
                   {/* {price} */}
                   Auction Ends 
-                  <span> in 5 Days</span>
+                  <span> in {remainingTime}</span>
                 </Link>
               </div>
             </div>

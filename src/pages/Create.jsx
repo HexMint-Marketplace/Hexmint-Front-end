@@ -18,7 +18,7 @@ import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import Token from "../services/Token"
+import Token from "../services/Token";
 
 function Create() {
   const [transactionObj, settransactionObj] = useState({});
@@ -121,9 +121,10 @@ function Create() {
       );
 
       //actually create the NFT
-      let transac = await contract.createToken(metadataURL.toString());
+      const transac = await contract.createToken(metadataURL.toString());
 
       await transac.wait();
+
 
       // setLoader(true);
       console.log("await for transaction", transac);
@@ -152,13 +153,34 @@ function Create() {
       // //Activity type, from wallet address, prize, transaction hash,
       // saveUserActivity("minted", transaction, transactionTime);
 
-
       console.log("after update form params");
       // window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
   }
+
+  const updateCollectionOwners = async (values) => {
+    try {
+      const walletAddress = Token.JWTDecodeWalletAddress();
+      const userid = await getuserdetails(walletAddress.toString());
+      const response = await CustomerServices.updateCollectionOwners(
+        userid,
+        values.collectionId
+      );
+      if (response.status === 200) {
+        toast.success("Details updated successfully!");
+        // setTimeout(() => {
+        //   window.location.replace("/");
+        // }, 4000);
+      } else {
+        toast.error(response.data.message);
+        setLoader(false);
+      }
+    } catch (e) {
+      setLoader(false);
+    }
+  };
 
   const saveUserActivity = async (
     activityType,
@@ -199,7 +221,7 @@ function Create() {
     ) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("minted", transactionObj, tokenid, new Date());
-
+      
       settokenid({});
       settransactionObj({});
 
@@ -228,9 +250,9 @@ function Create() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        const walletAddress =  Token.JWTDecodeWalletAddress();
+        const walletAddress = Token.JWTDecodeWalletAddress();
         const userId = await getuserdetails(walletAddress.toString());
-        const ownedCollections = (response.data.collections).filter((element) => {
+        const ownedCollections = response.data.collections.filter((element) => {
           return element.userid === userId;
         });
         setAllCollections(ownedCollections);
@@ -255,6 +277,7 @@ function Create() {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
+          updateCollectionOwners={updateCollectionOwners}
           onSubmit={mintNFT}
         >
           {(formikProps) => {

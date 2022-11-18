@@ -37,7 +37,18 @@ const getUserDetailsFromUserId = (userid) => {
   });
 };
 
+const getTimeAuctionDetails = (tokenId) => {
+  // console.log(`in user services ${userid}`);
+
+  return axios.get(APIEndpoint + `/time-auction-details`, {
+    params: {
+      tokenId: tokenId,
+    },
+  });
+};
+
 export default {
   getUserDetailsFromWalletAddress,
   getUserDetailsFromUserId,
+  getTimeAuctionDetails,
 };

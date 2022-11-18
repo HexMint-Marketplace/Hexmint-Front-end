@@ -47,7 +47,6 @@ const ListingForm = () => {
 
   console.log("NFTData: ", NFTData);
 
-
   async function listNFT(values) {
     // setListingType(values.ListingType);
     // setListingPrize(values.listingPrize);
@@ -95,14 +94,38 @@ const ListingForm = () => {
 
       // let listingPrice = await contract.getListPrice();
       // listingPrice = listingPrice.toString();
-     
 
       let transaction = await contract.ListToken(NFTData.tokenId, price);
       console.log("after create token method called");
       await transaction.wait();
       // console.log("await for transaction");
-
       console.log("await for transaction", transaction);
+      transaction.listingType = values.ListingType;
+      if (values.ListingType == 2) {
+        transaction.currentbid = values.listingPrize;
+        //duration has to be calculated in frontend/backend
+        let endDate = new Date();
+        if (values.Duration === "5d") {
+          endDate.setTime(endDate.getTime() + 5 * 24 * 3600 * 1000);
+        } else if (values.Duration === "1w") {
+          endDate.setTime(endDate.getTime() + 7 * 24 * 3600 * 1000);
+        } else if (values.Duration === "2w") {
+          endDate.setTime(endDate.getTime() + 2 * 7 * 24 * 3600 * 1000);
+        } else if (values.Duration === "3w") {
+          endDate.setTime(endDate.getTime() + 3 * 7 * 24 * 3600 * 1000);
+        } else if (values.Duration === "1m") {
+          endDate.setTime(endDate.getTime() + 1 * 4 * 7 * 24 * 3600 * 1000);
+        } else if (values.Duration === "2m") {
+          endDate.setTime(endDate.getTime() + 2 * 4 * 7 * 24 * 3600 * 1000);
+        } else if (values.Duration === "2min") {
+          endDate.setTime(endDate.getTime() + 2 * 60 * 1000);
+        } else if (values.Duration === "5min") {
+          endDate.setTime(endDate.getTime() + 5 * 60 * 1000);
+        }
+
+        transaction.endDate = endDate.toISOString();
+      }
+
       settransactionObj(transaction);
       console.log("transactionObj: in use state ", transactionObj);
 
@@ -272,23 +295,30 @@ const ListingForm = () => {
                         }
                         error={errors.Duration}
                       >
-                        <MenuItem key="1" value="1">
+                        <MenuItem key="1" value="5d">
                           5 days
                         </MenuItem>
-                        <MenuItem key="2" value="2">
+                        <MenuItem key="2" value="1w">
                           1 week
                         </MenuItem>
-                        <MenuItem key="3" value="3">
+                        <MenuItem key="3" value="2w">
                           2 week
                         </MenuItem>
-                        <MenuItem key="4" value="4">
+                        <MenuItem key="4" value="3w">
                           3 week
                         </MenuItem>
-                        <MenuItem key="5" value="5">
+                        <MenuItem key="5" value="1m">
                           1 month
                         </MenuItem>
-                        <MenuItem key="6" value="6">
+                        <MenuItem key="6" value="2m">
                           2 month
+                        </MenuItem>
+                        {/* should be removed below menu items */}
+                        <MenuItem key="7" value="2min">
+                          2 minutes
+                        </MenuItem>
+                        <MenuItem key="8" value="5min">
+                          5 minutes
                         </MenuItem>
                       </TextField>
                       <HeightBox height="20px" />
