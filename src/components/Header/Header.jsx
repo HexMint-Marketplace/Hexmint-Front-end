@@ -14,6 +14,7 @@ import ConnectingServices from "../../services/ConnectingServices";
 import { useRef } from "react";
 import Token from "../../services/Token";
 import { useDisconnect } from "wagmi";
+import Loader from "../ui/Loader/Loader"
 
 const NAV_LINKS = [
   {
@@ -39,6 +40,7 @@ function Header() {
   const [islogoutcalling, setIslogoutcalling] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
   const { disconnect } = useDisconnect();
 
   //Wagmi Hooks
@@ -59,14 +61,6 @@ function Header() {
   const getUserType = (Utype) => {
     setUserType(Utype);
   };
-
-  // const t = setInterval(() => {
-  //   console.log("interval");
-  //   if (isConnected) {
-  //     handleLogout();
-  //   }
-  // }, 10000);
-  // clearInterval(t);
 
   useEffect(() => {
     handleLogout();
@@ -105,6 +99,7 @@ function Header() {
 
   const handleLogout = () => {
     console.log("logout calling");
+
     if (isConnected) {
       const checkTokenExp = Token.getDecodedAccessTokenExp();
       if (checkTokenExp) {
@@ -132,7 +127,11 @@ function Header() {
 
   return (
     <>
+    
       <header className="header w-100">
+      {loader ? (
+        <Loader isLoading={loader} />
+      ) : (
         <Container>
           <div className="navigation d-flex  align-items-center justify-content-between ">
             <NavLink to="/home" className="logo-navlink">
@@ -341,10 +340,31 @@ function Header() {
 
             <div className="nav_right d-flex align-items-center gap-5">
               {/* Connect the user's wallet into the system after click or display the wallet address if the user already connect to the system */}
-              {isConnected ? (
+              {isConnected && userType === "Super Admin" && (
+                <button className="btn d-flex gap-1 align-items-center custom-style ">
+                  <span className="overflow-hidden wallet-address">
+                    <b>
+                      <span className="px-1">
+                        <AccountCircleIcon
+                          fontSize={screenWidth > 1200 ? "large" : "small"}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1rem" }}>
+                        {screenWidth > 700 &&
+                          (ensName ?? address).substring(0, 8) + "....."}
+
+                        {screenWidth <= 700 &&
+                          (ensName ?? address).substring(0, 3) + ".."}
+                      </span>
+                    </b>
+                  </span>
+                </button>
+              )}
+              {isConnected && userType !== "Super Admin" && (
                 <Link
                   to={`/seller-profile/${address}`}
                   className="text-decoration-none to-user"
+                  disable={userType === "Super Admin" ? true : false}
                 >
                   <button className="btn d-flex gap-1 align-items-center custom-style ">
                     <span className="overflow-hidden wallet-address">
@@ -365,7 +385,8 @@ function Header() {
                     </span>
                   </button>
                 </Link>
-              ) : (
+              )}
+              {!isConnected && (
                 <button
                   onClick={() => {
                     setshowConnectWallet(true);
@@ -388,6 +409,7 @@ function Header() {
             </div>
           </div>
         </Container>
+      )}
       </header>
       {showConnectWallet && (
         <ConnectWallet

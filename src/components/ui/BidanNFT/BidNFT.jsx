@@ -13,11 +13,13 @@ import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import SellIcon from "@mui/icons-material/Sell";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -30,8 +32,17 @@ const BidNFT = (props) => {
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
+  const [BuyerUserType, setBuyerUserType] = useState("");
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
+
+  const initialValues = {
+    bidPrice: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    bidPrice: Yup.number().required("Required").label("Your Bid Amount"),
+  });
 
   const {
     _v,
@@ -185,7 +196,9 @@ const BidNFT = (props) => {
 
   useEffect(() => {
     const walletAddress = Token.JWTDecodeWalletAddress();
+    const userType = Token.JWTDecodeUserType();
     updateBuyerWalletAddress(walletAddress);
+    setBuyerUserType(userType);
   }, []);
   if (buyerWalletAddress == undefined) {
     return null;
@@ -219,12 +232,23 @@ const BidNFT = (props) => {
                       </h4>
                       <div className="bcollection-name">{collectionName}</div>
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
-                        <CardContent>
-                          <h6 className="d-inline">Owned By : </h6>
-                          <span className="d-inline">
-                            {seller.substring(0, 16) + "........"}
-                          </span>
-                        </CardContent>
+
+                        {buyerWalletAddress !== props.NFTData.seller ? (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <Link to={`/profile-view/${seller}`}>
+                              <span className="d-inline">
+                                {seller.substring(0, 16) + "........"}
+                              </span>
+                            </Link>
+                          </CardContent>
+                        ) : (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <span className="d-inline">You</span>
+                          </CardContent>
+                        )}
+
                       </Card>
                       <div className="prize-is">
                         <h5 className="py-2">Current bid : {price} ETH</h5>
@@ -241,6 +265,7 @@ const BidNFT = (props) => {
                         className="buyNow_button  d-flex align-items-center"
                         onClick={() => setisShown(true)}
                         fullWidth
+                        disabled={BuyerUserType !== "Customer" ? true : false}
                       >
                         <span className="text-white">
                           <SellIcon /> Place Bid
@@ -252,6 +277,7 @@ const BidNFT = (props) => {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={bidNFT}
+
                           >
                             {(formikProps) => {
                               const {
@@ -280,10 +306,15 @@ const BidNFT = (props) => {
                                       name="biddingPrice"
                                       value={values.biddingPrice}
                                       onChange={handleChange("biddingPrice")}
+                                      helperText={
+                                        touched.bidPrice && errors.bidPrice
+                                      }
                                       fullWidth
+                                      error={errors.biddingPrice}
                                       variant="outlined"
                                       label="biddingPrice"
                                       placeholder="Enter Bid Amount"
+
                                     />
 
                                     <Button

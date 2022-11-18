@@ -4,11 +4,13 @@ import { NFT__DATA } from "../../../asssets/data/data.js";
 import CollectionCard from "../CollectionCard/CollectionCard.jsx";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
+import Loader from "../Loader/Loader";
 
 function ExploreList() {
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
   useEffect(() => {
+    setLoader(true);
     getCollections();
   }, []);
 
@@ -29,21 +31,27 @@ function ExploreList() {
     }
     setTimeout(() => {
       setLoader(false);
-    }, 200);
+    }, 1000);
   };
 
   return (
-    <section data-testid="collection_section">
-      <Container>
-        <Row>
-          {allCollections.map((item) => (
-            <Col lg="4" md="4" sm="6" className="mb-4">
-              <CollectionCard key={item.id} item={item} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </section>
+    <>
+      {loader ? (
+        <Loader isLoading={loader} />
+      ) : (
+        <section data-testid="collection_section">
+          <Container>
+            <Row>
+              {allCollections.map((item) => (
+                <Col lg="4" md="4" sm="6" className="mb-4">
+                  <CollectionCard key={item.id} item={item} />
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </section>
+      )}
+    </>
   );
 }
 

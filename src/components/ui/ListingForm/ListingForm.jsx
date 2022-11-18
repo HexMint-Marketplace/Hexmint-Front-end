@@ -150,7 +150,7 @@ const ListingForm = () => {
       );
       if (response.status === 200) {
         console.log("User activity saved successfully");
-        toast.success("Successfully minted your NFT!");
+        toast.success("Successfully listed your NFT!");
         setTimeout(() => {
           window.location.replace("/");
         }, 4000);

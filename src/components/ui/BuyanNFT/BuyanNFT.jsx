@@ -13,7 +13,7 @@ import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SellIcon from "@mui/icons-material/Sell";
 
 const BuyanNFT = (props) => {
@@ -24,6 +24,7 @@ const BuyanNFT = (props) => {
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
   const { address, isConnected } = useAccount();
+  const [BuyerUserType, setBuyerUserType] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -68,24 +69,7 @@ const BuyanNFT = (props) => {
         MarketplaceJSON.abi,
         signer
       );
-      console.log("contract: ", contract);
-      const referralRate = parseInt(await contract.getReferralRate());
-      console.log("rate: ", referralRate);
-      console.log("price: ", (price * (referralRate + 100)) / 100);
-      const totalFee = (price * (referralRate + 100)) / 100;
-      console.log("total feeeeeeeeeeee: ", totalFee);
-      const salePrice = ethers.utils.parseEther(totalFee.toString());
 
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      console.log("update message");
-      //run the executeSale function
-      let transaction = await contract.executeSale(tokenId, {
-        value: salePrice,
-      });
-      await transaction.wait();
-      console.log("transaction: ", transaction);
-      settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
       contract.on(
         "TokenStatusUpdatedSuccess",
         (tokenId, contractAddress, seller, price, currentlyListed, event) => {
@@ -104,11 +88,32 @@ const BuyanNFT = (props) => {
         }
       );
 
+      console.log("contract: ", contract);
+      const referralRate = parseInt(await contract.getReferralRate());
+      console.log("rate: ", referralRate);
+      console.log("price: ", (price * (referralRate + 100)) / 100);
+      const totalFee = (price * (referralRate + 100)) / 100;
+      console.log("total feeeeeeeeeeee: ", totalFee);
+      const salePrice = ethers.utils.parseEther(totalFee.toString());
+
+      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
+      console.log("update message");
+      //run the executeSale function
+      let transaction = await contract.executeSale(tokenId, {
+        value: salePrice,
+      });
+      await transaction.wait();
+      console.log("transaction: ", transaction);
+      settransactionObj(transaction);
+      console.log("transactionObj: in use state ", transactionObj);
+
+
       updateMessage("");
-      alert("You successfully bought the NFT!");
+
       updateMessage("");
     } catch (e) {
-      alert("Upload Error: " + e);
+      // alert("Upload Error: " + e);
+      toast.error("Upload Error: " + e)
     }
   }
 
@@ -127,7 +132,7 @@ const BuyanNFT = (props) => {
       );
       if (response.status === 200) {
         console.log("User activity saved successfully");
-        toast.success("Successfully minted your NFT!");
+        toast.success("Successfully bought the NFT!");
         setTimeout(() => {
           window.location.replace("/");
         }, 4000);
@@ -144,6 +149,7 @@ const BuyanNFT = (props) => {
 
   useEffect(() => {
     console.log("use effect called -------------------------------");
+    console.log("in use effect tokenid: ", tokenid, "in use effect transactionObj: ", transactionObj);
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
@@ -159,7 +165,9 @@ const BuyanNFT = (props) => {
 
   useEffect(() => {
     const walletAddress = Token.JWTDecodeWalletAddress();
+    const userType = Token.JWTDecodeUserType();
     updateBuyerWalletAddress(walletAddress);
+    setBuyerUserType(userType);
   }, []);
   if (buyerWalletAddress == undefined) {
     return null;
@@ -193,12 +201,21 @@ const BuyanNFT = (props) => {
                       </h4>
                       <div className="bcollection-name">{collectionName}</div>
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
-                        <CardContent>
-                          <h6 className="d-inline">Owned By : </h6>
-                          <span className="d-inline">
-                            {seller.substring(0, 16) + "........"}
-                          </span>
-                        </CardContent>
+                        {buyerWalletAddress !== props.NFTData.seller ? (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <Link to={`/profile-view/${seller}`}>
+                              <span className="d-inline">
+                                {seller.substring(0, 16) + "........"}
+                              </span>
+                            </Link>
+                          </CardContent>
+                        ) : (
+                          <CardContent>
+                            <h6 className="d-inline">Owned By : </h6>
+                            <span className="d-inline">You</span>
+                          </CardContent>
+                        )}
                       </Card>
                       <div className="prize-is">
                         <h5 className="py-2">Price : {price} ETH</h5>
@@ -211,11 +228,11 @@ const BuyanNFT = (props) => {
                       className="buyNow_button  d-flex align-items-center"
                       onClick={() => buyNFT(tokenId)}
                       fullWidth
+                      disabled={BuyerUserType !== "Customer" ? true : false}
                     >
                       <span className="text-white">
                         {" "}
-                        <SellIcon />{" "}
-                        Buy this NFT
+                        <SellIcon /> Buy this NFT
                       </span>
                     </Button>
                   ) : (

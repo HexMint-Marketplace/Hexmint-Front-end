@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./ServiceSection.css";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import { toast } from "react-toastify";
 
 function ServiceSection() {
   const { address, isConnected } = useAccount();
@@ -31,15 +32,26 @@ function ServiceSection() {
                   </h5>
                 ) : (
                   <h5>
-                    <Link onClick={() => connect()} to="">
-                      Connect Your Wallet
-                    </Link>
+                    {isConnected && <Link to="">Connect Your Wallet</Link>}
+                    {!isConnected && (
+                      <Link
+                        onClick={() =>
+                          toast.info(
+                            "Use the connect 'wallet button' in top of the page"
+                          )
+                        }
+                        to=""
+                      >
+                        Connect Your Wallet
+                      </Link>
+                    )}
                   </h5>
                 )}
 
                 <p className="mt-3">
-                  Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                  Lorem ipsum Lorem ipsum
+                  To connect your crypto wallet to an HeXmint NFT marketplace,
+                  firstly you must have a Metamsk account. Just install MetaMask
+                  and follow the steps
                 </p>
               </div>
             </div>
@@ -48,20 +60,26 @@ function ServiceSection() {
           <Col lg="3" md="4" sm="6" className="mb-3">
             <div className="single_service">
               <div className="single_service_content">
-                {isConnected ? (
+                {isConnected && (
                   <h5>
                     <Link to="/seller-profile">Create Your Collection</Link>
                   </h5>
-                ) : (
+                )}
+                {!isConnected && (
                   <h5>
-                    <Link onClick={() => connect()} to="">
+                    <Link
+                      onClick={() =>
+                        toast.info("You have to connect your wallet first")
+                      }
+                      to=""
+                    >
                       Create Your Collection
                     </Link>
                   </h5>
                 )}
                 <p className="mt-3">
-                  Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                  Lorem ipsum Lorem ipsum
+                  An NFT collection is an assortment of digital assets released
+                  by an artist containing a limited number of individual NFTs.
                 </p>
               </div>
             </div>
@@ -70,21 +88,28 @@ function ServiceSection() {
           <Col lg="3" md="4" sm="6" className="mb-3">
             <div className="single_service">
               <div className="single_service_content">
-                {isConnected ? (
+                {isConnected && (
                   <h5>
                     <Link to="/create">Mint Your NFTs</Link>
                   </h5>
-                ) : (
+                )}
+                {!isConnected && (
                   <h5>
-                    <Link onClick={() => connect()} to="">
+                    <Link
+                      onClick={() =>
+                        toast.info("You have to connect your wallet first")
+                      }
+                      to=""
+                    >
                       Mint Your NFTs
                     </Link>
                   </h5>
                 )}
 
                 <p className="mt-3">
-                  Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                  Lorem ipsum Lorem ipsum
+                  Minting an NFT, or non-fungible token, is publishing a unique
+                  digital asset on a blockchain so that it can be bought, sold,
+                  and traded.
                 </p>
               </div>
             </div>
@@ -93,21 +118,27 @@ function ServiceSection() {
           <Col lg="3" md="4" sm="6" className="mb-3">
             <div className="single_service">
               <div className="single_service_content">
-                {isConnected ? (
+                {isConnected && (
                   <h5>
                     <Link to="/seller-profile">List Your NFTs</Link>
                   </h5>
-                ) : (
+                )}
+                {!isConnected && (
                   <h5>
-                    <Link onClick={() => connect()} to="">
+                    <Link
+                      onClick={() =>
+                        toast.info("You have to connect your wallet first")
+                      }
+                      to=""
+                    >
                       List Your NFTs
                     </Link>
                   </h5>
                 )}
 
-                <p className="mt-3">
-                  Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                  Lorem ipsum Lorem ipsum
+                <p className="mt-3">Wanna sell your NFT? It is important to
+                  note that listing your NFT on the marketplace is a primary
+                  requirement to sell it to customers across the globe.
                 </p>
               </div>
             </div>
