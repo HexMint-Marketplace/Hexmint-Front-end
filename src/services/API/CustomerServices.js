@@ -134,15 +134,17 @@ const getCustomerDetailsFromWalletAddress = async (walletaddress) => {
   console.log("in get customer details from wallet address", walletaddress);
   return axios({
     method: "get",
-    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
-    url: APIEndpoint + `/get-customer-details-from-wallet-address/${walletaddress}`,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url:
+      APIEndpoint +
+      `/get-customer-details-from-wallet-address/${walletaddress}`,
   });
 };
-    
-const reportSeller = async(sellerWalletAddress, reason, ViewerAddress) =>{
+
+const reportSeller = async (sellerWalletAddress, reason, ViewerAddress) => {
   return axios({
     method: "post",
-    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/report-seller",
     data: {
       sellerWalletAddress: sellerWalletAddress,
@@ -152,13 +154,10 @@ const reportSeller = async(sellerWalletAddress, reason, ViewerAddress) =>{
   });
 };
 
-const getBlockedUsersWalletAddress = async (address) => {
+const getIsBlocked = async (address) => {
   return axios({
     method: "get",
-    url: APIEndpoint + "/get-blocked-users-walletaddress",
-    data: {
-      walletaddress: address,
-    }
+    url: APIEndpoint + `/get-blocked-users-status/${address}`,
   });
 };
 
@@ -178,5 +177,5 @@ export default {
   getCollectionName,
   getCustomerDetailsFromWalletAddress,
   reportSeller,
-  getBlockedUsersWalletAddress
+  getIsBlocked,
 };
