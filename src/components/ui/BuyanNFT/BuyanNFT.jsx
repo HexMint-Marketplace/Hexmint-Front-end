@@ -106,14 +106,9 @@ const BuyanNFT = (props) => {
       console.log("transaction: ", transaction);
       settransactionObj(transaction);
       console.log("transactionObj: in use state ", transactionObj);
-
-
-      updateMessage("");
-
-      updateMessage("");
     } catch (e) {
       // alert("Upload Error: " + e);
-      toast.error("Upload Error: " + e)
+      toast.error("Upload Error: " + e);
     }
   }
 
@@ -149,13 +144,18 @@ const BuyanNFT = (props) => {
 
   useEffect(() => {
     console.log("use effect called -------------------------------");
-    console.log("in use effect tokenid: ", tokenid, "in use effect transactionObj: ", transactionObj);
+    console.log(
+      "in use effect tokenid: ",
+      tokenid,
+      "in use effect transactionObj: ",
+      transactionObj
+    );
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
       console.log("In the saveuseractivity use effect function");
-      saveUserActivity("bought", transactionObj, tokenid, new Date());
+      saveUserActivity("bade", transactionObj, tokenid, new Date());
 
       settokenid({});
       settransactionObj({});

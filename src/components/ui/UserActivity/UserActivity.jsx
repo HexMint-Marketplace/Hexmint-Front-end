@@ -108,6 +108,13 @@ export default function UserActivity(props) {
                     </TableCell>
                   )}
 
+                  {row.activitytype === "bade" && (
+                    <TableCell component="th" scope="row">
+                      <PaidIcon />
+                      &nbsp;Bade
+                    </TableCell>
+                  )}
+
                   <TableCell align="right">{row.NFTid}</TableCell>
                   <TableCell align="right">{row.price} ETH</TableCell>
                   <TableCell align="right">{row.fromwalletaddress}</TableCell>
