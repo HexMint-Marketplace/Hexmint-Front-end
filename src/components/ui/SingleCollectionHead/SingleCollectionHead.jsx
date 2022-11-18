@@ -1,50 +1,144 @@
-import React from 'react'
-import { Container, Row, Col } from 'reactstrap';
+import React from "react";
+import { Container, Row, Col } from "reactstrap";
 import "./singleCollectionHead.css";
+import HeightBox from "../../HeightBox/HeightBox";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Paper from "@mui/material/Paper";
+import Banner from "../../../asssets/images/banner.png";
 
 const SingleCollectionHead = (props) => {
-  const{contractAddress, collectionName, description, collectionIcon} = props.collectionData[0];
-  console.log(props.collectionData)
+  const {
+    _v,
+    _id,
+    contractAddress,
+    collectionDescription,
+    collectionName,
+    createdAt,
+    logoImg,
+    numberofNfts,
+    ownersCount,
+    totalPrice,
+    floorPrize,
+    updatedAt,
+    userid,
+  } = props.collectionData;
+  console.log(props.collectionData);
+  // if (listedNFTcount > 0);
   return (
-    <section>
     <Container>
-        <Row>
-        <Row>
-            <Col lg="3" md="3" sm="12">
-                <div className='px-4'>
-                    <img src={collectionIcon} alt="" className='w-100 rounded-circle rounded-0 border border-5 img-fluid float-start'/>
-                </div>
-            </Col>
-        </Row>
+      <HeightBox height="30px" />
 
-        <Row>
-            <Col lg="8" md="3" sm="12">
-                <div className='h2 px-4 mt-3 collection-name'>
-                    {collectionName}
-                </div>
+      <Row>
+        <div>
+          <img src={Banner} alt="banner" className="banner-img" />
+          <div className="ajust-logo">
+            <img
+              src={logoImg}
+              alt=""
+              className="rounded-circle rounded-0 border border-5 img-fluid float-start custom-logoimg"
+            />
+          </div>
+        </div>
+      </Row>
 
-                <div className='px-4 mt-3 collection-description'>
-                    {description}
-                </div>
-            </Col>
+      <Row>
+        <Col sm="12" md="6" lg="6" className="ajust-details">
+          <div
+            className="h1 fw-bold collection-name"
+            style={{ fontSize: "4rem", paddingLeft: "10%" }}
+          >
+            {collectionName}
+          </div>
 
-            <Col lg="4" md="3" sm="12">
-                <div className='d-flex'>
-                <div className='NFT-count p-2 mt-4 mx-5'>
-                    127 NFTs
-                </div>
+          <div
+            className="collection-description"
+            style={{ fontSize: "1.5rem", paddingLeft: "10%" }}
+          >
+            {collectionDescription}
+          </div>
+          <HeightBox height="5px" />
+        </Col>
 
-                <div className='owners-count p-2 mt-4'>
-                    32 Owners
-                </div>
-                </div>
-            </Col>
-        </Row>
-        <hr class="hr-primary mt-4" />
-        </Row>
+        <Col sm="12" md="6" lg="6">
+          <Card
+            variant="outlined"
+            sx={{
+              textAlign: "center",
+              borderRadius: 3,
+              border: 1,
+              borderColor: "grey.500",
+              backgroundColor: "transparent",
+            }}
+          >
+            <CardContent>
+              <Row>
+                <Col sm="12" md="6" lg="3">
+                  <Card
+                    sx={{
+                      p: 1,
+                      m: 0.5,
+                      border: 1,
+                      height: 80,
+                      minWidth: 130,
+                    }}
+                    elevation={3}
+                  >
+                    <p>{numberofNfts + " total NFTs"}</p>
+                  </Card>
+                </Col>
+                <Col sm="12" md="6" lg="3">
+                  <Card
+                    sx={{
+                      p: 1,
+                      m: 0.5,
+                      border: 1,
+                      height: 80,
+                      minWidth: 130,
+                    }}
+                    elevation={3}
+                  >
+                    <p>{"Total volume of " + totalPrice}</p>
+                  </Card>
+                </Col>
+
+                <Col sm="12" md="6" lg="3">
+                  <Card
+                    sx={{
+                      p: 1,
+                      m: 0.5,
+                      border: 1,
+                      height: 80,
+                      minWidth: 130,
+                    }}
+                    elevation={3}
+                  >
+                    <p>{ownersCount + " Owner(s)"}</p>
+                  </Card>
+                </Col>
+                <Col sm="12" md="6" lg="3">
+                  <Card
+                    sx={{
+                      p: 1,
+                      m: 0.5,
+                      border: 1,
+                      height: 80,
+                      minWidth: 130,
+                    }}
+                    elevation={3}
+                  >
+                    <p>{"Floor Prize: " + floorPrize}</p>
+                  </Card>
+                </Col>
+              </Row>
+            </CardContent>
+          </Card>
+        </Col>
+      </Row>
+
+      <hr class="hr-primary mt-4" />
     </Container>
-    </section>
-  )
-}
+  );
+};
 
-export default SingleCollectionHead
+export default SingleCollectionHead;

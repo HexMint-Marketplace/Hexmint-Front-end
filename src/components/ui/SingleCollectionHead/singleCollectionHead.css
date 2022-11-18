@@ -1,23 +1,48 @@
-.collection-name{
-    color: white;
-
+.collection-name {
+  color: white;
+  /* font-size: 4rem !important; */
 }
 
-.collection-description{
-    color: white;
+.collection-description {
+  color: white;
+  font-size: 1.5rem !important;
 }
 
-.owners-count, .NFT-count{
-    border: 1px solid blueviolet;
-    color: white;
+.owners-count,
+.NFT-count {
+  border: 1px solid blueviolet;
+  color: white;
 }
 
-hr{
-    height: 4px;
-    margin-left: 15px;
-    margin-bottom:-3px;
+hr {
+  height: 4px;
+  margin-left: 15px;
+  margin-bottom: -3px;
 }
 
-.hr-primary{
-    background-image: -webkit-linear-gradient(left, rgba(66,133,244,.8), rgba(66, 133, 244,.6), rgba(0,0,0,0));
-  }
+.hr-primary {
+  background-image: -webkit-linear-gradient(
+    left,
+    rgba(66, 133, 244, 0.8),
+    rgba(66, 133, 244, 0.6),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.custom-logoimg {
+  width: 20% !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+.banner-img {
+  width: 100%;
+  aspect-ratio: 1/0.3;
+  border: solid;
+  border-color: aliceblue;
+}
+
+.ajust-logo {
+  position: relative;
+  bottom: 20%;
+  left: 7%;
+}

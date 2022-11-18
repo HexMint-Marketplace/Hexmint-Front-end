@@ -7,7 +7,7 @@
   font-size: 0.8rem;
   background: transparent;
   border: 3px solid rgba(221, 221, 221, 0.171);
-  outline: none;
+  outline: nonea;
   border-radius: 5px;
   cursor: pointer;
 }

@@ -1,0 +1,56 @@
+.form-input input {
+  width: 100%;
+  padding: 7px 25px;
+  color: #fff;
+  font-size: 0.8rem;
+  background: transparent;
+  border: 3px solid rgba(221, 221, 221, 0.171);
+  outline: nonea;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-input {
+  margin-bottom: 15px;
+}
+
+.form-input label {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.form-input .upload-input {
+  padding: 10px 25px;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.edit-profile-button {
+  padding: 13px 10px !important;
+  border-radius: 50px !important;
+}
+
+.edit-profile-button {
+  background: linear-gradient(to right, #59f9b7, #66feea);
+}
+
+.edit-profile-button {
+  text-decoration: none;
+  color: black;
+  font-weight: 650;
+  font-size: 1rem;
+}
+
+.edit-profile-button a:hover {
+  color: rgb(103, 38, 38);
+  text-shadow: black 2px 2px 20px;
+}
+
+/* @media only screen and (max-width: 576px) {
+  .create__item {
+    margin-top: 15px;
+  }
+} */

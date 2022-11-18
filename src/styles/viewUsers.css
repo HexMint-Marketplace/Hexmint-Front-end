@@ -1,0 +1,11 @@
+.table {
+  width: auto !important;
+  height: auto !important;
+  margin-left: 8%;
+  margin-right: 8% !important;
+  margin-bottom: 10% !important;
+}
+
+.section {
+  padding-top: 5%;
+}

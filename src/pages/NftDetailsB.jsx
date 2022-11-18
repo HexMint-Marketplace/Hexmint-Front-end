@@ -1,19 +1,38 @@
-import React from 'react'
-import {NFT__DATA} from '../asssets/data/data.js'
-import BuyanNFT from '../components/ui/BuyanNFT/BuyanNFT'
-import ExploreMore from '../components/ui/ExploreMore/ExploreMore'
+import React from "react";
+import BuyanNFT from "../components/ui/BuyanNFT/BuyanNFT";
+import ExploreMore from "../components/ui/ExploreMore/ExploreMore";
+import { useLocation } from "react-router-dom";
+import BidNFT from "../components/ui/BidanNFT/BidNFT";
 
 function NFTDetailsB() {
+  const location = useLocation();
+  // use location from NFTCard.jsx
+  const { NFTData, collectionData, sellType } = location.state;
+  console.log("NFTData: ...............", NFTData);
   return (
     <section>
-      <div>
-        <BuyanNFT key={NFT__DATA.id} NFTData = {NFT__DATA}/>
-        {/* <ExploreMore/> */}
-        <ExploreMore/>
-      </div>
+      {sellType == "Buy Now" && (
+        <div>
+          <BuyanNFT
+            key={NFTData.id}
+            NFTData={NFTData}
+            collectionData={collectionData}
+          />
+          <ExploreMore />
+        </div>
+      )}
+      {sellType == "In Auction" && (
+        <div>
+          <BidNFT
+            key={NFTData.id}
+            NFTData={NFTData}
+            collectionData={collectionData}
+          />
+          <ExploreMore />
+        </div>
+      )}
     </section>
-
-  )
+  );
 }
 
-export default NFTDetailsB
+export default NFTDetailsB;

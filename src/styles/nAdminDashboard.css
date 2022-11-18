@@ -1,0 +1,34 @@
+h1 {
+  font-weight: bold !important;
+  line-height: 1.5 !important;
+  font-size: 3rem !important;
+}
+
+.h1-mid {
+  color: #9c2c77;
+}
+
+.seller-row {
+  margin-top: 50px !important;
+}
+
+.heading {
+  padding: 5% 15% 0 !important;
+  text-align: center;
+}
+
+.profit {
+  padding: 7% 0 !important;
+}
+
+.hero_content h2 {
+  line-height: 60px;
+  font-size: 2.5rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .hero_content h2 {
+    font-size: 1.5rem;
+    line-height: 40px;
+  }
+}

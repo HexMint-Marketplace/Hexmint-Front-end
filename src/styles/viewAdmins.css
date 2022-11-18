@@ -1,0 +1,23 @@
+.add-button {
+  padding: 3% 8%;
+}
+
+.table {
+  width: auto !important;
+  height: auto !important;
+  margin-left: 8%;
+  margin-right: 8% !important;
+  margin-bottom: 10% !important;
+}
+
+.act-button {
+  margin: 2px 10px !important;
+}
+
+.alert {
+  background-color: #000 !important;
+}
+
+#alert-dialog-title {
+  color: #000 !important;
+}
