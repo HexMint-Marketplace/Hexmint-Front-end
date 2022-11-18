@@ -82,11 +82,12 @@ function Header() {
 
   const handleBlockedUsers = async () => {
     if (isConnected) {
-      const response = await CustomerServices.getBlockedUsersWalletAddress(
-        address
-      );
-      const isBlocked = response.data;
-      console.log("blockedUsers address.......................", isBlocked);
+      const response = await CustomerServices.getIsBlocked(address);
+      const isBlocked = response.data.data;
+      if (isBlocked) {
+        toast.error("You are blocked by admin");
+        disconnect();
+      }
     }
   };
 
