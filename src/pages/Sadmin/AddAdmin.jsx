@@ -25,6 +25,8 @@ function AddAdmin() {
     name: Yup.string().required("Name is required").label("Name"),
     walletaddress: Yup.string()
       .required("Wallet Address is required")
+      .min(42, "Wallet Address must be 42 characters")
+      .max(42, "Wallet Address must be 42 characters")
       .label("Wallet Address"),
     email: Yup.string().email().required("Email is required").label("Email"),
     mobilenumber: Yup.string()
