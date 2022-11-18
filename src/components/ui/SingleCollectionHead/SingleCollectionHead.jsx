@@ -64,7 +64,6 @@ const SingleCollectionHead = (props) => {
           <Card
             variant="outlined"
             sx={{
-              p: 1,
               textAlign: "center",
               borderRadius: 3,
               border: 1,
@@ -74,62 +73,62 @@ const SingleCollectionHead = (props) => {
           >
             <CardContent>
               <Row>
-                <Col>
-                  <Paper
+                <Col sm="12" md="6" lg="3">
+                  <Card
                     sx={{
                       p: 1,
-                      m: 1,
+                      m: 0.5,
                       border: 1,
-                      borderColor: "",
-                      backgroundColor: "#14141f",
+                      height: 80,
+                      minWidth: 130,
                     }}
                     elevation={3}
                   >
                     <p>{numberofNfts + " total NFTs"}</p>
-                  </Paper>
+                  </Card>
                 </Col>
-                <Col>
-                  <Paper
+                <Col sm="12" md="6" lg="3">
+                  <Card
                     sx={{
                       p: 1,
-                      m: 1,
+                      m: 0.5,
                       border: 1,
-                      borderColor: "",
-                      backgroundColor: "transparent",
+                      height: 80,
+                      minWidth: 130,
                     }}
                     elevation={3}
                   >
                     <p>{"Total volume of " + totalPrice}</p>
-                  </Paper>
+                  </Card>
                 </Col>
 
-                <Col>
-                  <Paper
+                <Col sm="12" md="6" lg="3">
+                  <Card
                     sx={{
                       p: 1,
-                      m: 1,
+                      m: 0.5,
                       border: 1,
-                      borderColor: "",
-                      backgroundColor: "transparent",
+                      height: 80,
+                      minWidth: 130,
                     }}
                     elevation={3}
                   >
                     <p>{ownersCount + " Owner(s)"}</p>
-                  </Paper>
+                  </Card>
                 </Col>
-                <Col>
-                  <Paper
+                <Col sm="12" md="6" lg="3">
+                  <Card
                     sx={{
                       p: 1,
-                      m: 1,
+                      m: 0.5,
                       border: 1,
-                      borderColor: "",
-                      backgroundColor: "transparent",
+                      height: 80,
+                      minWidth: 130,
                     }}
                     elevation={3}
                   >
                     <p>{"Floor Prize: " + floorPrize}</p>
-                  </Paper>
+                  </Card>
                 </Col>
               </Row>
             </CardContent>
