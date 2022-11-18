@@ -95,24 +95,10 @@ const BidNFT = (props) => {
       );
       console.log("contract: ", contract);
 
-      const salePrice = ethers.utils.parseEther((values.biddingPrice).toString());
+      const salePrice = ethers.utils.parseEther(values.biddingPrice.toString());
 
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
       console.log("update message");
-
-      //run the chargeForbid function
-      let transaction = await contract.chargeForbid(tokenId, currentBidder, {
-        value: salePrice,
-      });
-      await transaction.wait();
-      const details = await UserServices.getUserDetailsFromWalletAddress(seller);
-      transaction.ownerId = details.data.userid;
-      transaction.currentbid = values.biddingPrice;
-      transaction.endDate = endDate;
-      
-      console.log("transaction: ", transaction);
-      settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
       contract.on(
         "TokenStatusUpdatedSuccess",
         (tokenId, contractAddress, seller, price, currentlyListed, event) => {
@@ -130,12 +116,26 @@ const BidNFT = (props) => {
           console.log("tokenID: in use state ", tokenid);
         }
       );
+      //run the chargeForbid function
+      console.log("current bidder is .......................", currentBidder);
+      let transaction = await contract.chargeForbid(tokenId, currentBidder, {
+        value: salePrice,
+      });
+      await transaction.wait();
+      const details = await UserServices.getUserDetailsFromWalletAddress(
+        seller
+      );
+      transaction.ownerId = details.data.userid;
+      transaction.currentbid = values.biddingPrice;
+      transaction.endDate = endDate;
 
-      updateMessage("");
-      alert("You successfully bought the NFT!");
-      updateMessage("");
+      console.log("transaction: ", transaction);
+      settransactionObj(transaction);
+      console.log("transactionObj: in use state ", transactionObj);
     } catch (e) {
       alert("Upload Error: " + e);
+      setLoader(false);
+      // toast.error("Upload Error: " + e)
     }
   }
 
@@ -154,7 +154,7 @@ const BidNFT = (props) => {
       );
       if (response.status === 200) {
         console.log("User activity saved successfully");
-        toast.success("Successfully minted your NFT!");
+        toast.success("Successfully bade!");
         setTimeout(() => {
           window.location.replace("/");
         }, 4000);
@@ -176,7 +176,7 @@ const BidNFT = (props) => {
       Object.keys(transactionObj).length !== 0
     ) {
       console.log("In the saveuseractivity use effect function");
-      saveUserActivity("bought", transactionObj, tokenid, new Date());
+      saveUserActivity("bade", transactionObj, tokenid, new Date());
 
       settokenid({});
       settransactionObj({});
@@ -222,7 +222,6 @@ const BidNFT = (props) => {
                       </h4>
                       <div className="bcollection-name">{collectionName}</div>
                       <Card sx={{ p: 0.2, mt: 0.5, mb: 2 }}>
-
                         {buyerWalletAddress !== props.NFTData.seller ? (
                           <CardContent>
                             <h6 className="d-inline">Owned By : </h6>
@@ -238,7 +237,6 @@ const BidNFT = (props) => {
                             <span className="d-inline">You</span>
                           </CardContent>
                         )}
-
                       </Card>
                       <div className="prize-is">
                         <h5 className="py-2">Current bid : {price} ETH</h5>
@@ -267,7 +265,6 @@ const BidNFT = (props) => {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={bidNFT}
-
                           >
                             {(formikProps) => {
                               const {
@@ -304,7 +301,6 @@ const BidNFT = (props) => {
                                       variant="outlined"
                                       label="biddingPrice"
                                       placeholder="Enter Bid Amount"
-
                                     />
 
                                     <Button

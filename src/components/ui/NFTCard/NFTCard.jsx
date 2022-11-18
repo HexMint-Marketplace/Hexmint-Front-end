@@ -12,6 +12,7 @@ const NFTCard = (props) => {
     description,
     image,
     price,
+    currentBidder,
     seller,
     tokenId,
     currentbid,

@@ -27,11 +27,17 @@ function SingleCollection() {
         const details = await UserServices.getTimeAuctionDetails(tokenId);
         // console.log("details: sdaccdac: ", details);
         if (details.data.status === 200) {
-          //
+          const response = await UserServices.getUserDetailsFromUserId(details.data.item.bidderId)
+
           item.currentbid = details.data.item.currentbid;
           item.endDate = details.data.item.endDate;
           item.initialBid = details.data.initialBid;
+          item.currentBidder = response.data.walletaddress;
           // console.log("item.initialBid: ", item.initialBid);
+          console.log(
+            "current bidder id................... ",
+            item.currentBidder
+          );
           const duration = details.data.timeDiff;
           // console.log(duration, details.data.timeDiff);
           const days = Math.floor(duration / (1000 * 3600 * 24));
