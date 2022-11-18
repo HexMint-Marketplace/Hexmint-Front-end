@@ -54,7 +54,7 @@ const BuyanNFT = (props) => {
       return;
     }
     setLoader(true);
-    toast.info("Please wait while we countinue the transaction");
+    toast.info("Please wait while we continue the transaction");
     try {
       const ethers = require("ethers");
       //After adding your Hardhat network to your metamask, this code will get providers and signers
@@ -155,7 +155,7 @@ const BuyanNFT = (props) => {
       Object.keys(transactionObj).length !== 0
     ) {
       console.log("In the saveuseractivity use effect function");
-      saveUserActivity("bade", transactionObj, tokenid, new Date());
+      saveUserActivity("bought", transactionObj, tokenid, new Date());
 
       settokenid({});
       settransactionObj({});
