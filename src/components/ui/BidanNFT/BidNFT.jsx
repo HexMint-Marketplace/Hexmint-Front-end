@@ -37,11 +37,11 @@ const BidNFT = (props) => {
   const navigate = useNavigate();
 
   const initialValues = {
-    bidPrice: "",
+    biddingPrice: "",
   };
 
   const validationSchema = Yup.object().shape({
-    bidPrice: Yup.number().required("Required").label("Your Bid Amount"),
+    biddingPrice: Yup.number().required("Required").label("biddingPrice"),
   });
 
   const {
@@ -74,13 +74,6 @@ const BidNFT = (props) => {
     endDate,
     initialBid,
   } = props.NFTData;
-
-  const initialValues = {
-    biddingPrice: "",
-  };
-
-  const validationSchema = Yup.object().shape({});
-  // console.log("props.NFTData: ", props.collectionData);
 
   async function bidNFT(values) {
     if (!isConnected) {
