@@ -180,13 +180,16 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         return items;
     }
 
-    function transferNFT(uint256 tokenId, address receiver) public payable {
-        address seller = idToToken[tokenId].seller;
+    function transferNFT(uint256 tokenId, address payable receiver)
+        public
+        payable
+    {
+        address payable seller = idToToken[tokenId].seller;
         require(seller == msg.sender, "Only Seller can transfer the NFT");
 
         //update the details of the token
         idToToken[tokenId].currentlyListed = false;
-        idToToken[tokenId].seller = payable(receiver);
+        idToToken[tokenId].seller = receiver;
 
         //Actually transfer the token to the new owner
         if (ownerOf(tokenId) != seller) {
@@ -201,6 +204,34 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
             tokenId,
             address(this),
             payable(receiver),
+            0,
+            false
+        );
+    }
+
+    function transferNFTAfterTimeAuction(
+        uint256 tokenId,
+        address payable receiver, uint256 initialPrice 
+    ) public payable {
+        address payable seller = idToToken[tokenId].seller;
+        require(seller == msg.sender, "Only Seller can transfer the NFT");
+
+        //update the details of the token
+        idToToken[tokenId].currentlyListed = false;
+        idToToken[tokenId].seller = receiver;
+
+        //Actually transfer the token to the new owner
+
+        _transfer(address(this), receiver, tokenId);
+        //approve the marketplace to transfer NFT
+        approve(address(this), tokenId);
+
+        seller.transfer(initialPrice);
+
+        emit TokenStatusUpdatedSuccess(
+            tokenId,
+            address(this),
+            receiver,
             0,
             false
         );
@@ -238,6 +269,38 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
             address(this),
             seller,
             price,
+            false
+        );
+    }
+
+    function chargeForbid(uint256 tokenId, address payable refunder)
+        public
+        payable
+    {
+        uint256 price = idToToken[tokenId].price;
+        address payable seller = idToToken[tokenId].seller;
+        require(
+            idToToken[tokenId].currentlyListed == true,
+            "tokenId is not listed"
+        );
+        require(
+            price < msg.value,
+            "new bidding price should be higher than current bid"
+        );
+        //update new price (price goes higher with higher biddings)
+        idToToken[tokenId].price = msg.value;
+
+        if (refunder != seller) {
+            refunder.transfer(price);
+        }
+
+        //rest of the msg.value will collect by smart contract
+
+        emit TokenStatusUpdatedSuccess(
+            tokenId,
+            address(this),
+            seller,
+            msg.value,
             false
         );
     }
