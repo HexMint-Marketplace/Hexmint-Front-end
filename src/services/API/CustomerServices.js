@@ -134,20 +134,33 @@ const getCustomerDetailsFromWalletAddress = async (walletaddress) => {
   console.log("in get customer details from wallet address", walletaddress);
   return axios({
     method: "get",
-    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
-    url: APIEndpoint + `/get-customer-details-from-wallet-address/${walletaddress}`,
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url:
+      APIEndpoint +
+      `/get-customer-details-from-wallet-address/${walletaddress}`,
   });
 };
-    
-const reportSeller = async(sellerWalletAddress, reason, ViewerAddress) =>{
+
+const reportSeller = async (sellerWalletAddress, reason, ViewerAddress) => {
   return axios({
     method: "post",
-    headers : { Authorization: `Bearer ${Token.getAccessToken()}` },
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
     url: APIEndpoint + "/report-seller",
     data: {
       sellerWalletAddress: sellerWalletAddress,
       reason: reason,
       ViewerAddress: ViewerAddress,
+    },
+  });
+};
+
+const mintNFT = async (metadataURL) => {
+  return axios({
+    method: "post",
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+    url: APIEndpoint + "/mint-nft",
+    data: {
+      metadataURL: metadataURL,
     },
   });
 };
@@ -168,4 +181,5 @@ export default {
   getCollectionName,
   getCustomerDetailsFromWalletAddress,
   reportSeller,
+  mintNFT,
 };

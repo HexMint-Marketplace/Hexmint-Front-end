@@ -47,7 +47,7 @@ function Create() {
   const { PINATA_API_KEY } = process.env;
 
   //This function uploads the NFT image to IPFS
-  async function OnChangeFile(e) {
+  async function OnChangeFile(e) { 
     var file = e.target.files[0];
     console.log("process: ", PINATA_API_KEY);
     //check for file extension
@@ -94,67 +94,69 @@ function Create() {
     //Upload data to IPFS
     try {
       const metadataURL = await uploadMetadataToIPFS(values);
+      const response = await CustomerServices.mintNFT(metadataURL);
+      console.log("response: ",response);
       //After adding Hardhat network to metamask, this code will get providers and signers
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const signer = provider.getSigner();
 
-      //Pull the deployed contract instance
-      let contract = new ethers.Contract(
-        Marketplace.address,
-        Marketplace.abi,
-        signer
-      );
+      // //Pull the deployed contract instance
+      // let contract = new ethers.Contract(
+      //   Marketplace.address,
+      //   Marketplace.abi,
+      //   signer
+      // );
 
-      contract.on(
-        "TokenStatusUpdatedSuccess",
-        (tokenId, contractAddress, seller, price, currentlyListed, event) => {
-          let info = {
-            tokenId: tokenId,
-            contractAddress: contractAddress,
-            seller: seller,
-            price: price,
-            currentlyListed: currentlyListed,
-            data: event,
-          };
-          settokenid(info);
-        }
-      );
+      // contract.on(
+      //   "TokenStatusUpdatedSuccess",
+      //   (tokenId, contractAddress, seller, price, currentlyListed, event) => {
+      //     let info = {
+      //       tokenId: tokenId,
+      //       contractAddress: contractAddress,
+      //       seller: seller,
+      //       price: price,
+      //       currentlyListed: currentlyListed,
+      //       data: event,
+      //     };
+      //     settokenid(info);
+      //   }
+      // );
 
-      //actually create the NFT
-      const transac = await contract.createToken(metadataURL.toString());
+      // //actually create the NFT
+      // const transac = await contract.createToken(metadataURL.toString());
 
-      await transac.wait();
+      // await transac.wait();
 
 
-      // setLoader(true);
-      console.log("await for transaction", transac);
-      settransactionObj(transac);
-      console.log("transactionObj: in use state ", transactionObj);
-      // setTransaction(transac);
+      // // setLoader(true);
+      // console.log("await for transaction", transac);
+      // settransactionObj(transac);
+      // console.log("transactionObj: in use state ", transactionObj);
+      // // setTransaction(transac);
 
-      // setTimeout(() => {
-      //   console.log("lader is calling");
-      //   setLoader(false);
-      // }, 5000);
-
-      const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-
-      // alert("Successfully minted your NFT!");
-
-      console.log("Successfully minted your NFT!");
-
-      // saveUserActivity("minted", transaction, tokenID, transactionTime);
-      console.log("after save user activity");
+      // // setTimeout(() => {
+      // //   console.log("lader is calling");
+      // //   setLoader(false);
+      // // }, 5000);
 
       // const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-      // saveUserActivity("minted", transaction, transactionTime);
+      // // // update the user activity(mint) in the database for the user
+      // // //Activity type, from wallet address, prize, transaction hash,
 
-      console.log("after update form params");
-      // window.location.replace("/");
+      // // alert("Successfully minted your NFT!");
+
+      // console.log("Successfully minted your NFT!");
+
+      // // saveUserActivity("minted", transaction, tokenID, transactionTime);
+      // console.log("after save user activity");
+
+      // // const transactionTime = new Date();
+      // // // update the user activity(mint) in the database for the user
+      // // //Activity type, from wallet address, prize, transaction hash,
+      // // saveUserActivity("minted", transaction, transactionTime);
+
+      // console.log("after update form params");
+      // // window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
