@@ -21,12 +21,27 @@ function NormalAdminDashboard() {
   const [mintNFTs, setMintNFTs] = useState();
   const [totalSales, setTotalSales] = useState({});
   const [profit, setProfit] = useState({});
+  const [totalBalance, setTotalBalance] = useState();
 
   useEffect(() => {
     getCustomers();
     getNFTData();
     getTrades();
+    getTotalBalance();
   }, []);
+
+  const getTotalBalance = async () => {
+    try {
+      const response = await DashboardServices.getTotalBalance();
+      if (response.status === 200) {
+        setTotalBalance(response.data.data);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const getCustomers = async () => {
     setLoader(true);
@@ -113,7 +128,7 @@ function NormalAdminDashboard() {
                 className="card-body border border-5 rounded rounded-4 border-primary text-center"
               >
                 <h5 className="card-title text-white">Balance</h5>
-                <h4 className="card-title text-danger">76.2 ETH</h4>
+                <h4 className="card-title text-danger">{totalBalance} ETH</h4>
                 <p className="card-text text-white">
                   Total Customers - {count}
                 </p>
