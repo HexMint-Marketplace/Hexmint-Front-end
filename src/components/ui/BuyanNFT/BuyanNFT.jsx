@@ -104,6 +104,7 @@ const BuyanNFT = (props) => {
       });
       await transaction.wait();
       console.log("transaction: ", transaction);
+      transaction.referralRate = referralRate;
       settransactionObj(transaction);
       console.log("transactionObj: in use state ", transactionObj);
     } catch (e) {

@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserServices from "../../../services/API/UserServices";
+import { Container, Col, Row } from "reactstrap";
 import MarketplaceJSON from "../../../Marketplace.json";
 import axios from "axios";
 import "./CollectionCard.css";
@@ -22,17 +23,6 @@ const CollectionCard = (props) => {
     updatedAt,
     userid,
   } = props.item;
-
-  // const date = new Date();
-  // date.setTime(date.getTime() + 5 * 60 * 1000);
-  // console.log("end date: ", date);
-  // const date1 = new Date("2022-11-09T19:10:22.991+00:00");
-  // const duration = date.getTime()-date1.getTime();
-  // const days = Math.floor(duration/(1000 * 3600 * 24));
-  // const hours = Math.floor((duration%(1000 * 3600 * 24))/(1000 * 3600));
-  // const minutes = Math.floor(((duration%(1000 * 3600 * 24))%(1000 * 3600))/(1000*60));
-  // console.log("created At: ", days, hours, minutes);
-  // console.log("created            : ", new Date(date1.getTime()).toISOString());
 
   useEffect(() => {
     getuserdetails(userid);
@@ -128,6 +118,7 @@ const CollectionCard = (props) => {
   }
 
   return (
+    <Col lg="4" md="4" sm="6" className="mb-4">
     <div className="single_collection_card">
       <div className="collection_img">
         <Link
@@ -165,6 +156,7 @@ const CollectionCard = (props) => {
         </div>
       </div>
     </div>
+    </Col>
   );
 };
 

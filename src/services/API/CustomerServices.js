@@ -57,15 +57,6 @@ const createCollection = async (formData) => {
   });
 };
 
-const updateCollectionOwners = async (userid, collectionId) => {
-  return axios({
-    method: "post",
-    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
-    url: APIEndpoint + "/create-collection-owner",
-    data: { userid: userid, collectionId: collectionId },
-  });
-};
-
 const unBlockUser = async (id) => {
   return axios({
     method: "delete",
@@ -165,7 +156,6 @@ export default {
   updateUserDetails,
   getCustomers,
   createCollection,
-  updateCollectionOwners,
   getAllCollections,
   getUserActivityDetails,
   saveUserActivity,

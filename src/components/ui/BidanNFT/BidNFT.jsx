@@ -93,12 +93,14 @@ const BidNFT = (props) => {
         MarketplaceJSON.abi,
         signer
       );
-      console.log("contract: ", contract);
+      const referralRate = parseInt(await contract.getReferralRate());
+      const totalFee = (values.biddingPrice * (referralRate + 100)) / 100;
+      const salePrice = ethers.utils.parseEther(totalFee.toString());
 
-      const salePrice = ethers.utils.parseEther(values.biddingPrice.toString());
+      // const salePrice = ethers.utils.parseEther(values.biddingPrice.toString());
 
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      console.log("update message");
+      // updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
+      // console.log("update message");
       contract.on(
         "TokenStatusUpdatedSuccess",
         (tokenId, contractAddress, seller, price, currentlyListed, event) => {
@@ -117,7 +119,7 @@ const BidNFT = (props) => {
         }
       );
       //run the chargeForbid function
-      console.log("current bidder is .......................", currentBidder);
+      // console.log("current bidder is .......................", currentBidder);
       let transaction = await contract.chargeForbid(tokenId, currentBidder, {
         value: salePrice,
       });
@@ -127,6 +129,7 @@ const BidNFT = (props) => {
       );
       transaction.ownerId = details.data.userid;
       transaction.currentbid = values.biddingPrice;
+      transaction.referralRate = referralRate;
       transaction.endDate = endDate;
 
       console.log("transaction: ", transaction);
