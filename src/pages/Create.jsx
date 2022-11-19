@@ -124,63 +124,14 @@ function Create() {
       const transac = await contract.createToken(metadataURL.toString());
 
       await transac.wait();
-
-
       // setLoader(true);
-      console.log("await for transaction", transac);
+      // console.log("await for transaction", transac);
       settransactionObj(transac);
-      console.log("transactionObj: in use state ", transactionObj);
-      // setTransaction(transac);
-
-      // setTimeout(() => {
-      //   console.log("lader is calling");
-      //   setLoader(false);
-      // }, 5000);
-
-      const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-
-      // alert("Successfully minted your NFT!");
-
-      console.log("Successfully minted your NFT!");
-
-      // saveUserActivity("minted", transaction, tokenID, transactionTime);
-      console.log("after save user activity");
-
-      // const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-      // saveUserActivity("minted", transaction, transactionTime);
-
-      console.log("after update form params");
-      // window.location.replace("/");
+      // console.log("transactionObj: in use state ", transactionObj);
     } catch (e) {
       alert("Upload error" + e);
     }
   }
-
-  const updateCollectionOwners = async (values) => {
-    try {
-      const walletAddress = Token.JWTDecodeWalletAddress();
-      const userid = await getuserdetails(walletAddress.toString());
-      const response = await CustomerServices.updateCollectionOwners(
-        userid,
-        values.collectionId
-      );
-      if (response.status === 200) {
-        toast.success("Details updated successfully!");
-        // setTimeout(() => {
-        //   window.location.replace("/");
-        // }, 4000);
-      } else {
-        toast.error(response.data.message);
-        setLoader(false);
-      }
-    } catch (e) {
-      setLoader(false);
-    }
-  };
 
   const saveUserActivity = async (
     activityType,
@@ -221,7 +172,7 @@ function Create() {
     ) {
       console.log("In the saveuseractivity use effect function");
       saveUserActivity("minted", transactionObj, tokenid, new Date());
-      
+
       settokenid({});
       settransactionObj({});
 
@@ -277,7 +228,6 @@ function Create() {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          updateCollectionOwners={updateCollectionOwners}
           onSubmit={mintNFT}
         >
           {(formikProps) => {
