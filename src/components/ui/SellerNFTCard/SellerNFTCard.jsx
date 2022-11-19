@@ -56,25 +56,30 @@ function SellerNFTCard(props) {
           </div>
         </div>
       )}
-      {!props.isViewUser && (  
-    <div className="single_collection_card">
-      <div className="collection_img">
-        <Link to={`/seller-profile/seller-collection/NFT/${tokenId}`} state={{ item: props.item }}>
-          <img src={image} alt="" className="w-100" />
-        </Link>
-      </div>
-
-      <div className="creator_info-wrapper">
-        <div className="collection_content">
-          <h5 className="collection_title mb-0">
-            <Link to={`/seller-profile/seller-collection/NFT/${tokenId}`} state={{ item: props.item }}>
-            {collectionName} - {NFTname}#{tokenId}
-
+      {!props.isViewUser && (
+        <div className="single_collection_card">
+          <div className="collection_img">
+            <Link
+              to={`/seller-profile/seller-collection/NFT/${tokenId}`}
+              state={{ item: props.item }}
+            >
+              <img src={image} alt="" className="w-100" />
             </Link>
-          </h5>
+          </div>
+
+          <div className="creator_info-wrapper">
+            <div className="collection_content">
+              <h5 className="collection_title mb-0">
+                <Link
+                  to={`/seller-profile/seller-collection/NFT/${tokenId}`}
+                  state={{ item: props.item }}
+                >
+                  {collectionName} - {NFTname}#{tokenId}
+                </Link>
+              </h5>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       )}
     </>
   );

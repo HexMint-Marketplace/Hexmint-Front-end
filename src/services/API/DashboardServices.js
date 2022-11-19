@@ -25,8 +25,15 @@ const getTopUsers = (userType) => {
   return axios.get(APIEndpoint + `/get-top-users/${userType}`, {});
 };
 
+const getTotalBalance = () => {
+  return axios.get(APIEndpoint + `/get-total-balance`, {
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+  });
+};
+
 export default {
   getNFTCount,
   getBalance,
   getTopUsers,
+  getTotalBalance,
 };
