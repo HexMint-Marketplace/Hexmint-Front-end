@@ -38,7 +38,13 @@ const BidNFT = (props) => {
   };
 
   const validationSchema = Yup.object().shape({
-    biddingPrice: Yup.number().required("Required").label("biddingPrice"),
+    biddingPrice: Yup.number()
+      .required("Required")
+      .min(
+        Number(props.NFTData.price),
+        "Price must be greater than" + props.NFTData.price
+      )
+      .label("biddingPrice"),
   });
 
   const {

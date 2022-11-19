@@ -10,13 +10,22 @@ import { toast } from "react-toastify";
 import Loader from "../../components/ui/Loader/Loader";
 import LineChart from "../../components/ui/Charts/LineChart";
 import HeightBox from "../../components/HeightBox/HeightBox";
+import DashboardServices from "../../services/API/DashboardServices";
 
 function NormalAdminDashboard() {
   const [loader, setLoader] = useState(false);
   const [count, setCount] = useState(0);
+  const [labels1, setLabels1] = useState();
+  const [labels2, setLabels2] = useState();
+  const [selledNFTs, setSelledNFTs] = useState();
+  const [mintNFTs, setMintNFTs] = useState();
+  const [totalSales, setTotalSales] = useState({});
+  const [profit, setProfit] = useState({});
 
   useEffect(() => {
     getCustomers();
+    getNFTData();
+    getTrades();
   }, []);
 
   const getCustomers = async () => {
@@ -27,6 +36,50 @@ function NormalAdminDashboard() {
 
       if (response.status === 200) {
         setCount(response.data.data.length);
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
+
+  const getNFTData = async () => {
+    setLoader(true);
+
+    try {
+      const mintRes = await DashboardServices.getNFTCount("minted");
+      const sellRes = await DashboardServices.getNFTCount("bought");
+
+      if (mintRes.status === 200 && sellRes.status === 200) {
+        setLabels1(mintRes.data.data.date);
+        setMintNFTs(mintRes.data.data.data);
+        setSelledNFTs(sellRes.data.data.data);
+      } else {
+        toast.error("Error Occured!");
+      }
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
+    setTimeout(() => {
+      setLoader(false);
+    }, 200);
+  };
+
+  const getTrades = async () => {
+    setLoader(true);
+
+    try {
+      const transactions = await DashboardServices.getBalance("bought");
+      const profit = await DashboardServices.getBalance("profit");
+
+      if (profit.status === 200 && transactions.status === 200) {
+        setLabels2(transactions.data.data.date);
+        setTotalSales(transactions.data.data.data);
+        setProfit(profit.data.data.data);
       } else {
         toast.error("Error Occured!");
       }
@@ -71,10 +124,24 @@ function NormalAdminDashboard() {
         <HeightBox height="50px" />
         <Row>
           <Col lg="6" md="6" sm="12" className="mb-4">
-            <LineChart title={"Chart 1"} />
+            <LineChart
+              title={"NFT Data"}
+              labels={labels1}
+              data1={mintNFTs}
+              data2={selledNFTs}
+              label1={"Minted NFTs"}
+              label2={"Selled NFTs"}
+            />
           </Col>
           <Col lg="6" md="6" sm="12" className="mb-4">
-            <LineChart title={"Chart 2"} />
+            <LineChart
+              title={"Marketplace Trades"}
+              labels={labels2}
+              data1={totalSales}
+              data2={profit}
+              label1={"Transaction Total"}
+              label2={"Marketplace Profit"}
+            />
           </Col>
         </Row>
 
@@ -83,6 +150,7 @@ function NormalAdminDashboard() {
           <BestBuyers />
           <BestCreators />
         </Container>
+        <HeightBox height="50px" />
       </Container>
     );
   }

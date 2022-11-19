@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   Chart as ChartJS,
@@ -23,6 +23,10 @@ function LineChart(props) {
     Legend
   );
 
+  const [labels, setLabels] = useState([]);
+  const [data1, setData1] = useState([]);
+  const [data2, setData2] = useState([]);
+
   const options = {
     responsive: true,
     plugins: {
@@ -36,28 +40,24 @@ function LineChart(props) {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
+  useEffect(() => {
+    setLabels(props.labels);
+    setData1(props.data1);
+    setData2(props.data2);
+  });
 
-  const data = {
+  const Data = {
     labels,
     datasets: [
       {
-        label: "Dataset 1",
-        data: [20, 10, 5, 2, 20, 30, 45],
+        label: props.label1,
+        data: data1,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: "Dataset 2",
-        data: [87, 45, 23, 12, 76, 54, 23],
+        label: props.label2,
+        data: data2,
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
@@ -67,7 +67,7 @@ function LineChart(props) {
   return (
     <div>
       <Box sx={{ bgcolor: "white", m: 1, p: 2, borderRadius: "3%" }}>
-        <Line data={data} options={options} />
+        <Line data={Data} options={options} />
       </Box>
     </div>
   );

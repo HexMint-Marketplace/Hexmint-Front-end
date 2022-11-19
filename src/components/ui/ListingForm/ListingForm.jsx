@@ -38,7 +38,7 @@ const ListingForm = () => {
 
   const validationSchema = Yup.object().shape({
     ListingType: Yup.string().required("Listing Type is required"),
-    listingPrize: Yup.string().required("Listing Prize is required"),
+    listingPrize: Yup.number().required("Listing Prize is required"),
     Duration: Yup.string().when("ListingType", {
       is: "2",
       then: Yup.string().required("Duration is required"),
