@@ -22,6 +22,7 @@ const CollectionCard = (props) => {
     logoImg,
     updatedAt,
     userid,
+    // NFTData
   } = props.item;
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const CollectionCard = (props) => {
   }
   // console.log("isListedNFTsExist: ", isListedNFTsExist);
   if (!isListedNFTsExist) {
-    return null;
+    return <></>;
   }
 
   return (

@@ -20,7 +20,6 @@ function ExploreList() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        // console.log("hi new data........", response.data.collections);
         setAllCollections(response.data.collections);
       } else {
         toast.error("Error Occured!");
@@ -43,9 +42,7 @@ function ExploreList() {
           <Container>
             <Row>
               {allCollections.map((item) => (
-                <Col lg="4" md="4" sm="6" className="mb-4">
                   <CollectionCard key={item.id} item={item} />
-                </Col>
               ))}
             </Row>
           </Container>

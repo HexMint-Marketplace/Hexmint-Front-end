@@ -53,9 +53,7 @@ function CollectionList() {
 
               {/* remove slice to avoid blanks */}
               {allCollections.slice(0, 6).map((item) => (
-                <Col lg="4" md="4" sm="6" className="mb-4">
                   <CollectionCard key={item.id} item={item} />
-                </Col>
               ))}
 
               <Col lg="12" className="mb-5">

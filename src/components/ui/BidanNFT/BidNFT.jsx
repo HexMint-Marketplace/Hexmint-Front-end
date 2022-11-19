@@ -200,7 +200,7 @@ const BidNFT = (props) => {
     setBuyerUserType(userType);
   }, []);
   if (buyerWalletAddress == undefined) {
-    return null;
+    return <></>;
   }
 
   if (loader) {
