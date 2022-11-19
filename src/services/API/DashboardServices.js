@@ -5,38 +5,28 @@ import Token from "../Token";
 //API endpoint
 const APIEndpoint = config.DOMAIN_NAME + "/dashboard";
 
-//activity type : "minted" or "listed"
+//activity type : "minted" or "bought"
 const getNFTCount = (activityType) => {
-  return axios.get(APIEndpoint + `/get-nft-count`, {
+  return axios.get(APIEndpoint + `/get-nft-count/${activityType}`, {
     headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
-    data: {
-      activityType: activityType,
-    },
   });
 };
 
 //balance type : "bought" or "profit"
 const getBalance = (balanceType) => {
-  return axios.get(APIEndpoint + `/get-balance`, {
+  return axios.get(APIEndpoint + `/get-balance/${balanceType}`, {
     headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
-    data: {
-      balanceType: balanceType,
-    },
   });
 };
 
 //user type : "creator" or "seller" or "buyer"
 const getTopUsers = (userType) => {
-  return axios.get(APIEndpoint + `/get-top-users`, {
-    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
-    data: {
-      userType: userType,
-    },
-  });
+  console.log(".....................", userType);
+  return axios.get(APIEndpoint + `/get-top-users/${userType}`, {});
 };
 
 export default {
   getNFTCount,
   getBalance,
-  getTopUsers
+  getTopUsers,
 };

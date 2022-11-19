@@ -29,8 +29,10 @@ function AddAdmin() {
       .max(42, "Wallet Address must be 42 characters")
       .label("Wallet Address"),
     email: Yup.string().email().required("Email is required").label("Email"),
-    mobilenumber: Yup.string()
+    mobilenumber: Yup.number()
       .required("Mobile Number is required")
+      .min(10, "Mobile Number must be 10 characters")
+      .max(10, "Mobile Number must be 10 characters")
       .label("Mobile Number"),
     DOB: Yup.string().required("DOB is required").label("DOB"),
   });
@@ -44,7 +46,6 @@ function AddAdmin() {
 
     try {
       const response = await AdminServices.addAdmin(values);
-      console.log(response);
       if (response.status === 201) {
         toast.success(response.data.message);
       } else if (response.status === 200) {
