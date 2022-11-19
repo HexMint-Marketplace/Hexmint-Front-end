@@ -63,7 +63,7 @@ function SingleCollection() {
     setIsSeperated(true);
   }
   if (!isSeperated) {
-    return null;
+    return <></>;
   }
   return (
     <section>

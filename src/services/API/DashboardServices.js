@@ -35,8 +35,15 @@ const getTopUsers = (userType) => {
   });
 };
 
+const getTotalBalance = () => {
+  return axios.get(APIEndpoint + `/get-total-balance`, {
+    headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
+  });
+};
+
 export default {
   getNFTCount,
   getBalance,
-  getTopUsers
+  getTopUsers,
+  getTotalBalance
 };
