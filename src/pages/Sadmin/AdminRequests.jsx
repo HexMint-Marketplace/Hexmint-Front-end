@@ -40,13 +40,11 @@ function AdminRequests() {
   };
 
   const handleYes = async (id) => {
-    // setIsdelete(true);
     declineRequest(id);
     setOpenConfirm(false);
   };
 
   const handleNo = async () => {
-    // setIsdelete(false);
     setOpenConfirm(false);
   };
 
@@ -60,7 +58,6 @@ function AdminRequests() {
       const response = await AdminServices.getAdminRequests();
       if (response.status === 200) {
         setRequests(response.data.data);
-        console.log(response.data.data);
       } else {
         toast.error("Error Occured!");
       }

@@ -26,7 +26,10 @@ function TransferForm() {
   const initialValues = { receiverWalletAddress: "" };
 
   const validationSchema = Yup.object().shape({
-    receiverWalletAddress: Yup.string().required("Wallet Address is required"),
+    receiverWalletAddress: Yup.string()
+      .required("Wallet Address is required")
+      .min(42, "Wallet Address must be 42 characters")
+      .max(42, "Wallet Address must be 42 characters"),
   });
 
   async function handleSubmit(values) {
