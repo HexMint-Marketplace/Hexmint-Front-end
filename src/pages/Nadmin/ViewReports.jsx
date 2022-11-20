@@ -154,7 +154,7 @@ function ViewReports() {
                       </Button>
                       <Button
                         className="btn btn-danger"
-                        onClick={() => deleteReport(row._id)}
+                        onClick={() => deleteReport(row.to._id)}
                         sx={{ ml: 2, mr: 2 }}
                       >
                         <Link to="">Delete</Link>
