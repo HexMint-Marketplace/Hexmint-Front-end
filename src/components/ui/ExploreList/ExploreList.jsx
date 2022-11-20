@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Col, Row } from "reactstrap";
-import { NFT__DATA } from "../../../asssets/data/data.js";
+import { Container, Row } from "reactstrap";
 import CollectionCard from "../CollectionCard/CollectionCard.jsx";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
@@ -25,7 +24,6 @@ function ExploreList() {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {
@@ -42,7 +40,7 @@ function ExploreList() {
           <Container>
             <Row>
               {allCollections.map((item) => (
-                  <CollectionCard key={item.id} item={item} />
+                <CollectionCard key={item.id} item={item} />
               ))}
             </Row>
           </Container>

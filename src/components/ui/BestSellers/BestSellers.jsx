@@ -17,13 +17,10 @@ function BestSellers() {
   }, []);
 
   const getSellerData = async () => {
-    console.log("getSellerData");
     try {
       const response = await DashboardServices.getTopUsers("seller");
-      console.log("response", response);
       if (response.status === 200) {
         setSellerData(response.data.data);
-        console.log("seller data", response.data.data);
       } else {
         toast.error("Error Occured!");
       }

@@ -3,15 +3,12 @@ import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./ServiceSection.css";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import { toast } from "react-toastify";
 
 function ServiceSection() {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+
   return (
     <section>
       <Container>
@@ -136,9 +133,10 @@ function ServiceSection() {
                   </h5>
                 )}
 
-                <p className="mt-3">Wanna sell your NFT? It is important to
-                  note that listing your NFT on the marketplace is a primary
-                  requirement to sell it to customers across the globe.
+                <p className="mt-3">
+                  Wanna sell your NFT? It is important to note that listing your
+                  NFT on the marketplace is a primary requirement to sell it to
+                  customers across the globe.
                 </p>
               </div>
             </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
-import AuthServices from "../../services/AuthServices";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import DehazeIcon from "@mui/icons-material/Dehaze";
@@ -16,25 +15,6 @@ import Token from "../../services/Token";
 import { useDisconnect } from "wagmi";
 import Loader from "../ui/Loader/Loader";
 import CustomerServices from "../../services/API/CustomerServices";
-
-const NAV_LINKS = [
-  {
-    display: "Home",
-    url: "/home",
-  },
-  {
-    display: "Explore",
-    url: "/explore",
-  },
-  {
-    display: "Create",
-    url: "/create",
-  },
-  {
-    display: "Profile",
-    url: "/seller-profile",
-  },
-];
 
 function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -92,11 +72,7 @@ function Header() {
   };
 
   const handleConnect = async () => {
-    console.log("clicked");
-    console.log("connected ? ", isConnected);
     const JWTUserType = await ConnectingServices.creatingNewToken(address);
-
-    console.log("JWTUserType in the pop up window", JWTUserType);
     setUserType(JWTUserType);
     if (address !== prevFixedAddress.current) {
       if (JWTUserType === "Admin") {
@@ -110,8 +86,6 @@ function Header() {
   };
 
   const handleLogout = () => {
-    console.log("logout calling");
-
     if (isConnected) {
       const checkTokenExp = Token.getDecodedAccessTokenExp();
       if (checkTokenExp) {

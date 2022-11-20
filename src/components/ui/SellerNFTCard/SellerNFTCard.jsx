@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import CustomerServices from "../../../services/API/CustomerServices";
-
 import "../CollectionCard/CollectionCard.css";
 
 function SellerNFTCard(props) {
@@ -16,13 +15,11 @@ function SellerNFTCard(props) {
     description,
     collectionId,
   } = props.item;
-  // console.log("props.item ",props.item);
+
   const [collectionName, setcollectionName] = useState("");
 
   useEffect(() => {
-    console.log("Seller NFT Card", props);
     getCollectionName(collectionId);
-    console.log("is view user", props.isViewUser);
   }, []);
 
   const getCollectionName = async (collectionId) => {
@@ -32,7 +29,6 @@ function SellerNFTCard(props) {
       setcollectionName(response.data.collectionName);
     } catch (e) {
       toast.error("Error in getting collection name");
-      console.log("error", e);
     }
   };
   return (
@@ -49,8 +45,6 @@ function SellerNFTCard(props) {
                 <div>
                   {collectionName} - {NFTname}#{tokenId}
                 </div>
-                {/* <div></div> */}
-                {/* <div>{}</div>{collectionId+" - "+NFTname} */}
               </div>
             </div>
           </div>

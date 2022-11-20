@@ -1,10 +1,8 @@
 import { React, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Container, Col, Row } from "reactstrap";
-import { NFT__DATA } from "../../../asssets/data/data.js";
 import "./collectionList.css";
 import CollectionCard from "../CollectionCard/CollectionCard";
-import MarketplaceJSON from "../../../Marketplace.json";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
 import Loader from "../Loader/Loader";
@@ -23,13 +21,11 @@ function CollectionList() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        console.log("hi new data........", response.data.collections);
         setAllCollections(response.data.collections);
       } else {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {
@@ -53,7 +49,7 @@ function CollectionList() {
 
               {/* remove slice to avoid blanks */}
               {allCollections.slice(0, 6).map((item) => (
-                  <CollectionCard key={item.id} item={item} />
+                <CollectionCard key={item.id} item={item} />
               ))}
 
               <Col lg="12" className="mb-5">

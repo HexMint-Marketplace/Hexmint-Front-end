@@ -1,22 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import 'remixicon/fonts/remixicon.css'
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from 'react-router-dom';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-// import {MoralisProvider} from 'react-moralis';
+import "remixicon/fonts/remixicon.css";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router } from "react-router-dom";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  // </React.StrictMode>
-
+  <Router>
+    <App />
+  </Router>
 );
 
 serviceWorkerRegistration.register();

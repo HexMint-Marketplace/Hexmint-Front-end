@@ -1,12 +1,11 @@
 import { React, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Container, Col, Row } from "reactstrap";
-import { NFT__DATA } from "../../../asssets/data/data.js";
 import "../CollectionList/collectionList.css";
 import "./exploreMore.css";
 import CollectionCard from "../CollectionCard/CollectionCard";
 import CustomerServices from "../../../services/API/CustomerServices";
 import { toast } from "react-toastify";
+import Loader from "../../ui/Loader/Loader";
 
 function ExploreMore() {
   const [allCollections, setAllCollections] = useState([]);
@@ -34,23 +33,28 @@ function ExploreMore() {
       setLoader(false);
     }, 200);
   };
-  return (
-    <section>
-      <Container>
-        <Row>
-          <Col lg="12" className="mb-5">
-            <div className="explore_list d-flex align-items-center justify-content-between ">
-              <h5 className="explore-more">Explore More</h5>
-            </div>
-          </Col>
 
-          {allCollections.slice(0, 4).map((item) => (
+  if (loader) {
+    return <Loader isLoading={loader} />;
+  } else {
+    return (
+      <section>
+        <Container>
+          <Row>
+            <Col lg="12" className="mb-5">
+              <div className="explore_list d-flex align-items-center justify-content-between ">
+                <h5 className="explore-more">Explore More</h5>
+              </div>
+            </Col>
+
+            {allCollections.slice(0, 4).map((item) => (
               <CollectionCard key={item.id} item={item} />
-          ))}
-        </Row>
-      </Container>
-    </section>
-  );
+            ))}
+          </Row>
+        </Container>
+      </section>
+    );
+  }
 }
 
 export default ExploreMore;

@@ -16,13 +16,10 @@ function BestBuyers() {
   }, []);
 
   const getBuyerData = async () => {
-    console.log("getBuyerData");
     try {
       const response = await DashboardServices.getTopUsers("buyer");
-      console.log("response buyer", response);
       if (response.status === 200) {
         setBuyerData(response.data.data);
-        console.log("buyer data", response.data.data);
       } else {
         toast.error("Error Occured!");
       }

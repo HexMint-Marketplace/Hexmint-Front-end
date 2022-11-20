@@ -18,7 +18,7 @@ const SellanNFT = (props) => {
     seller,
     tokenId,
   } = props.NFTData;
-  //   console.log("image: ",imgUrl);
+
   return (
     <Container>
       <HeightBox height="100px" />
@@ -70,7 +70,6 @@ const SellanNFT = (props) => {
                         >
                           Transfer
                         </Link>
-                        {/* <Link to={{pathname:'seller-profile/NFT/transfer-form',img:imgUrl}}>Transfer</Link> */}
                       </button>
                     </Col>
                   </Row>
