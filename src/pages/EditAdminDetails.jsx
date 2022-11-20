@@ -29,8 +29,6 @@ function EditAdminDetails(props) {
     email: Yup.string().email().required("Email is required").label("Email"),
     mobilenumber: Yup.number()
       .required("Mobile Number is required")
-      .min(10, "Mobile Number should be 10 digits")
-      .max(10, "Mobile Number should be 10 digits")
       .label("Mobile Number"),
   });
 
