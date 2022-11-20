@@ -7,7 +7,7 @@ import NFTs from "../../../pages/NFTs";
 import {USER_NFT_DATA} from "../../../asssets/data/data"
 
 function UserNFTList(props) {
-    const {data} = props
+    const {data} = props;
     return (
         <section>
         <Container>

@@ -262,7 +262,7 @@ const BidNFT = (props) => {
                         className="buyNow_button  d-flex align-items-center"
                         onClick={() => setisShown(true)}
                         fullWidth
-                        disabled={BuyerUserType !== "Customer" ? true : false}
+                        disabled={(BuyerUserType === "Customer" || !isConnected) ? false : true}
                       >
                         <span className="text-white">
                           <SellIcon /> Place Bid

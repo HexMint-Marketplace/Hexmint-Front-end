@@ -137,15 +137,15 @@ function SellerProfile() {
         console.log("tokenID", i.tokenId);
         const tokenURI = await contract.tokenURI(i.tokenId);
         let meta = await axios.get(tokenURI);
-        // console.log("meta: ", meta);
         meta = meta.data;
-        // console.log("i: ", i);
+        console.log("meta: ", meta);
+        console.log("i: ", i);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
           tokenId: i.tokenId.toNumber(),
           seller: i.seller,
-          contractAddress: i.contractAddress,
+          contractAddress: i._owner,
           image: meta.image,
           NFTname: meta.title,
           description: meta.description,
