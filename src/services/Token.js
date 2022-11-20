@@ -2,7 +2,6 @@ import jwtDecode from "jwt-decode";
 
 const setAccessToken = (value) => {
   localStorage.setItem("token", value);
-  console.log("token set in local storage");
 };
 
 const getAccessToken = () => {

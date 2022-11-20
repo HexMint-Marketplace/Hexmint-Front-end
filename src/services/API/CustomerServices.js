@@ -38,7 +38,6 @@ const deleteReport = async (id) => {
 };
 
 const updateUserDetails = async (formData) => {
-  console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
     headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
@@ -48,7 +47,6 @@ const updateUserDetails = async (formData) => {
 };
 
 const createCollection = async (formData) => {
-  console.log(`in customer services ${formData}`);
   return axios({
     method: "post",
     headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
@@ -74,7 +72,6 @@ const blockUser = async (id) => {
 };
 
 const getAllCollections = async () => {
-  console.log("in get all collections", Token.getAccessToken());
   return axios({
     method: "get",
     url: APIEndpoint + "/get-collection-count",
@@ -122,7 +119,6 @@ const getCollectionName = async (collectionID) => {
 };
 
 const getCustomerDetailsFromWalletAddress = async (walletaddress) => {
-  console.log("in get customer details from wallet address", walletaddress);
   return axios({
     method: "get",
     headers: { Authorization: `Bearer ${Token.getAccessToken()}` },
