@@ -50,14 +50,24 @@ function Header() {
   useEffect(() => {
     prevFixedAddress.current = fixedAddress;
     handleBlockedUsers();
-    if (isConnected) {
-      handleConnect();
-      setshowConnectWallet(false);
+    setTimeout(() => {
+      if (isConnected) {
+        handleConnect();
+        setshowConnectWallet(false);
 
-      //call handleconncect wallet function if the user is connected
-    } else {
-      navigate("/home");
-    }
+        //call handleconncect wallet function if the user is connected
+      } else {
+        navigate("/home");
+      }
+    }, 2000);
+    // if (isConnected) {
+    //   handleConnect();
+    //   setshowConnectWallet(false);
+
+    //   //call handleconncect wallet function if the user is connected
+    // } else {
+    //   navigate("/home");
+    // }
   }, [address]);
 
   const handleBlockedUsers = async () => {
