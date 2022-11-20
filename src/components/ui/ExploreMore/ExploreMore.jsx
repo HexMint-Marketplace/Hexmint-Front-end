@@ -20,13 +20,11 @@ function ExploreMore() {
       const response = await CustomerServices.getAllCollections();
 
       if (response.status === 200) {
-        // console.log("hi new data........", response.data.collections);
         setAllCollections(response.data.collections);
       } else {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {

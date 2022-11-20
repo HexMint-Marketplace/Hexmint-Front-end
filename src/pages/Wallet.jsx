@@ -9,8 +9,6 @@ const Wallet = () => {
 
   const connectWalletHandler = () => {
     if (window.ethereum && window.ethereum.isMetaMask) {
-      console.log("MetaMask Here!");
-
       window.ethereum
         .request({ method: "eth_requestAccounts" })
         .then((result) => {
@@ -22,7 +20,6 @@ const Wallet = () => {
           setErrorMessage(error.message);
         });
     } else {
-      console.log("Need to install MetaMask");
       setErrorMessage("Please install MetaMask browser extension to interact");
     }
   };

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import "../CollectionCard/CollectionCard.css";
 
 const NFTCard = (props) => {
-  console.log(props);
   const {
     NFTname,
     collectionId,

@@ -8,7 +8,6 @@ import CardContent from "@mui/material/CardContent";
 import Marketplace from "../../../Marketplace.json";
 
 const SellanNFT = (props) => {
-  console.log("props: ", props);
   const {
     NFTname,
     collectionId,
@@ -43,7 +42,6 @@ const SellanNFT = (props) => {
     return transaction.currentlyListed;
   }
 
-  console.log("tokenId:sbkjdcbnsdncv;sdkdsl: ", currentlyListed);
   return (
     <Container>
       <HeightBox height="100px" />
@@ -78,7 +76,6 @@ const SellanNFT = (props) => {
                 <div className="sell_buttons d-flex align-items-center gap-4 mb-2">
                   <Row>
                     <Col lg="6" md="6" sm="12">
-                      {console.log("kaumal: ", currentlyListed)}
                       {currentlyListed && (
                         <button
                           className="sellNow_button  d-flex align-items-center common_btn"

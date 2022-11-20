@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 function NFTs(data) {
-  console.log("data from NFts.jsx: ", data);
   const newTo = {
     pathname: "/nftPage/" + data.data.tokenId,
   };

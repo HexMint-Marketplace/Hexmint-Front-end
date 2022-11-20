@@ -22,7 +22,7 @@ const SingleCollectionHead = (props) => {
     updatedAt,
     userid,
   } = props.collectionData;
-  console.log(props.collectionData);
+
   return (
     <Container>
       <HeightBox height="30px" />

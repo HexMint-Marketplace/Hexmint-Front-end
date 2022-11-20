@@ -64,10 +64,8 @@ const ListingForm = () => {
             currentlyListed: currentlyListed,
             data: event,
           };
-          console.log("info: ", info);
-          console.log("tokenId: ", tokenId);
+
           settokenid(info);
-          console.log("tokenID: in use state ", tokenid);
         }
       );
       //transfer the NFT'
@@ -78,9 +76,8 @@ const ListingForm = () => {
       );
 
       let transaction = await contract.ListToken(NFTData.tokenId, price);
-      console.log("after create token method called");
       await transaction.wait();
-      console.log("await for transaction", transaction);
+
       transaction.listingType = values.ListingType;
       if (values.ListingType == 2) {
         transaction.currentbid = values.listingPrize;
@@ -107,7 +104,6 @@ const ListingForm = () => {
       }
 
       settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
 
       updateMessage("");
     } catch (e) {
@@ -149,7 +145,6 @@ const ListingForm = () => {
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
-      console.log("In the saveuseractivity use effect function");
       saveUserActivity("listed", transactionObj, tokenid, new Date());
 
       settokenid({});
