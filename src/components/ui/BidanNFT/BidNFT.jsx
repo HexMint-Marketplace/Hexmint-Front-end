@@ -150,7 +150,6 @@ const BidNFT = (props) => {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully bade!");
         setTimeout(() => {
           window.location.replace("/");

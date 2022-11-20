@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { toast } from "react-toastify";
 
 const setAccessToken = (value) => {
   localStorage.setItem("token", value);
@@ -31,7 +32,7 @@ const JWTDecodeUserType = () => {
     const decoded = jwtDecode(token);
     return decoded.usertype;
   } catch (err) {
-    console.log(err);
+    toast.error("Error in decoding token");
   }
 };
 
@@ -44,7 +45,7 @@ const JWTDecodeWalletAddress = () => {
     const walletaddress = decoded.walletaddress;
     return walletaddress;
   } catch (err) {
-    console.log(err);
+    toast.error("Error in decoding token");
   }
 };
 
