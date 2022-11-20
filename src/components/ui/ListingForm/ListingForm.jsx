@@ -14,6 +14,8 @@ import HeightBox from "../../HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import UserServices from "../../../services/API/UserServices";
+import Token from "../../../services/Token";
 
 // console.log(img01);
 const ListingForm = () => {
@@ -38,7 +40,9 @@ const ListingForm = () => {
 
   const validationSchema = Yup.object().shape({
     ListingType: Yup.string().required("Listing Type is required"),
-    listingPrize: Yup.number().required("Listing Prize is required"),
+    listingPrize: Yup.number()
+      .min(0.0001, "Minimum is 0.0001")
+      .required("Listing Prize is required"),
     Duration: Yup.string().when("ListingType", {
       is: "2",
       then: Yup.string().required("Duration is required"),
@@ -91,6 +95,10 @@ const ListingForm = () => {
 
       console.log("listing prize: ", values.listingPrize);
       const price = ethers.utils.parseEther(values.listingPrize);
+      const referralRate = parseInt(await contract.getReferralRate());
+      const details = await UserServices.getUserDetailsFromWalletAddress(
+        Token.JWTDecodeWalletAddress()
+      );
 
       // let listingPrice = await contract.getListPrice();
       // listingPrice = listingPrice.toString();
@@ -117,11 +125,15 @@ const ListingForm = () => {
           endDate.setTime(endDate.getTime() + 1 * 4 * 7 * 24 * 3600 * 1000);
         } else if (values.Duration === "2m") {
           endDate.setTime(endDate.getTime() + 2 * 4 * 7 * 24 * 3600 * 1000);
-        } else if (values.Duration === "2min") {
-          endDate.setTime(endDate.getTime() + 2 * 60 * 1000);
-        } else if (values.Duration === "5min") {
-          endDate.setTime(endDate.getTime() + 5 * 60 * 1000);
         }
+        // else if (values.Duration === "2min") {
+        //   endDate.setTime(endDate.getTime() + 2 * 60 * 1000);
+        // } else if (values.Duration === "5min") {
+        //   endDate.setTime(endDate.getTime() + 5 * 60 * 1000);
+        // }
+        transaction.ownerId = details.data.userid;
+
+        transaction.referralRate = referralRate;
 
         transaction.endDate = endDate.toISOString();
       }

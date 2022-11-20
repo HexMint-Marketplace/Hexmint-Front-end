@@ -46,15 +46,12 @@ function ViewUsers() {
 
     try {
       const response = await CustomerServices.getBlockedCustomers();
-      console.log("response", response.data.data);
       if (response.status === 200) {
-        console.log("hi new data........", response);
         setBlkCustomers(response.data.data);
       } else {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {

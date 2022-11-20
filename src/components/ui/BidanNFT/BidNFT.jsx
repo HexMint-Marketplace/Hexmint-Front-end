@@ -101,7 +101,8 @@ const BidNFT = (props) => {
       );
       const referralRate = parseInt(await contract.getReferralRate());
       const totalFee = (values.biddingPrice * (referralRate + 100)) / 100;
-      const salePrice = ethers.utils.parseEther(totalFee.toString());
+      console.log("totalFee: ", totalFee.toFixed(5));
+      const salePrice = ethers.utils.parseEther(totalFee.toFixed(5));
 
       // const salePrice = ethers.utils.parseEther(values.biddingPrice.toString());
 
@@ -126,9 +127,14 @@ const BidNFT = (props) => {
       );
       //run the chargeForbid function
       // console.log("current bidder is .......................", currentBidder);
-      let transaction = await contract.chargeForbid(tokenId, currentBidder, {
-        value: salePrice,
-      });
+      let transaction = await contract.chargeForbid(
+        tokenId,
+        currentBidder,
+        referralRate,
+        {
+          value: salePrice,
+        }
+      );
       await transaction.wait();
       const details = await UserServices.getUserDetailsFromWalletAddress(
         seller

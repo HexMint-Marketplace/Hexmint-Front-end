@@ -38,7 +38,6 @@ function ViewReports() {
       const response = await CustomerServices.getReports();
       if (response.status === 200) {
         setReports(response.data.data);
-        console.log(response.data.data);
       } else {
         toast.error("Error Occured!");
       }

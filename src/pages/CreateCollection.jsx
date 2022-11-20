@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/createCollection.css";
 import CustomerServices from "../services/API/CustomerServices";
-import FormData from "form-data";
 import Loader from "../components/ui/Loader/Loader";
 import { uploadFileToIPFS } from "../pinata";
 import { Formik } from "formik";
@@ -13,11 +11,10 @@ import TextField from "@mui/material/TextField";
 import HeightBox from "../components/HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import AuthServices from "../services/AuthServices";
 import Token from "../services/Token";
+import { toast } from "react-toastify";
 
 function CreateCollection() {
-  const Navigate = useNavigate();
   const initialValues = {
     logo: "",
     collectionName: "",
@@ -39,7 +36,6 @@ function CreateCollection() {
   const [userWallet, setuserWallet] = useState();
 
   useEffect(() => {
-    // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
     const walletAddress = Token.JWTDecodeWalletAddress();
     setuserWallet(walletAddress);
   }, []);
@@ -49,13 +45,11 @@ function CreateCollection() {
     try {
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
-      console.log("response is: ", response);
       if (response.success === true) {
-        console.log("Uploaded image to Pinata: ", response.pinataURL);
         setCollectionIcon(response.pinataURL);
       }
     } catch (e) {
-      console.log("Error during file upload", e);
+      toast.error("Error while uploading the file");
     }
   }
 
@@ -70,16 +64,14 @@ function CreateCollection() {
       formData["ownersCount"] = 0;
 
       const response = await CustomerServices.createCollection(formData);
-      console.log("In the response", response);
       if (response.status === 202) {
-        console.log("In the if and updated user details succesfully");
-        Navigate(`/seller-profile/${userWallet}`);
+        toast.success("Collection Created Successfully");
       }
     } catch (error) {
-      console.log("error", error);
+      toast.error("Something went wrong");
+      setLoader(false);
     }
     setTimeout(() => {
-      console.log("loader false calling");
       setLoader(false);
     }, 1500);
   };

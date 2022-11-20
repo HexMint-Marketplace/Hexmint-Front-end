@@ -15,6 +15,7 @@ import CustomerServices from "../../../services/API/CustomerServices";
 import Loader from "../Loader/Loader";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
+import { toast } from "react-toastify";
 moment().format();
 
 export default function UserActivity(props) {
@@ -23,33 +24,23 @@ export default function UserActivity(props) {
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    console.log(
-      ".................THIS IS FOR CHECK COMPONENT USE EFFECT...................."
-    );
     getActivitydetails(walletaddress);
   }, []);
 
   const getActivitydetails = async (walletaddress) => {
-    console.log("getActivitydetails calling");
+    setLoader(true);
     try {
       //Get user activity details by passing the user's wallet address
       const details = await CustomerServices.getUserActivityDetails(
         walletaddress
       );
-      // temp = details.data.userActivity;
-      setuserActivityDetails(details.data.userActivity);
-      console.log("In get user activity details", details);
-      console.log(
-        "In get user activity details and user activities are",
-        details.data.userActivity
-      );
 
+      setuserActivityDetails(details.data.userActivity);
       setTimeout(() => {
-        console.log("loader false calling");
         setLoader(false);
       }, 2000);
     } catch (error) {
-      console.log(error);
+      toast.error("Error while fetching user activity details");
     }
   };
 
