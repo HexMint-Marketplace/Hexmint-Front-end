@@ -31,8 +31,6 @@ function AddAdmin() {
     email: Yup.string().email().required("Email is required").label("Email"),
     mobilenumber: Yup.number()
       .required("Mobile Number is required")
-      .min(10, "Mobile Number must be 10 characters")
-      .max(10, "Mobile Number must be 10 characters")
       .label("Mobile Number"),
     DOB: Yup.string().required("DOB is required").label("DOB"),
   });
