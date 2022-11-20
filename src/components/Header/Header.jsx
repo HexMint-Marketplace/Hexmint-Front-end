@@ -31,7 +31,6 @@ function Header() {
     connector: new InjectedConnector(),
   });
 
-  //Set user type and useraddress
   const [userType, setUserType] = useState();
   const [userAddress, setuserAddress] = useState("");
   const [showConnectWallet, setshowConnectWallet] = useState(false);
@@ -60,14 +59,6 @@ function Header() {
         navigate("/home");
       }
     }, 2000);
-    // if (isConnected) {
-    //   handleConnect();
-    //   setshowConnectWallet(false);
-
-    //   //call handleconncect wallet function if the user is connected
-    // } else {
-    //   navigate("/home");
-    // }
   }, [address]);
 
   const handleBlockedUsers = async () => {
