@@ -7,8 +7,6 @@ const APIEndpoint = config.DOMAIN_NAME + "/auth";
 
 //Connect to API
 const connectwallet = async (data) => {
-  console.log(`in authservices ${data}`);
-
   return axios({
     method: "post",
     url: APIEndpoint + "/connect-wallet",

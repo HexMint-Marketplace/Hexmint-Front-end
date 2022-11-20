@@ -21,7 +21,6 @@ const getBalance = (balanceType) => {
 
 //user type : "creator" or "seller" or "buyer"
 const getTopUsers = (userType) => {
-  console.log(".....................", userType);
   return axios.get(APIEndpoint + `/get-top-users/${userType}`, {});
 };
 

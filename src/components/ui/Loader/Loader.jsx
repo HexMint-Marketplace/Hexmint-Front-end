@@ -3,7 +3,6 @@ import "../Loader/loader.css";
 import React, { Fragment } from "react";
 
 const Loader = (props) => {
-  console.log("preloader", props.isLoading);
   return (
     props.isLoading && (
       <Fragment>

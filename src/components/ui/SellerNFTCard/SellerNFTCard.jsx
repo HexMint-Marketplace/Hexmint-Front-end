@@ -5,7 +5,6 @@ import CustomerServices from "../../../services/API/CustomerServices";
 import "../CollectionCard/CollectionCard.css";
 
 function SellerNFTCard(props) {
-  console.log("Seller NFT Card", props);
   const {
     tokenId,
     seller,
@@ -25,7 +24,7 @@ function SellerNFTCard(props) {
   const getCollectionName = async (collectionId) => {
     try {
       const response = await CustomerServices.getCollectionName(collectionId);
-      console.log("response", response);
+
       setcollectionName(response.data.collectionName);
     } catch (e) {
       toast.error("Error in getting collection name");
