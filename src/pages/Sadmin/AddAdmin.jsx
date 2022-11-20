@@ -31,6 +31,8 @@ function AddAdmin() {
     email: Yup.string().email().required("Email is required").label("Email"),
     mobilenumber: Yup.number()
       .required("Mobile Number is required")
+
+
       .label("Mobile Number"),
     DOB: Yup.string().required("DOB is required").label("DOB"),
   });
@@ -138,7 +140,7 @@ function AddAdmin() {
                     />
                     <HeightBox height="20px" />
                     <TextField
-                      type="text"
+                      type="number"
                       name="mobilenumber"
                       value={values.mobilenumber}
                       onChange={handleChange("mobilenumber")}
