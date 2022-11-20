@@ -17,7 +17,6 @@ function BestCreators() {
   }, []);
 
   const getSellerData = async () => {
-    console.log("getSellerData");
     try {
       const response = await DashboardServices.getTopUsers("creator");
 

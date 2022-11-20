@@ -16,15 +16,12 @@ import { Link, useNavigate } from "react-router-dom";
 import SellIcon from "@mui/icons-material/Sell";
 
 const BuyanNFT = (props) => {
-  const [message, updateMessage] = useState();
-  // const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
   const [BuyerUserType, setBuyerUserType] = useState("");
   const { address, isConnected } = useAccount();
-  const navigate = useNavigate();
 
   const {
     _v,
@@ -98,7 +95,6 @@ const BuyanNFT = (props) => {
           };
 
           settokenid(info);
-
         }
       );
 
@@ -113,10 +109,9 @@ const BuyanNFT = (props) => {
       await transaction.wait();
       transaction.referralRate = referralRate;
       settransactionObj(transaction);
-
     } catch (e) {
-      // alert("Upload Error: " + e);
       toast.error("Upload Error: " + e);
+      setLoader(false);
     }
   }
 
@@ -134,7 +129,6 @@ const BuyanNFT = (props) => {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully bought the NFT!");
         setTimeout(() => {
           window.location.replace("/");
@@ -144,14 +138,10 @@ const BuyanNFT = (props) => {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
-
-
-
 
   if (buyerWalletAddress == undefined) {
     return null;
@@ -206,7 +196,8 @@ const BuyanNFT = (props) => {
                       </div>
                     </CardContent>
                   </Card>
-                  {(buyerWalletAddress !== props.NFTData.seller || !isConnected )? (
+                  {buyerWalletAddress !== props.NFTData.seller ||
+                  !isConnected ? (
                     <Button
                       sx={{ mt: 3, mb: 3 }}
                       className="buyNow_button  d-flex align-items-center"

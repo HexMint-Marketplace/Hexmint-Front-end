@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import ExploreList from "../components/ui/ExploreList/ExploreList";
 import { Container } from "reactstrap";

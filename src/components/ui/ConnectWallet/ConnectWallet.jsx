@@ -4,8 +4,6 @@ import { Container, Row } from "reactstrap";
 import ConnectingServices from "../../../services/ConnectingServices";
 import "../ConnectWallet/connectWallet.css";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import AuthServices from "../../../services/AuthServices";
 
 function ConnectWallet(props) {
   //Wagmi Hooks
@@ -23,11 +21,7 @@ function ConnectWallet(props) {
   }, [isConnected]);
 
   const handleConnect = async () => {
-    console.log("clicked");
-    console.log("connected ? ", isConnected);
     const JWTUserType = await ConnectingServices.creatingNewToken(address);
-
-    console.log("JWTUserType in the pop up window", JWTUserType);
     props.setUserType(JWTUserType);
     if (JWTUserType === "Admin") {
       navigate("/nadmin-dashboard");
@@ -59,7 +53,6 @@ function ConnectWallet(props) {
                 className="btn button-connect mb-3"
                 disabled={!connector.ready}
                 key={connector.id}
-                // onClick={() => connect(connector)}
                 onClick={() => connect({ connector })}
               >
                 {connector.name}

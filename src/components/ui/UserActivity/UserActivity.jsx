@@ -41,6 +41,7 @@ export default function UserActivity(props) {
       }, 2000);
     } catch (error) {
       toast.error("Error while fetching user activity details");
+      setLoader(false);
     }
   };
 
