@@ -21,16 +21,11 @@ function AdminProfile() {
     setLoader(true);
     const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
 
-    console.log("Should display", walletAddress);
-
     getAdmindetails(walletAddress.address);
 
     setuserWallet(walletAddress);
-    console.log("I fire once");
-    console.log("In user Effect", userWallet);
 
     setTimeout(() => {
-      console.log("loader false calling");
       setLoader(false);
     }, 1500);
   }, [issubmit]);
@@ -42,7 +37,6 @@ function AdminProfile() {
   const getAdmindetails = async (walletAddress) => {
     try {
       const details = await AdminServices.getAdminDetails(walletAddress);
-      console.log("Details", details);
 
       const userType = details.data.usertype;
       setUserType(userType);
@@ -58,9 +52,7 @@ function AdminProfile() {
 
       const proPic = details.data.propic;
       setProPic(proPic);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   return (

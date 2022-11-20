@@ -19,14 +19,14 @@ function TransferForm() {
   const [message, updateMessage] = useState("");
   const { NFTData } = location.state;
   const [loader, setLoader] = useState(false);
-
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
-
   const initialValues = { receiverWalletAddress: "" };
-
   const validationSchema = Yup.object().shape({
-    receiverWalletAddress: Yup.string().required("Wallet Address is required"),
+    receiverWalletAddress: Yup.string()
+      .required("Wallet Address is required")
+      .min(42, "Wallet Address must be 42 characters")
+      .max(42, "Wallet Address must be 42 characters"),
   });
 
   async function handleSubmit(values) {
@@ -37,7 +37,6 @@ function TransferForm() {
       //get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      // console.log("before update message");
       updateMessage("Please wait.. uploading (upto 5 mins)");
 
       //Pull the deployed contract instance
@@ -58,11 +57,8 @@ function TransferForm() {
             currentlyListed: currentlyListed,
             data: event,
           };
-          console.log("info: ", info);
-          console.log("tokenId: ", tokenId);
+
           settokenid(info);
-          // settokenIDValue(tokenId.toString());
-          console.log("tokenID: in use state ", tokenid);
         }
       );
 
@@ -71,15 +67,15 @@ function TransferForm() {
         NFTData.tokenId,
         values.receiverWalletAddress
       );
-      console.log("after create token method called");
+
       await transaction.wait();
-      console.log("await for transaction", transaction);
+
       settransactionObj(transaction);
 
       updateMessage("");
     } catch (e) {
       toast.error("Upload error" + e);
-      loader(false);
+      setLoader(false);
     }
   }
 
@@ -97,7 +93,6 @@ function TransferForm() {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
@@ -107,24 +102,20 @@ function TransferForm() {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
 
   useEffect(() => {
-    console.log("use effect called -------------------------------");
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
-      console.log("In the saveuseractivity use effect function");
       saveUserActivity("transferred", transactionObj, tokenid, new Date());
 
       settokenid({});
       settransactionObj({});
-      // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
 

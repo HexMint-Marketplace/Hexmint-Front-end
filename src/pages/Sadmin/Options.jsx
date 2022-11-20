@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import MarketplaceJSON from "../../Marketplace.json";
+import { toast } from "react-toastify";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -48,13 +49,15 @@ function Options() {
   };
 
   const validationSchemaOne = Yup.object().shape({
-    withdrawAmount: Yup.string()
+    withdrawAmount: Yup.number()
       .required("Field is required")
+      .min(0, "Amount must be greater than 0")
+      .max(Number(amount), "Amount must be less than or equal to " + amount)
       .label("Withdraw Amount"),
   });
 
   const validationSchemaTwo = Yup.object().shape({
-    newProfit: Yup.string()
+    newProfit: Yup.number()
       .required("Field is required")
       .label("New Commision Rate"),
   });
@@ -73,13 +76,14 @@ function Options() {
       setContract(contract_);
       updateCurrentBalance(provider, contract_);
       updateCurrentReferralRate(contract_);
-    } catch (e) {}
+    } catch (e) {
+      toast.error("Error Occured !");
+    }
   }, []);
 
   const updateCurrentBalance = async (provider, contract) => {
     const balance = await provider.getBalance(contract.address);
-    console.log("balance: ",balance);
-    setAmount(balance.toString()/(10**18));
+    setAmount(balance.toString() / 10 ** 18);
   };
 
   const updateCurrentReferralRate = async (contract) => {
@@ -88,20 +92,19 @@ function Options() {
   };
 
   const handleWithdraw = async (values) => {
-    console.log(values.withdrawAmount);
-    const withdrawAmount = ethers.utils.parseEther(values.withdrawAmount.toString());
-    console.log(withdrawAmount);
+    const withdrawAmount = ethers.utils.parseEther(
+      values.withdrawAmount.toString()
+    );
     try {
       const transaction = await contract.withdraw(withdrawAmount);
       await transaction.wait();
-      alert("withdraw = " + withdrawAmount/(10**18) + " ETH successfully");
+      alert("withdraw = " + withdrawAmount / 10 ** 18 + " ETH successfully");
     } catch (e) {
       alert("upload error: " + e);
     }
   };
 
   const handleProfitChange = async (values) => {
-    console.log(values.newProfit);
     const newReferralRate = values.newProfit;
     try {
       const transaction = await contract.updateReferralRate(newReferralRate);
@@ -128,7 +131,10 @@ function Options() {
       <Card>
         <CardHeader />
         <Paper elevation={24} sx={{ p: 3 }}>
-          <h3>Your Balance : {amount}<span> ETH</span></h3>
+          <h3>
+            Your Balance : {amount}
+            <span> ETH</span>
+          </h3>
         </Paper>
         <CardContent>
           <Typography variant="body2" color="text.secondary">

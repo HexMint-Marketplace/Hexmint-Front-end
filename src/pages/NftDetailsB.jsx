@@ -8,7 +8,7 @@ function NFTDetailsB() {
   const location = useLocation();
   // use location from NFTCard.jsx
   const { NFTData, collectionData, sellType } = location.state;
-  console.log("NFTData: ...............", NFTData);
+
   return (
     <section>
       {sellType == "Buy Now" && (

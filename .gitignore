@@ -60,3 +60,4 @@ artifacts
 
 .env
 package-lock.json
+pinata.js

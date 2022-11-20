@@ -1,13 +1,10 @@
-import { React, useState, useEffect, useRef } from "react";
+import { React, useState, useEffect } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
-import { Link } from "react-router-dom";
 import Marketplace from "../Marketplace.json";
-import { useLocation } from "react-router";
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/create.css";
 import CustomerServices from "../services/API/CustomerServices";
-import AuthServices from "../services/AuthServices";
 import UserServices from "../services/API/UserServices";
 import { toast } from "react-toastify";
 import Loader from "../components/ui/Loader/Loader";
@@ -44,22 +41,18 @@ function Create() {
   const [allCollections, setAllCollections] = useState([]);
   const [loader, setLoader] = useState(false);
 
-  const { PINATA_API_KEY } = process.env;
-
   //This function uploads the NFT image to IPFS
   async function OnChangeFile(e) {
     var file = e.target.files[0];
-    console.log("process: ", PINATA_API_KEY);
     //check for file extension
     try {
-      console.log("In the try block on changeFile");
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
         setFileURL(response.pinataURL);
       }
     } catch (e) {
-      console.log("Error during file upload", e);
+      toast.error("Error uploading file to IPFS");
     }
   }
 
@@ -83,7 +76,7 @@ function Create() {
         return response.pinataURL;
       }
     } catch (e) {
-      console.log("error uploading JSON metadata:", e);
+      toast.error("Error uploading metadata to IPFS");
     }
   }
 
@@ -122,65 +115,13 @@ function Create() {
 
       //actually create the NFT
       const transac = await contract.createToken(metadataURL.toString());
-
       await transac.wait();
-
-
-      // setLoader(true);
-      console.log("await for transaction", transac);
       settransactionObj(transac);
-      console.log("transactionObj: in use state ", transactionObj);
-      // setTransaction(transac);
-
-      // setTimeout(() => {
-      //   console.log("lader is calling");
-      //   setLoader(false);
-      // }, 5000);
-
-      const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-
-      // alert("Successfully minted your NFT!");
-
-      console.log("Successfully minted your NFT!");
-
-      // saveUserActivity("minted", transaction, tokenID, transactionTime);
-      console.log("after save user activity");
-
-      // const transactionTime = new Date();
-      // // update the user activity(mint) in the database for the user
-      // //Activity type, from wallet address, prize, transaction hash,
-      // saveUserActivity("minted", transaction, transactionTime);
-
-      console.log("after update form params");
-      // window.location.replace("/");
     } catch (e) {
-      alert("Upload error" + e);
-    }
-  }
-
-  const updateCollectionOwners = async (values) => {
-    try {
-      const walletAddress = Token.JWTDecodeWalletAddress();
-      const userid = await getuserdetails(walletAddress.toString());
-      const response = await CustomerServices.updateCollectionOwners(
-        userid,
-        values.collectionId
-      );
-      if (response.status === 200) {
-        toast.success("Details updated successfully!");
-        // setTimeout(() => {
-        //   window.location.replace("/");
-        // }, 4000);
-      } else {
-        toast.error(response.data.message);
-        setLoader(false);
-      }
-    } catch (e) {
+      toast.error("Error while minting NFT");
       setLoader(false);
     }
-  };
+  }
 
   const saveUserActivity = async (
     activityType,
@@ -195,9 +136,7 @@ function Create() {
         contractInfo,
         transactionTime
       );
-      console.log("response is ", response);
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully minted your NFT!");
         setTimeout(() => {
           window.location.replace("/");
@@ -207,29 +146,22 @@ function Create() {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
 
   useEffect(() => {
-    console.log("use effect called -------------------------------");
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
-      console.log("In the saveuseractivity use effect function");
       saveUserActivity("minted", transactionObj, tokenid, new Date());
-      
+
       settokenid({});
       settransactionObj({});
-
-      // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
-
-  // console.log("Working", process.env);
 
   useEffect(() => {
     getCollections();
@@ -260,7 +192,6 @@ function Create() {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {
@@ -277,7 +208,6 @@ function Create() {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          updateCollectionOwners={updateCollectionOwners}
           onSubmit={mintNFT}
         >
           {(formikProps) => {

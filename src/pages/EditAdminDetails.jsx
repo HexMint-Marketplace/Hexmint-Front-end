@@ -15,9 +15,7 @@ import Button from "@mui/material/Button";
 
 function EditAdminDetails(props) {
   const { walletaddress, setissubmit } = props;
-  console.log("In the admin details edit and wallet address is", walletaddress);
   const [loader, setLoader] = useState(false);
-
   const [profilePic, setprofilePic] = useState();
 
   const initialValues = {
@@ -29,46 +27,21 @@ function EditAdminDetails(props) {
   const validationSchema = Yup.object().shape({
     pro: Yup.string().required("Required"),
     email: Yup.string().email().required("Email is required").label("Email"),
-    mobilenumber: Yup.string()
+    mobilenumber: Yup.number()
       .required("Mobile Number is required")
       .label("Mobile Number"),
   });
-
-  // Validate uploaded image file
-  // const fileValidation = () => {
-  //   var fileInput = document.getElementById("propic");
-  //   console.log("In the file validation", fileInput);
-  //   console.log("In the file files", fileInput.files);
-
-  //   // Image preview
-  //   if (fileInput.files && fileInput.files[0]) {
-  //     console.log("In the if");
-  //     // var filesSelected = fileInput[0];
-  //     var reader = new FileReader();
-  //     reader.onload = function (e) {
-  //       const a = reader.result.replace("data:", "").replace(/^.+,/, "");
-  //       console.log("In the reader", a);
-  //       setBase64Img(a);
-  //       // console.log("In the BASE 64", base64_img);
-  //       console.log("BASE 64 is", base64_img);
-  //     };
-
-  //     reader.readAsDataURL(fileInput.files[0]);
-  //   }
-  // };
 
   async function OnChangeFile(e) {
     var file = e.target.files[0];
     try {
       //upload the file to IPFS
       const response = await uploadFileToIPFS(file);
-      // console.log("response is: ", response);
       if (response.success === true) {
-        console.log("Uploaded image to Pinata: ", response.pinataURL);
         setprofilePic(response.pinataURL);
       }
     } catch (e) {
-      console.log("Error during file upload", e);
+      toast.error("Error uploading file to IPFS");
     }
   }
 
@@ -79,21 +52,19 @@ function EditAdminDetails(props) {
       const formData = values;
       formData["walletaddress"] = walletaddress;
       formData["propic"] = profilePic;
-      console.log(formData);
       const response = await AdminServices.updateAdminDetails(formData);
-      console.log("In the response", response);
       if (response.status === 200) {
         setissubmit(true);
-
         toast.success("Profile Edit request submitted successfully");
       } else {
         toast.error(response.data.message);
+        setLoader(false);
       }
     } catch (error) {
       toast.error("Something went wrong");
+      setLoader(false);
     }
     setTimeout(() => {
-      console.log("loader false calling");
       setLoader(false);
     }, 1500);
   };

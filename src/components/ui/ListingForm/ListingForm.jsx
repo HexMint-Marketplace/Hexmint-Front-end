@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
-import img01 from "../../../asssets/collectionImages/Apes.jpg";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Container } from "reactstrap";
 import Marketplace from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
@@ -14,44 +12,34 @@ import HeightBox from "../../HeightBox/HeightBox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import UserServices from "../../../services/API/UserServices";
+import Token from "../../../services/Token";
 
-// console.log(img01);
 const ListingForm = () => {
   const location = useLocation();
-  // const [ListingType, setListingType] = useState("");
-  // const [listingPrize, setListingPrize] = useState();
   const [message, updateMessage] = useState("");
-  // const [Duration, setDuration] = useState();
   const ethers = require("ethers");
   const { NFTData } = location.state;
-
   const [transactionObj, settransactionObj] = useState({});
-  // const [tokenid, settokenid] = useState("");
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
-
   const initialValues = {
     ListingType: "",
     listingPrize: "",
     Duration: "",
   };
-
   const validationSchema = Yup.object().shape({
     ListingType: Yup.string().required("Listing Type is required"),
-    listingPrize: Yup.string().required("Listing Prize is required"),
+    listingPrize: Yup.number()
+      .min(0.0001, "Minimum is 0.0001")
+      .required("Listing Prize is required"),
     Duration: Yup.string().when("ListingType", {
       is: "2",
       then: Yup.string().required("Duration is required"),
     }),
   });
 
-  console.log("NFTData: ", NFTData);
-
   async function listNFT(values) {
-    // setListingType(values.ListingType);
-    // setListingPrize(values.listingPrize);
-    // setDuration(values.Duration);
-    console.log("values: ", values);
     setLoader(true);
     toast.info("Please wait while we list your NFT");
 
@@ -59,10 +47,6 @@ const ListingForm = () => {
       //get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      // console.log("before update message");
-      updateMessage("Please wait.. uploading (upto 5 mins)");
-
-      //Pull the deployed contract instance
       let contract = new ethers.Contract(
         Marketplace.address,
         Marketplace.abi,
@@ -80,26 +64,20 @@ const ListingForm = () => {
             currentlyListed: currentlyListed,
             data: event,
           };
-          console.log("info: ", info);
-          console.log("tokenId: ", tokenId);
+
           settokenid(info);
-          // settokenIDValue(tokenId.toString());
-          console.log("tokenID: in use state ", tokenid);
         }
       );
       //transfer the NFT'
-
-      console.log("listing prize: ", values.listingPrize);
       const price = ethers.utils.parseEther(values.listingPrize);
-
-      // let listingPrice = await contract.getListPrice();
-      // listingPrice = listingPrice.toString();
+      const referralRate = parseInt(await contract.getReferralRate());
+      const details = await UserServices.getUserDetailsFromWalletAddress(
+        Token.JWTDecodeWalletAddress()
+      );
 
       let transaction = await contract.ListToken(NFTData.tokenId, price);
-      console.log("after create token method called");
       await transaction.wait();
-      // console.log("await for transaction");
-      console.log("await for transaction", transaction);
+
       transaction.listingType = values.ListingType;
       if (values.ListingType == 2) {
         transaction.currentbid = values.listingPrize;
@@ -117,21 +95,20 @@ const ListingForm = () => {
           endDate.setTime(endDate.getTime() + 1 * 4 * 7 * 24 * 3600 * 1000);
         } else if (values.Duration === "2m") {
           endDate.setTime(endDate.getTime() + 2 * 4 * 7 * 24 * 3600 * 1000);
-        } else if (values.Duration === "2min") {
-          endDate.setTime(endDate.getTime() + 2 * 60 * 1000);
-        } else if (values.Duration === "5min") {
-          endDate.setTime(endDate.getTime() + 5 * 60 * 1000);
         }
+        transaction.ownerId = details.data.userid;
+
+        transaction.referralRate = referralRate;
 
         transaction.endDate = endDate.toISOString();
       }
 
       settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
 
       updateMessage("");
     } catch (e) {
-      alert("Upload error" + e);
+      toast.error("Error while listing NFT");
+      setLoader(false);
     }
   }
 
@@ -149,7 +126,6 @@ const ListingForm = () => {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully listed your NFT!");
         setTimeout(() => {
           window.location.replace("/");
@@ -159,25 +135,20 @@ const ListingForm = () => {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
 
   useEffect(() => {
-    console.log("use effect called -------------------------------");
-    // if (tokenid && transactionObj) {
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
-      console.log("In the saveuseractivity use effect function");
       saveUserActivity("listed", transactionObj, tokenid, new Date());
 
       settokenid({});
       settransactionObj({});
-      // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
 

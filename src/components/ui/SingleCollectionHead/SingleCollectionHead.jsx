@@ -4,7 +4,6 @@ import "./singleCollectionHead.css";
 import HeightBox from "../../HeightBox/HeightBox";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Paper from "@mui/material/Paper";
 import Banner from "../../../asssets/images/banner.png";
 
 const SingleCollectionHead = (props) => {
@@ -23,8 +22,7 @@ const SingleCollectionHead = (props) => {
     updatedAt,
     userid,
   } = props.collectionData;
-  console.log(props.collectionData);
-  // if (listedNFTcount > 0);
+
   return (
     <Container>
       <HeightBox height="30px" />

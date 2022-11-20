@@ -4,7 +4,6 @@ import "./buyanNFT.css";
 import MarketplaceJSON from "../../../Marketplace.json";
 import Loader from "../Loader/Loader";
 import CustomerServices from "../../../services/API/CustomerServices";
-import AuthServices from "../../../services/AuthServices";
 import Token from "../../../services/Token";
 import { toast } from "react-toastify";
 import Card from "@mui/material/Card";
@@ -17,15 +16,12 @@ import { Link, useNavigate } from "react-router-dom";
 import SellIcon from "@mui/icons-material/Sell";
 
 const BuyanNFT = (props) => {
-  const [message, updateMessage] = useState();
-  // const [tokenid, settokenid] = useState("");
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
-  const { address, isConnected } = useAccount();
   const [BuyerUserType, setBuyerUserType] = useState("");
-  const navigate = useNavigate();
+  const { address, isConnected } = useAccount();
 
   const {
     _v,
@@ -46,7 +42,23 @@ const BuyanNFT = (props) => {
   const { NFTname, collectionId, description, image, price, seller, tokenId } =
     props.NFTData;
 
-  console.log("props.NFTData: ", props.collectionData);
+  useEffect(() => {
+    const walletAddress = Token.JWTDecodeWalletAddress();
+    const userType = Token.JWTDecodeUserType();
+    updateBuyerWalletAddress(walletAddress);
+    setBuyerUserType(userType);
+  }, []);
+
+  useEffect(() => {
+    if (
+      Object.keys(tokenid).length !== 0 &&
+      Object.keys(transactionObj).length !== 0
+    ) {
+      saveUserActivity("bought", transactionObj, tokenid, new Date());
+      settokenid({});
+      settransactionObj({});
+    }
+  }, [tokenid, transactionObj]);
 
   async function buyNFT(tokenId) {
     if (!isConnected) {
@@ -60,9 +72,9 @@ const BuyanNFT = (props) => {
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log("signer.getAddress(): ", signer.getAddress());
+
       updateBuyerWalletAddress(signer.getAddress());
-      console.log("buyerWalletAddress: ", buyerWalletAddress);
+
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
         MarketplaceJSON.address,
@@ -83,32 +95,23 @@ const BuyanNFT = (props) => {
           };
 
           settokenid(info);
-          // settokenIDValue(tokenId.toString());
-          console.log("tokenID: in use state ", tokenid);
         }
       );
 
-      console.log("contract: ", contract);
       const referralRate = parseInt(await contract.getReferralRate());
-      console.log("rate: ", referralRate);
-      console.log("price: ", (price * (referralRate + 100)) / 100);
       const totalFee = (price * (referralRate + 100)) / 100;
-      console.log("total feeeeeeeeeeee: ", totalFee);
       const salePrice = ethers.utils.parseEther(totalFee.toString());
 
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      console.log("update message");
       //run the executeSale function
       let transaction = await contract.executeSale(tokenId, {
         value: salePrice,
       });
       await transaction.wait();
-      console.log("transaction: ", transaction);
+      transaction.referralRate = referralRate;
       settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
     } catch (e) {
-      // alert("Upload Error: " + e);
       toast.error("Upload Error: " + e);
+      setLoader(false);
     }
   }
 
@@ -126,7 +129,6 @@ const BuyanNFT = (props) => {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully bought the NFT!");
         setTimeout(() => {
           window.location.replace("/");
@@ -136,39 +138,11 @@ const BuyanNFT = (props) => {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
 
-  useEffect(() => {
-    console.log("use effect called -------------------------------");
-    console.log(
-      "in use effect tokenid: ",
-      tokenid,
-      "in use effect transactionObj: ",
-      transactionObj
-    );
-    if (
-      Object.keys(tokenid).length !== 0 &&
-      Object.keys(transactionObj).length !== 0
-    ) {
-      console.log("In the saveuseractivity use effect function");
-      saveUserActivity("bought", transactionObj, tokenid, new Date());
-
-      settokenid({});
-      settransactionObj({});
-      // settokenIDValue("");
-    }
-  }, [tokenid, transactionObj]);
-
-  useEffect(() => {
-    const walletAddress = Token.JWTDecodeWalletAddress();
-    const userType = Token.JWTDecodeUserType();
-    updateBuyerWalletAddress(walletAddress);
-    setBuyerUserType(userType);
-  }, []);
   if (buyerWalletAddress == undefined) {
     return null;
   }
@@ -222,7 +196,8 @@ const BuyanNFT = (props) => {
                       </div>
                     </CardContent>
                   </Card>
-                  {buyerWalletAddress !== props.NFTData.seller ? (
+                  {buyerWalletAddress !== props.NFTData.seller ||
+                  !isConnected ? (
                     <Button
                       sx={{ mt: 3, mb: 3 }}
                       className="buyNow_button  d-flex align-items-center"

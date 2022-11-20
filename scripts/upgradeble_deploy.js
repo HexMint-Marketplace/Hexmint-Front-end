@@ -8,7 +8,7 @@ async function main() {
   const marketplace = await upgrades.deployProxy(Marketplace, [42]);
 
   await marketplace.deployed();
-  console.log("HexMint deployed to:", marketplace.address);
+  
 
   const data = {
     address: marketplace.address,
@@ -22,6 +22,6 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    
     process.exit(1);
   });

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
 import { NavLink, Link } from "react-router-dom";
-import AuthServices from "../../services/AuthServices";
 import { useAccount, useConnect, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import DehazeIcon from "@mui/icons-material/Dehaze";
@@ -16,25 +15,6 @@ import Token from "../../services/Token";
 import { useDisconnect } from "wagmi";
 import Loader from "../ui/Loader/Loader";
 import CustomerServices from "../../services/API/CustomerServices";
-
-const NAV_LINKS = [
-  {
-    display: "Home",
-    url: "/home",
-  },
-  {
-    display: "Explore",
-    url: "/explore",
-  },
-  {
-    display: "Create",
-    url: "/create",
-  },
-  {
-    display: "Profile",
-    url: "/seller-profile",
-  },
-];
 
 function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -51,7 +31,6 @@ function Header() {
     connector: new InjectedConnector(),
   });
 
-  //Set user type and useraddress
   const [userType, setUserType] = useState();
   const [userAddress, setuserAddress] = useState("");
   const [showConnectWallet, setshowConnectWallet] = useState(false);
@@ -70,14 +49,16 @@ function Header() {
   useEffect(() => {
     prevFixedAddress.current = fixedAddress;
     handleBlockedUsers();
-    if (isConnected) {
-      handleConnect();
-      setshowConnectWallet(false);
+    setTimeout(() => {
+      if (isConnected) {
+        handleConnect();
+        setshowConnectWallet(false);
 
-      //call handleconncect wallet function if the user is connected
-    } else {
-      navigate("/home");
-    }
+        //call handleconncect wallet function if the user is connected
+      } else {
+        navigate("/home");
+      }
+    }, 2000);
   }, [address]);
 
   const handleBlockedUsers = async () => {
@@ -92,11 +73,7 @@ function Header() {
   };
 
   const handleConnect = async () => {
-    console.log("clicked");
-    console.log("connected ? ", isConnected);
     const JWTUserType = await ConnectingServices.creatingNewToken(address);
-
-    console.log("JWTUserType in the pop up window", JWTUserType);
     setUserType(JWTUserType);
     if (address !== prevFixedAddress.current) {
       if (JWTUserType === "Admin") {
@@ -110,8 +87,6 @@ function Header() {
   };
 
   const handleLogout = () => {
-    console.log("logout calling");
-
     if (isConnected) {
       const checkTokenExp = Token.getDecodedAccessTokenExp();
       if (checkTokenExp) {

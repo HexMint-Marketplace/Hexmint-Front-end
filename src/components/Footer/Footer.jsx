@@ -1,42 +1,14 @@
 import React from "react";
-
 import { Container, Row, Col } from "reactstrap";
 import "./footer.css";
-
 import { Link } from "react-router-dom";
-import { useAccount, useConnect, useEnsName } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { useAccount, useEnsName } from "wagmi";
 import { toast } from "react-toastify";
-
-const Basic_Navs = [
-  {
-    display: "Home",
-    url: "/home",
-  },
-  {
-    display: "Explore",
-    url: "/explore",
-  },
-  {
-    display: "Create",
-    url: "/create",
-  },
-  {
-    display: "Contact",
-    url: "/contact",
-  },
-  {
-    display: "Connect Wallet",
-    url: "/wallet",
-  },
-];
 
 const Footer = () => {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+
   return (
     <footer className="footer">
       <Container>
@@ -50,6 +22,7 @@ const Footer = () => {
                   </span>
                   HeXmint
                 </h2>
+                <p>For any inquiries : inquiries@hexmint.com</p>
               </div>
             </Link>
           </Col>
@@ -88,14 +61,6 @@ const Footer = () => {
             </div>
           </Col>
 
-          {/* <Col lg="1" md="1" sm="6" className="mb-2">
-            <div className="list__group">
-                    <div className="list__item">
-                        <Link to={'/contact'}>{'Contact'}</Link>
-                    </div>
-            </div>
-          </Col> */}
-
           <Col lg="2" md="2" sm="6" className="mb-2">
             <div className="list__group">
               <div className="list__item">
@@ -115,7 +80,7 @@ const Footer = () => {
           </Col>
 
           <Col lg="12" className=" mt-4 text-center">
-            <p className="copyright">@NFT-2022</p>
+            <p className="copyright">@HeXmint-2022</p>
           </Col>
         </Row>
       </Container>

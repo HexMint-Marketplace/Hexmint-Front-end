@@ -54,13 +54,11 @@ function ViewAdmins() {
       const response = await AdminServices.getAdmins();
 
       if (response.status === 200) {
-        console.log("hi new data........", response.data.data);
         setAllAdmins(response.data.data);
       } else {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {
@@ -74,12 +72,10 @@ function ViewAdmins() {
       const response = await AdminServices.deleteAdmin(id);
       toast.success(response.data.message);
       if (response.status === 200) {
-        console.log(response);
       } else {
         toast.error("Error Occured!");
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
     }
     setTimeout(() => {

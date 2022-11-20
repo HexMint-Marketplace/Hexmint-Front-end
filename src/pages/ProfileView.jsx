@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import Loader from "../components/ui/Loader/Loader";
 import CustomerServices from "../services/API/CustomerServices";
 import HeightBox from "../components/HeightBox/HeightBox";
 import defaultProPic from "../asssets/collectionImages/Apes.jpg";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-
-//Mui elements for pop up block user form
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -19,7 +16,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Token from "../services/Token";
 import { toast } from "react-toastify";
-
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import SellerNFTCard from "../components/ui/SellerNFTCard/SellerNFTCard";
@@ -35,8 +31,6 @@ function ProfileView() {
   const [isfetched, setisFetched] = useState(false);
   const walletAddress = useParams();
   const { address, isConnected } = useAccount();
-
-  //mui elements for pop up block user form
   const [open, setOpen] = React.useState(false);
   const [reason, setReason] = React.useState("");
 
@@ -55,8 +49,6 @@ function ProfileView() {
   const handleReport = () => {
     setLoader(true);
     setOpen(false);
-    console.log("Reason", reason);
-    console.log("Seller Wallet Address", sellerWalletAddress);
     reportSeller();
   };
   const handleChange = (event) => {
@@ -65,18 +57,11 @@ function ProfileView() {
 
   //End of mui elements for pop up block user form
 
-  console.log("in profile view walletaddress from params", walletAddress);
-
   useEffect(() => {
     setLoader(true);
     // const walletAddress = JSON.parse(localStorage.getItem("userAddress"));
-    console.log("in profile view");
-
     setSellerWalletAddress(walletAddress.address);
     setViewerAddress(Token.JWTDecodeWalletAddress());
-    console.log("in profile view after set", sellerWalletAddress);
-
-    // setuserWallet(walletaddress);
     getuserdetails(walletAddress.address);
   }, []);
 
@@ -100,12 +85,6 @@ function ProfileView() {
         let meta = await axios.get(tokenURI);
         meta = meta.data;
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-        console.log(
-          "seller from contract",
-          i.seller,
-          "......seller profile address",
-          Waddress
-        );
         if (i.seller === Waddress) {
           let item = {
             price,
@@ -122,12 +101,11 @@ function ProfileView() {
         }
       })
     );
-    console.log("items are ", items);
+
     const filteredItems = items.filter((item) => item !== undefined);
-    console.log("filtered items", filteredItems);
+
     setSellerNFTDetails(filteredItems);
     if (filteredItems.length > 0) {
-      console.log("in if fiktered items", filteredItems);
       setisFetched(true);
     }
   }
@@ -138,7 +116,6 @@ function ProfileView() {
 
       const details =
         await CustomerServices.getCustomerDetailsFromWalletAddress(Waddress);
-      console.log("In get user details", details);
 
       const name = details.data.name;
       setName(name);
@@ -149,25 +126,21 @@ function ProfileView() {
       const propic = details.data.propic;
       setProPic(propic);
     } catch (err) {
-      console.log(err);
+      toast.error("Something went wrong");
     }
     await filterSellersNFTs(Waddress);
     setTimeout(() => {
-      console.log("loader false calling");
       setLoader(false);
     }, 2000);
   };
 
   const reportSeller = async () => {
-    console.log("in report seller in profile view and viewer", ViewerAddress);
     try {
-      console.log("in try.............................");
       const response = await CustomerServices.reportSeller(
         sellerWalletAddress,
         reason,
         ViewerAddress
       );
-      console.log("Report Seller Response");
 
       if (response.data.status === 200) {
         toast.success("Your Report Request Submited Successfully");
@@ -239,21 +212,12 @@ function ProfileView() {
                     <DialogContentText>
                       I think this account is......
                     </DialogContentText>
-                    {/* <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Email Address"
-                  type="email"
-                  fullWidth
-                  variant="standard"
-                /> */}
+
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       placeholder="Select A Reason"
                       fullWidth
-                      //   label="Age"
                       onChange={handleChange}
                     >
                       <MenuItem

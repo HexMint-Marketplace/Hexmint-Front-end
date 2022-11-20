@@ -1,13 +1,13 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import "./sellanNFT.css";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import HeightBox from "./../../HeightBox/HeightBox";
 import CardContent from "@mui/material/CardContent";
+import Marketplace from "../../../Marketplace.json";
 
 const SellanNFT = (props) => {
-  console.log("props: ", props);
   const {
     NFTname,
     collectionId,
@@ -18,7 +18,30 @@ const SellanNFT = (props) => {
     seller,
     tokenId,
   } = props.NFTData;
-  //   console.log("image: ",imgUrl);
+
+  const [currentlyListed, setCurrentlyListed] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const _data = await getListCondition(tokenId);
+      setCurrentlyListed(_data);
+    };
+    fetchData().catch(console.error);
+  }, []);
+
+  async function getListCondition(tokenId) {
+    const ethers = require("ethers");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    let contract = new ethers.Contract(
+      Marketplace.address,
+      Marketplace.abi,
+      signer
+    );
+    let transaction = await contract.getTokenForId(tokenId);
+    return transaction.currentlyListed;
+  }
+
   return (
     <Container>
       <HeightBox height="100px" />
@@ -53,14 +76,24 @@ const SellanNFT = (props) => {
                 <div className="sell_buttons d-flex align-items-center gap-4 mb-2">
                   <Row>
                     <Col lg="6" md="6" sm="12">
-                      <button className="sellNow_button  d-flex align-items-center common_btn">
-                        <Link
-                          to="/seller-profile/seller-collection/NFT/listing-form"
-                          state={{ NFTData: props.NFTData }}
+                      {currentlyListed && (
+                        <button
+                          className="sellNow_button  d-flex align-items-center common_btn"
+                          title="Already Listed!!!"
                         >
                           Sell Now
-                        </Link>
-                      </button>
+                        </button>
+                      )}
+                      {!currentlyListed && (
+                        <button className="sellNow_button  d-flex align-items-center common_btn">
+                          <Link
+                            to="/seller-profile/seller-collection/NFT/listing-form"
+                            state={{ NFTData: props.NFTData }}
+                          >
+                            Sell Now
+                          </Link>
+                        </button>
+                      )}
                     </Col>
                     <Col lg="6" md="6" sm="12">
                       <button className="transfer_button d-flex align-items-center common_btn">
@@ -70,7 +103,6 @@ const SellanNFT = (props) => {
                         >
                           Transfer
                         </Link>
-                        {/* <Link to={{pathname:'seller-profile/NFT/transfer-form',img:imgUrl}}>Transfer</Link> */}
                       </button>
                     </Col>
                   </Row>

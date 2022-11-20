@@ -273,7 +273,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         );
     }
 
-    function chargeForbid(uint256 tokenId, address payable refunder)
+    function chargeForbid(uint256 tokenId, address payable refunder, uint256 prevReferralRate)
         public
         payable
     {
@@ -291,7 +291,8 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         idToToken[tokenId].price = msg.value;
 
         if (refunder != seller) {
-            refunder.transfer(price);
+            uint refundPrice = price + (price / 100) * prevReferralRate;
+            refunder.transfer(refundPrice);
         }
 
         //rest of the msg.value will collect by smart contract

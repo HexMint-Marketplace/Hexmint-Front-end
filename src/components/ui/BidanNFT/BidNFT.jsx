@@ -13,7 +13,7 @@ import CardContent from "@mui/material/CardContent";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useAccount, useConnect, useEnsName } from "wagmi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import SellIcon from "@mui/icons-material/Sell";
 import Box from "@mui/material/Box";
@@ -23,22 +23,25 @@ import * as Yup from "yup";
 
 const BidNFT = (props) => {
   const [isShown, setisShown] = useState(false);
-  console.log("In time auction buying");
-  const [message, updateMessage] = useState();
   const [buyerWalletAddress, updateBuyerWalletAddress] = useState();
   const [transactionObj, settransactionObj] = useState({});
   const [tokenid, settokenid] = useState({});
   const [loader, setLoader] = useState(false);
   const [BuyerUserType, setBuyerUserType] = useState("");
   const { address, isConnected } = useAccount();
-  const navigate = useNavigate();
 
   const initialValues = {
     biddingPrice: "",
   };
 
   const validationSchema = Yup.object().shape({
-    biddingPrice: Yup.number().required("Required").label("biddingPrice"),
+    biddingPrice: Yup.number()
+      .required("Required")
+      .min(
+        Number(props.NFTData.price),
+        "Price must be greater than" + props.NFTData.price
+      )
+      .label("biddingPrice"),
   });
 
   const {
@@ -78,27 +81,22 @@ const BidNFT = (props) => {
       return;
     }
     setLoader(true);
-    toast.info("Please wait while we countinue the transaction");
+    toast.info("Please wait while we continue the transaction");
     try {
       const ethers = require("ethers");
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log("signer.getAddress(): ", signer.getAddress());
       updateBuyerWalletAddress(signer.getAddress());
-      console.log("buyerWalletAddress: ", buyerWalletAddress);
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
         MarketplaceJSON.address,
         MarketplaceJSON.abi,
         signer
       );
-      console.log("contract: ", contract);
-
-      const salePrice = ethers.utils.parseEther(values.biddingPrice.toString());
-
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      console.log("update message");
+      const referralRate = parseInt(await contract.getReferralRate());
+      const totalFee = (values.biddingPrice * (referralRate + 100)) / 100;
+      const salePrice = ethers.utils.parseEther(totalFee.toFixed(5));
       contract.on(
         "TokenStatusUpdatedSuccess",
         (tokenId, contractAddress, seller, price, currentlyListed, event) => {
@@ -112,30 +110,29 @@ const BidNFT = (props) => {
           };
 
           settokenid(info);
-          // settokenIDValue(tokenId.toString());
-          console.log("tokenID: in use state ", tokenid);
         }
       );
-      //run the chargeForbid function
-      console.log("current bidder is .......................", currentBidder);
-      let transaction = await contract.chargeForbid(tokenId, currentBidder, {
-        value: salePrice,
-      });
+      let transaction = await contract.chargeForbid(
+        tokenId,
+        currentBidder,
+        referralRate,
+        {
+          value: salePrice,
+        }
+      );
       await transaction.wait();
       const details = await UserServices.getUserDetailsFromWalletAddress(
         seller
       );
       transaction.ownerId = details.data.userid;
       transaction.currentbid = values.biddingPrice;
+      transaction.referralRate = referralRate;
       transaction.endDate = endDate;
 
-      console.log("transaction: ", transaction);
       settransactionObj(transaction);
-      console.log("transactionObj: in use state ", transactionObj);
     } catch (e) {
-      alert("Upload Error: " + e);
+      toast.error("Error while bidding NFT");
       setLoader(false);
-      // toast.error("Upload Error: " + e)
     }
   }
 
@@ -153,7 +150,6 @@ const BidNFT = (props) => {
         transactionTime
       );
       if (response.status === 200) {
-        console.log("User activity saved successfully");
         toast.success("Successfully bade!");
         setTimeout(() => {
           window.location.replace("/");
@@ -163,24 +159,19 @@ const BidNFT = (props) => {
         setLoader(false);
       }
     } catch (error) {
-      console.log("Error occur", error);
       toast.error("Error Occured!");
       setLoader(false);
     }
   };
 
   useEffect(() => {
-    console.log("use effect called -------------------------------");
     if (
       Object.keys(tokenid).length !== 0 &&
       Object.keys(transactionObj).length !== 0
     ) {
-      console.log("In the saveuseractivity use effect function");
       saveUserActivity("bade", transactionObj, tokenid, new Date());
-
       settokenid({});
       settransactionObj({});
-      // settokenIDValue("");
     }
   }, [tokenid, transactionObj]);
 
@@ -191,7 +182,7 @@ const BidNFT = (props) => {
     setBuyerUserType(userType);
   }, []);
   if (buyerWalletAddress == undefined) {
-    return null;
+    return <></>;
   }
 
   if (loader) {
@@ -253,7 +244,11 @@ const BidNFT = (props) => {
                         className="buyNow_button  d-flex align-items-center"
                         onClick={() => setisShown(true)}
                         fullWidth
-                        disabled={BuyerUserType !== "Customer" ? true : false}
+                        disabled={
+                          BuyerUserType === "Customer" || !isConnected
+                            ? false
+                            : true
+                        }
                       >
                         <span className="text-white">
                           <SellIcon /> Place Bid
