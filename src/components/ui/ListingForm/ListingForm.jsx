@@ -47,7 +47,6 @@ const ListingForm = () => {
       //get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      updateMessage("Please wait.. uploading (upto 5 mins)");
       let contract = new ethers.Contract(
         Marketplace.address,
         Marketplace.abi,
@@ -72,8 +71,6 @@ const ListingForm = () => {
         }
       );
       //transfer the NFT'
-
-      console.log("listing prize: ", values.listingPrize);
       const price = ethers.utils.parseEther(values.listingPrize);
       const referralRate = parseInt(await contract.getReferralRate());
       const details = await UserServices.getUserDetailsFromWalletAddress(
