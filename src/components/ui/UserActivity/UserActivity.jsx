@@ -48,7 +48,7 @@ export default function UserActivity(props) {
   return (
     <>
       {loader ? (
-        <div>
+        <div data-testid="activity">
           <Loader isLoading={loader} />
         </div>
       ) : (

@@ -19,7 +19,7 @@ const { chains, provider, webSocketProvider } = configureChains(
   });
 
 describe('Test the Edit Admin Details page', () => {
-  test('Email input should have type email', () => {
+  test('Edit form should have email placeholder', () => {
     render(
     <BrowserRouter>
     <WagmiConfig client={client}>
@@ -27,20 +27,8 @@ describe('Test the Edit Admin Details page', () => {
     </WagmiConfig>
     </BrowserRouter>
     );
-    const adminEmail = screen.getByPlaceholderText('Enter Your Email Address')
-    expect(adminEmail).toHaveAttribute('type', 'email')
-  })
+    const adminEmail = screen.getAllByPlaceholderText('Email')
 
-  // test('Should be able to submit the edit details form', () => {
-  //   render(
-  //   <BrowserRouter>
-  //   <WagmiConfig client={client}>
-  //       (<EditAdminDetails/>)
-  //   </WagmiConfig>
-  //   </BrowserRouter>
-  //   );
-  //   const submitButton = screen.getByTestId('submit')
-  //   expect(adminEmail).toHaveAttribute('type', 'email')
-  // })
+  })
 
 });

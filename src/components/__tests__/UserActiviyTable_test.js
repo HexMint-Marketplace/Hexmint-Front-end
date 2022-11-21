@@ -28,7 +28,7 @@ const { chains, provider, webSocketProvider } = configureChains(
         </WagmiConfig>
         </BrowserRouter>
         );
-        const linkElement = screen.getByTestId("table_head")
+        const linkElement = screen.getByTestId('activity')
         expect(linkElement).toBeInTheDocument();
     });
 });
