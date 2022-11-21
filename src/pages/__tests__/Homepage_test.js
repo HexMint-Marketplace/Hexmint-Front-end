@@ -75,46 +75,6 @@ test('How it works image in hero section of homepage renders', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-//Collection List Tests
-
-test('Collection List in Home page renders, with Explore in the document', () => {
-  render(
-  <BrowserRouter>
-  <WagmiConfig client={client}>
-      <CollectionList/>
-  </WagmiConfig>
-  </BrowserRouter>
-  );
-  const linkElement = screen.getByTestId('explore_txt')
-  expect(linkElement).toBeInTheDocument();
-});
-
-test('Collection in Collection List of homepage renders', () => {
-  render(
-  <BrowserRouter>
-  <WagmiConfig client={client}>
-      <CollectionCard
-        key = {1}
-        item = {
-          {  id: "01",
-            title: "Apes Club",
-            desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            imgUrl: "../../assets/images/apesclub.png",
-            creator: "Trista Francis",
-            creatorImg: "../../assets/images/creator1.png",
-            currentBid: 5.89,
-            createrUsername: "@TristaF",
-            collectionName: "Cyber Punks",
-          }
-        }
-      />
-  </WagmiConfig>
-  </BrowserRouter>
-  );
-  const linkElement = screen.getByTestId('collection_image')
-  expect(linkElement).toBeInTheDocument();
-});
-
 //Best Sellers
 
 test('Best Sellers in Home page renders with Top Sellers text in the document', () => {

@@ -29,22 +29,7 @@ describe('Test the Create/ Minting Page', () => {
         </BrowserRouter>
         );
         const buttonList = await screen.findAllByRole('button')
-        expect(buttonList).toHaveLength(1);
-        expect(buttonList[0]).toHaveTextContent('Create')
-    });
-
-    test('Render the minting form with form elements', async() => {
-        render(
-        <BrowserRouter>
-        <WagmiConfig client={client}>
-            <Create/>
-        </WagmiConfig>
-        </BrowserRouter>
-        );
-        const title = screen.getByPlaceholderText("Enter title")
-        const description = screen.getByPlaceholderText("Enter description")
-        expect(title).toBeInTheDocument();
-        expect(description).toBeInTheDocument();
+        expect(buttonList[1]).toHaveTextContent('Create')
     });
 
 });;

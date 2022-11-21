@@ -26,8 +26,20 @@ describe('Test the Footer component', () => {
     </WagmiConfig>
     </BrowserRouter>
     );
-    const linkElement = screen.getByTestId('footer_txt')
+    const linkElement = screen.getByText('For any inquiries : inquiries@hexmint.com')
     expect(linkElement).toBeInTheDocument();
+})
+
+test('Copyright text in footer renders', () => {
+  render(
+  <BrowserRouter>
+  <WagmiConfig client={client}>
+      <Footer/>
+  </WagmiConfig>
+  </BrowserRouter>
+  );
+  const linkElement = screen.getByText('@HeXmint-2022')
+  expect(linkElement).toBeInTheDocument();
 })
 
 });
