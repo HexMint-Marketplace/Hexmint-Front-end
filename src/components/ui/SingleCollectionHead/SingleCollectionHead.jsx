@@ -16,7 +16,7 @@ const SingleCollectionHead = (props) => {
     createdAt,
     logoImg,
     numberofNfts,
-    ownersCount,
+    numofOwners,
     totalPrice,
     floorPrize,
     updatedAt,
@@ -111,7 +111,7 @@ const SingleCollectionHead = (props) => {
                     }}
                     elevation={3}
                   >
-                    <p>{ownersCount + " Owner(s)"}</p>
+                    <p>{numofOwners + " Owner(s)"}</p>
                   </Card>
                 </Col>
                 <Col sm="12" md="6" lg="3">

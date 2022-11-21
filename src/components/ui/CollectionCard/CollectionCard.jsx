@@ -46,7 +46,7 @@ const CollectionCard = (props) => {
 
   async function getNFTData() {
     const ethers = require("ethers");
-
+    const owners = new Set();
     let sumPrice = 0;
     let numofNfts = 0;
     let floorPrize = Number.MAX_SAFE_INTEGER;
@@ -83,6 +83,7 @@ const CollectionCard = (props) => {
           };
           sumPrice += Number(price);
           numofNfts += 1;
+          owners.add(i.seller);
           if (Number(price) < floorPrize) {
             floorPrize = Number(price);
           }
@@ -90,7 +91,7 @@ const CollectionCard = (props) => {
         }
       })
     );
-
+    props.item.numofOwners = owners.size;
     props.item.numberofNfts = numofNfts;
     props.item.totalPrice = sumPrice;
 
