@@ -8,6 +8,10 @@
 // const key = "d1ac1f06fc8c74bb0e77";
 // const secret = "5bda47bcfd583cf284f5a0f2aa183aa098da7b80691dbec2e7d2831c4e90f54c";
 
+//third
+const key = "a2873abf28086dddfadb";
+const secret = "93c198441ba978f62e1ffbcec04f65833807f54e5eedc761d31a83b1a280d0b3";
+
 // const secret = process.env.PIANTA_SECRET_KEY;
 // console.log('secret: ',secret);
 
