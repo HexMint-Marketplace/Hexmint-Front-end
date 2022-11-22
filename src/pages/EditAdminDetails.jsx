@@ -4,7 +4,7 @@ import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/editProfile.css";
 import AdminServices from "../services/API/AdminServices";
 import Loader from "../components/ui/Loader/Loader";
-import { uploadFileToIPFS } from "../pinata";
+import { uploadFileToIPFS } from "../pinata_2";
 import { toast } from "react-toastify";
 import { Formik } from "formik";
 import * as Yup from "yup";

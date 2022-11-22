@@ -11,8 +11,8 @@
 // const secret = process.env.PIANTA_SECRET_KEY;
 // console.log('secret: ',secret);
 
-const key = "fd06d913ef227fa82730";
-const secret = "9bdaf48d89c42531df4e030170a135377f3e4343a1a3fe0389b47c9fb7e92b6e";
+const key = "24bc8656a26bd82ca173";
+const secret = "e182377098a61d9ca3d40c6727c5ed6580ba7acb146cc51b811e474b4623990b";
 
 
 const axios = require('axios');
