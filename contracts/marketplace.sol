@@ -210,7 +210,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
     function transferNFTAfterTimeAuction(
         uint256 tokenId,
         address payable receiver, uint256 initialPrice 
-    ) public payable onlyOwner{
+    ) public onlyOwner{
         address payable seller = idToToken[tokenId].seller;
 
         //update the details of the token
