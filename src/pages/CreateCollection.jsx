@@ -4,7 +4,7 @@ import CommonHeader from "../components/ui/CommonHeader/CommonHeader";
 import "../styles/createCollection.css";
 import CustomerServices from "../services/API/CustomerServices";
 import Loader from "../components/ui/Loader/Loader";
-import { uploadFileToIPFS } from "../pinata";
+import { uploadFileToIPFS } from "../pinata_1";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
