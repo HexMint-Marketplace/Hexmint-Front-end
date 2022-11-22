@@ -59,7 +59,11 @@ function HeroSection() {
 
           <Col lg="6" md="11" s="10" xs="10">
             <div className="home_image w-100">
-              <img data-testid="homepage_banner" src={homeImage} alt="" />
+              <img
+                data-testid="homepage_banner"
+                src={homeImage}
+                alt="bannerImage"
+              />
             </div>
           </Col>
         </Row>
@@ -73,7 +77,7 @@ function HeroSection() {
                   data-testid="howitworks_image"
                   src={howItWorks}
                   className="img-fluid mx-auto"
-                  alt=""
+                  alt="howitworks"
                 />
               </div>
             </div>
