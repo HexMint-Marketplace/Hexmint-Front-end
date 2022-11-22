@@ -194,8 +194,6 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
         //Actually transfer the token to the new owner
         if (ownerOf(tokenId) != seller) {
             _transfer(address(this), receiver, tokenId);
-            //approve the marketplace to transfer NFT
-            approve(address(this), tokenId);
         } else {
             _transfer(seller, receiver, tokenId);
         }
@@ -212,9 +210,8 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
     function transferNFTAfterTimeAuction(
         uint256 tokenId,
         address payable receiver, uint256 initialPrice 
-    ) public payable {
+    ) public onlyOwner{
         address payable seller = idToToken[tokenId].seller;
-        require(seller == msg.sender, "Only Seller can transfer the NFT");
 
         //update the details of the token
         idToToken[tokenId].currentlyListed = false;

@@ -39,6 +39,6 @@ describe('Test the Header component', () => {
     </BrowserRouter>
     );
     const buttonList = await screen.findAllByRole('button')
-    expect(buttonList[0]).toHaveTextContent('Connect Wallet')
+    expect(buttonList).toHaveLength(1)
   });
 });

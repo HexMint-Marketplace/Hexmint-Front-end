@@ -237,7 +237,8 @@ const BidNFT = (props) => {
                       </div>
                     </CardContent>
                   </Card>
-                  {buyerWalletAddress !== props.NFTData.seller ? (
+                  {buyerWalletAddress !== props.NFTData.seller  ||
+                  !isConnected ? (
                     <>
                       <Button
                         sx={{ mt: 3, mb: 3 }}
